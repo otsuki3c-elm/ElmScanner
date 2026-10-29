@@ -8,11 +8,3 @@ struct ElmScannerApp: App {
         }
     }
 }
-
-struct ContentView: View {
-    var body: some View {
-        Text("ElmScanner")
-            .font(.largeTitle)
-            .frame(minWidth: 480, minHeight: 320)
-    }
-}

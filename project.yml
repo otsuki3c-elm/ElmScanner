@@ -16,6 +16,10 @@ targets:
     deploymentTarget: "14.0"
     sources:
       - path: Sources/ElmScanner
+    entitlements:
+      path: ElmScanner.entitlements
+      properties:
+        com.apple.security.device.camera: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScanner
@@ -28,6 +32,9 @@ targets:
         # App Sandbox, with files picked in open/save panels.
         ENABLE_APP_SANDBOX: true
         ENABLE_USER_SELECTED_FILES: readwrite
+        # ISBN lookup (Open Library) and the camera.
+        ENABLE_OUTGOING_NETWORK_CONNECTIONS: true
+        INFOPLIST_KEY_NSCameraUsageDescription: ElmScanner uses the camera to scan the ISBN barcode on a book.
   ElmScannerTests:
     type: bundle.unit-test
     platform: macOS
