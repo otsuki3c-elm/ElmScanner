@@ -1,0 +1,55 @@
+name: ElmScanner
+options:
+  bundleIdPrefix: com.otsuki.elmscanner
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  ElmScanner:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Sources/ElmScanner
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScanner
+        PRODUCT_NAME: ElmScanner
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_CFBundleDisplayName: ElmScanner
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        ENABLE_HARDENED_RUNTIME: true
+        # App Sandbox, with files picked in open/save panels.
+        ENABLE_APP_SANDBOX: true
+        ENABLE_USER_SELECTED_FILES: readwrite
+  ElmScannerTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Tests/ElmScannerTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+    dependencies:
+      - target: ElmScanner
+schemes:
+  ElmScanner:
+    build:
+      targets:
+        ElmScanner: all
+        ElmScannerTests: [test]
+    test:
+      config: Debug
+      targets:
+        - ElmScannerTests
+    run:
+      config: Debug
+    archive:
+      config: Release
