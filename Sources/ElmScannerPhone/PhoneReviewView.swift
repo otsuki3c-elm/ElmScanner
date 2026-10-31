@@ -6,7 +6,7 @@ struct PhoneReviewView: View {
     var session: ScanSession
 
     @State private var editing: ScannedBook.ID?
-    @State private var format = ExportService.Format.zotero
+    @State private var format = ExportService.Format.cslJSON
     @State private var exportDocument = ExportDocument(data: Data())
     @State private var exporting = false
     @State private var message: String?
@@ -33,14 +33,13 @@ struct PhoneReviewView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
+                // Two stages: where to send the file, then which format.
                 Menu("Export") {
-                    Section("Save to Files") {
-                        Button("Zotero (CSL JSON)") { export(.zotero) }
-                        Button("BibTeX") { export(.bibtex) }
+                    Menu("Files App", systemImage: "folder") {
+                        formatButtons { export($0) }
                     }
-                    Section("Email as Attachment") {
-                        Button("Zotero (CSL JSON)") { email(.zotero) }
-                        Button("BibTeX") { email(.bibtex) }
+                    Menu("Email", systemImage: "envelope") {
+                        formatButtons { email($0) }
                     }
                 }
                 .disabled(session.foundBooks.isEmpty)
@@ -98,6 +97,19 @@ struct PhoneReviewView: View {
         )
     }
 
+    /// RIS and BibTeX, then everything else behind "More…".
+    @ViewBuilder
+    private func formatButtons(_ action: @escaping (ExportService.Format) -> Void) -> some View {
+        ForEach(ExportService.Format.common) { format in
+            Button(format.title) { action(format) }
+        }
+        Menu("More…") {
+            ForEach(ExportService.Format.more) { format in
+                Button(format.title) { action(format) }
+            }
+        }
+    }
+
     private func export(_ chosen: ExportService.Format) {
         do {
             exportDocument = ExportDocument(data: try ExportService.data(for: session.foundBooks, format: chosen))
@@ -119,7 +131,7 @@ struct PhoneReviewView: View {
             mailAttachment = MailAttachment(
                 data: try ExportService.data(for: session.foundBooks, format: chosen),
                 fileName: chosen.fileName,
-                mimeType: chosen == .zotero ? "application/json" : "text/plain",
+                mimeType: chosen.mimeType,
                 subject: "ElmScanner export: \(count) book\(count == 1 ? "" : "s"), \(when)"
             )
         } catch {

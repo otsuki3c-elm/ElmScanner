@@ -39,8 +39,14 @@ struct ReviewView: View {
                 Button("Remove") { session.remove(selection) }
                     .disabled(selection.isEmpty)
                 Menu("Export") {
-                    Button("Zotero (CSL JSON)…") { export(.zotero) }
-                    Button("BibTeX…") { export(.bibtex) }
+                    ForEach(ExportService.Format.common) { format in
+                        Button("\(format.title)…") { export(format) }
+                    }
+                    Menu("More…") {
+                        ForEach(ExportService.Format.more) { format in
+                            Button("\(format.title)…") { export(format) }
+                        }
+                    }
                 }
                 .fixedSize()
                 .disabled(session.foundBooks.isEmpty)

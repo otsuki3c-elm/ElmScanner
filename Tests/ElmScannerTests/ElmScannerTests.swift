@@ -59,4 +59,42 @@ final class ElmScannerTests: XCTestCase {
         session.removeAll()
         XCTAssertTrue(ScanSession(storeURL: url).books.isEmpty)
     }
+
+    func testEveryFormatProducesWellFormedOutput() throws {
+        let org = BookMetadata(
+            title: "Active ageing", subtitle: "a portrait & more", authors: [AuthorName(familyName: "Eurostat")],
+            publisher: "Publications <Office>", place: "Luxembourg", publicationYear: 2012, numberOfPages: "141",
+            isbn: "9789279215070", url: "http://example.org/?a=1&b=2", tags: ["Aging"])
+        for format in ExportService.Format.allCases {
+            let data = try ExportService.data(for: [dune, org], format: format)
+            XCTAssertFalse(data.isEmpty, format.title)
+            if format.mimeType.hasSuffix("xml") {
+                let parser = XMLParser(data: data)
+                XCTAssertTrue(parser.parse(), "\(format.title) isn't well-formed XML: \(String(describing: parser.parserError))")
+            }
+        }
+    }
+
+    func testBinaryMARCRecordsAreSelfConsistent() throws {
+        let data = try ExportService.data(for: [dune, dune], format: .marc)
+        var offset = 0
+        var records = 0
+        while offset < data.count {
+            let length = Int(String(decoding: data[offset..<offset + 5], as: UTF8.self))!
+            XCTAssertEqual(data[offset + length - 1], 0x1D)
+            let base = Int(String(decoding: data[offset + 12..<offset + 17], as: UTF8.self))!
+            XCTAssertEqual(data[offset + base - 1], 0x1E)
+            // Every directory entry points at a field that ends with the field terminator.
+            var entry = offset + 24
+            while data[entry] != 0x1E {
+                let size = Int(String(decoding: data[entry + 3..<entry + 7], as: UTF8.self))!
+                let start = Int(String(decoding: data[entry + 7..<entry + 12], as: UTF8.self))!
+                XCTAssertEqual(data[offset + base + start + size - 1], 0x1E)
+                entry += 12
+            }
+            offset += length
+            records += 1
+        }
+        XCTAssertEqual(records, 2)
+    }
 }

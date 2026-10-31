@@ -7,27 +7,90 @@ import UniformTypeIdentifiers
 
 /// Writes scanned books as CSL JSON (Zotero ▸ File ▸ Import) or BibTeX.
 enum ExportService {
-    enum Format {
-        case zotero, bibtex
+    /// The formats Zotero can import, as listed in its documentation.
+    enum Format: String, CaseIterable, Identifiable {
+        case cslJSON, bibtex, biblatex, ris, refer, refworks, webOfScience
+        case mods, marcxml, marc, endnoteXML, zoteroRDF, bibliontology, dublinCore, contextObject
+
+        var id: String { rawValue }
+
+        /// Shown first in the export menus; everything else is under "More…".
+        static let common: [Format] = [.ris, .bibtex]
+        static let more: [Format] = allCases.filter { !common.contains($0) }
+
+        /// The name Zotero uses for the format.
+        var title: String {
+            switch self {
+            case .cslJSON: return "CSL JSON"
+            case .bibtex: return "BibTeX"
+            case .biblatex: return "BibLaTeX"
+            case .ris: return "RIS"
+            case .refer: return "Refer/BibIX"
+            case .refworks: return "RefWorks Tagged"
+            case .webOfScience: return "Web of Science Tagged"
+            case .mods: return "MODS"
+            case .marcxml: return "MARCXML"
+            case .marc: return "MARC"
+            case .endnoteXML: return "EndNote XML"
+            case .zoteroRDF: return "Zotero RDF"
+            case .bibliontology: return "Bibliontology RDF"
+            case .dublinCore: return "Dublin Core RDF"
+            case .contextObject: return "XML ContextObject"
+            }
+        }
+
+        var fileExtension: String {
+            switch self {
+            case .cslJSON: return "json"
+            case .bibtex, .biblatex: return "bib"
+            case .ris: return "ris"
+            case .refer, .refworks, .webOfScience: return "txt"
+            case .mods, .marcxml, .endnoteXML: return "xml"
+            case .marc: return "marc"
+            case .zoteroRDF, .bibliontology, .dublinCore: return "rdf"
+            case .contextObject: return "ctx"
+            }
+        }
 
         var contentType: UTType {
             switch self {
-            case .zotero: return .json
-            case .bibtex: return UTType(filenameExtension: "bib") ?? .plainText
+            case .cslJSON: return .json
+            case .mods, .marcxml, .endnoteXML: return .xml
+            case .refer, .refworks, .webOfScience: return .plainText
+            default: return UTType(filenameExtension: fileExtension) ?? .data
             }
         }
-        var fileName: String {
+
+        var mimeType: String {
             switch self {
-            case .zotero: return "ElmScanner Export.json"
-            case .bibtex: return "ElmScanner Export.bib"
+            case .cslJSON: return "application/json"
+            case .mods, .marcxml, .endnoteXML, .contextObject: return "application/xml"
+            case .zoteroRDF, .bibliontology, .dublinCore: return "application/rdf+xml"
+            case .marc: return "application/marc"
+            default: return "text/plain"
             }
         }
+
+        var fileName: String { "ElmScanner Export (\(title)).\(fileExtension)" }
     }
 
     static func data(for books: [BookMetadata], format: Format) throws -> Data {
         switch format {
-        case .zotero: return try cslJSON(books)
+        case .cslJSON: return try cslJSON(books)
         case .bibtex: return Data(bibtex(books).utf8)
+        case .biblatex: return Data(biblatex(books).utf8)
+        case .ris: return Data(ris(books).utf8)
+        case .refer: return Data(refer(books).utf8)
+        case .refworks: return Data(refworks(books).utf8)
+        case .webOfScience: return Data(webOfScience(books).utf8)
+        case .mods: return Data(mods(books).utf8)
+        case .marcxml: return Data(marcxml(books).utf8)
+        case .marc: return marc(books)
+        case .endnoteXML: return Data(endnoteXML(books).utf8)
+        case .zoteroRDF: return Data(zoteroRDF(books).utf8)
+        case .bibliontology: return Data(bibliontologyRDF(books).utf8)
+        case .dublinCore: return Data(dublinCoreRDF(books).utf8)
+        case .contextObject: return Data(contextObject(books).utf8)
         }
     }
 
@@ -129,7 +192,9 @@ enum ExportService {
 /// The exported file, handed to SwiftUI's file exporter (the Files app on iPhone).
 struct ExportDocument: FileDocument {
     static let bibType = UTType(filenameExtension: "bib") ?? .plainText
-    static var readableContentTypes: [UTType] { [.json, .plainText, bibType] }
+    static var readableContentTypes: [UTType] {
+        [.json, .plainText, .xml, .data, bibType] + ExportService.Format.allCases.map(\.contentType)
+    }
     static var writableContentTypes: [UTType] { readableContentTypes }
 
     var data: Data
