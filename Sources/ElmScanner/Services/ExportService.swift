@@ -71,7 +71,8 @@ enum ExportService {
             }
         }
 
-        var fileName: String { "ElmScanner Export (\(title)).\(fileExtension)" }
+        /// "Refer/BibIX" has a slash, which can't go in a file name.
+        var fileName: String { "ElmScanner Export (\(title.replacingOccurrences(of: "/", with: "-"))).\(fileExtension)" }
     }
 
     static func data(for books: [BookMetadata], format: Format) throws -> Data {
@@ -170,21 +171,31 @@ enum ExportService {
     private static func entry(for book: BookMetadata, usedKeys: inout Set<String>) -> String {
         var fields: [(String, String)] = [("title", book.fullTitle)]
         if !book.authors.isEmpty {
-            let names = book.authors.map { $0.isOrganization ? "{\($0.familyName)}" : "\($0.familyName), \($0.givenName)" }
-            fields.append(("author", names.joined(separator: " and ")))
+            fields.append(("author", bibAuthors(book.authors)))
         }
         if let publisher = book.publisher { fields.append(("publisher", publisher)) }
         if let place = book.place { fields.append(("address", place)) }
         if let year = book.publicationYear { fields.append(("year", String(year))) }
         fields.append(("isbn", book.isbn))
         if let url = book.url { fields.append(("url", url)) }
-        let body = fields.map { "  \($0.0) = {\(escape($0.1))}" }.joined(separator: ",\n")
+        let body = fields.map { key, value in "  \(key) = {\(key == "author" ? value : escape(value))}" }.joined(separator: ",\n")
         return "@book{\(citeKey(for: book, usedKeys: &usedKeys)),\n\(body)\n}"
     }
 
     /// Braces would unbalance the entry; the rest is left as-is (BibTeX
     /// tools accept UTF-8, and {…} protects the case of the whole value).
-    private static func escape(_ value: String) -> String {
+    /// The author field: "Family, Given" joined with "and"; an organization goes in its own
+    /// braces so it isn't split into names. Braces inside a name are escaped here, since
+    /// the whole field is left alone afterwards.
+    static func bibAuthors(_ authors: [AuthorName]) -> String {
+        authors.map {
+            $0.isOrganization
+                ? "{\(escape($0.familyName))}"
+                : "\(escape($0.familyName)), \(escape($0.givenName))"
+        }.joined(separator: " and ")
+    }
+
+    static func escape(_ value: String) -> String {
         value.replacingOccurrences(of: "{", with: "(").replacingOccurrences(of: "}", with: ")")
     }
 }

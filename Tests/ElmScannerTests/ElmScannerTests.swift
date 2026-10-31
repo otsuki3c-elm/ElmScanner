@@ -97,4 +97,29 @@ final class ElmScannerTests: XCTestCase {
         }
         XCTAssertEqual(records, 2)
     }
+
+    func testEditFormKeepsOrganizationAuthors() {
+        let authors = [AuthorName(familyName: "Statistical Office of the European Communities"),
+                       AuthorName(givenName: "Frank", familyName: "Herbert")]
+        XCTAssertEqual(BookEditForm.parseAuthors(BookEditForm.editableAuthors(authors)), authors)
+    }
+
+    func testFileNamesHaveNoSlash() {
+        for format in ExportService.Format.allCases { XCTAssertFalse(format.fileName.contains("/"), format.title) }
+    }
+
+    func testControlCharactersDontBreakXML() throws {
+        var odd = dune
+        odd.title = "Du\u{0B}ne\u{0}"
+        let data = try ExportService.data(for: [odd], format: .mods)
+        XCTAssertTrue(XMLParser(data: data).parse())
+    }
+
+    func testOrganizationAuthorKeepsItsBraces() {
+        var org = dune
+        org.authors = [AuthorName(familyName: "Statistical Office"), AuthorName(givenName: "Frank", familyName: "Herbert")]
+        for text in [ExportService.bibtex([org]), ExportService.biblatex([org])] {
+            XCTAssertTrue(text.contains("author = {{Statistical Office} and Herbert, Frank}"), text)
+        }
+    }
 }

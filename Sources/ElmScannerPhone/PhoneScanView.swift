@@ -11,6 +11,7 @@ struct PhoneScanView: View {
     @State private var lastFeedbackAt = Date.distantPast
     @State private var reviewing = false
     @State private var confirmingClear = false
+    @State private var showingAbout = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -65,6 +66,10 @@ struct PhoneScanView: View {
                     Button("Clear", role: .destructive) { confirmingClear = true }
                         .disabled(session.books.isEmpty)
                 }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button { showingAbout = true } label: { Image(systemName: "info.circle") }
+                        .accessibilityLabel("About ElmScanner")
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Next") { reviewing = true }.disabled(session.books.isEmpty)
                 }
@@ -74,6 +79,7 @@ struct PhoneScanView: View {
                 Button("Remove All", role: .destructive) { session.removeAll() }
             }
             .navigationDestination(isPresented: $reviewing) { PhoneReviewView(session: session) }
+            .sheet(isPresented: $showingAbout) { AboutView() }
             .sheet(item: editingBinding) { book in
                 BookEditForm(book: book) { session.update(book.id, with: $0) }
             }

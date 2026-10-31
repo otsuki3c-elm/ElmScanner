@@ -6,7 +6,9 @@ extension ExportService {
     // MARK: Shared
 
     private static func xml(_ text: String) -> String {
-        text.replacingOccurrences(of: "&", with: "&amp;")
+        // Control characters other than tab and line breaks aren't allowed in XML at all.
+        String(String.UnicodeScalarView(text.unicodeScalars.filter { $0.value >= 0x20 || $0 == "\t" || $0 == "\n" || $0 == "\r" }))
+            .replacingOccurrences(of: "&", with: "&amp;")
             .replacingOccurrences(of: "<", with: "&lt;")
             .replacingOccurrences(of: ">", with: "&gt;")
             .replacingOccurrences(of: "\"", with: "&quot;")
@@ -26,10 +28,7 @@ extension ExportService {
         return books.map { book in
             var fields: [(String, String)] = [("title", book.title)]
             if let subtitle = book.subtitle, !subtitle.isEmpty { fields.append(("subtitle", subtitle)) }
-            if !book.authors.isEmpty {
-                let names = book.authors.map { $0.isOrganization ? "{\($0.familyName)}" : inverted($0) }
-                fields.append(("author", names.joined(separator: " and ")))
-            }
+            if !book.authors.isEmpty { fields.append(("author", bibAuthors(book.authors))) }
             if let publisher = book.publisher { fields.append(("publisher", publisher)) }
             if let place = book.place { fields.append(("location", place)) }
             if let year = book.publicationYear { fields.append(("date", String(year))) }
@@ -37,13 +36,9 @@ extension ExportService {
             fields.append(("isbn", book.isbn))
             if let url = book.url { fields.append(("url", url)) }
             if !book.tags.isEmpty { fields.append(("keywords", book.tags.joined(separator: ", "))) }
-            let body = fields.map { "  \($0.0) = {\(braceSafe($0.1))}" }.joined(separator: ",\n")
+            let body = fields.map { key, value in "  \(key) = {\(key == "author" ? value : escape(value))}" }.joined(separator: ",\n")
             return "@book{\(citeKey(for: book, usedKeys: &usedKeys)),\n\(body)\n}"
         }.joined(separator: "\n\n") + "\n"
-    }
-
-    private static func braceSafe(_ value: String) -> String {
-        value.replacingOccurrences(of: "{", with: "(").replacingOccurrences(of: "}", with: ")")
     }
 
     // MARK: RIS

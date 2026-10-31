@@ -24,7 +24,7 @@ struct BookEditForm: View {
         let m = book.metadata
         _title = State(initialValue: m?.title ?? "")
         _subtitle = State(initialValue: m?.subtitle ?? "")
-        _authors = State(initialValue: Self.authorsText(m?.authors ?? []))
+        _authors = State(initialValue: Self.editableAuthors(m?.authors ?? []))
         _publisher = State(initialValue: m?.publisher ?? "")
         _place = State(initialValue: m?.place ?? "")
         _year = State(initialValue: m?.publicationYear.map(String.init) ?? "")
@@ -36,6 +36,16 @@ struct BookEditForm: View {
     /// "Family, Given" per author, separated by semicolons.
     static func authorsText(_ authors: [AuthorName]) -> String {
         authors.map { $0.isOrganization ? $0.familyName : "\($0.familyName), \($0.givenName)" }.joined(separator: "; ")
+    }
+
+    /// The same, for the edit field: an organization gets a trailing comma, so that
+    /// "Statistical Office of the European Communities," isn't read back as a person.
+    static func editableAuthors(_ authors: [AuthorName]) -> String {
+        authors.map { $0.isOrganization ? "\($0.familyName)," : "\($0.familyName), \($0.givenName)" }.joined(separator: "; ")
+    }
+
+    static func parseAuthors(_ text: String) -> [AuthorName] {
+        text.split(separator: ";").map { AuthorName(parsing: String($0)) }.filter { !$0.familyName.isEmpty }
     }
 
     var body: some View {
@@ -104,7 +114,7 @@ struct BookEditForm: View {
         onSave(BookMetadata(
             title: title.trimmingCharacters(in: .whitespaces),
             subtitle: trimmed(subtitle),
-            authors: authors.split(separator: ";").map { AuthorName(parsing: String($0)) }.filter { !$0.familyName.isEmpty },
+            authors: Self.parseAuthors(authors),
             publisher: trimmed(publisher),
             place: trimmed(place),
             publicationYear: Int(year.trimmingCharacters(in: .whitespaces)),
