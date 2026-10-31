@@ -25,6 +25,12 @@ final class ScanSession {
         lookUp(books[index].isbn)
     }
 
+    /// Replaces a book's metadata with the user's edits.
+    func update(_ id: UUID, with metadata: BookMetadata) {
+        guard let index = books.firstIndex(where: { $0.id == id }) else { return }
+        books[index].state = .found(metadata)
+    }
+
     func remove(_ ids: Set<UUID>) { books.removeAll { ids.contains($0.id) } }
 
     private func lookUp(_ isbn: String) {

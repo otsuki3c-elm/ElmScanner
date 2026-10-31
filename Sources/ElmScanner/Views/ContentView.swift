@@ -5,21 +5,46 @@ struct ContentView: View {
     @State private var camera = BarcodeCamera()
     @State private var selection = Set<UUID>()
     @State private var manualISBN = ""
-    @State private var message: String?
+    @State private var reviewing = false
+    @State private var editing: ScannedBook.ID?
+    @State private var feedback: ScanFeedback?
+    @State private var lastFeedbackAt = Date.distantPast
 
     var body: some View {
-        HSplitView {
-            cameraPane
-                .frame(minWidth: 320, idealWidth: 400)
-            listPane
-                .frame(minWidth: 360)
+        ZStack {
+            if reviewing {
+                ReviewView(session: session) { slide(to: false) }
+                    .transition(.move(edge: .trailing))
+            } else {
+                HStack(spacing: 0) {
+                    cameraPane
+                        .frame(minWidth: 320, idealWidth: 400, maxWidth: 480)
+                    Divider()
+                    listPane
+                        .frame(minWidth: 360)
+                }
+                .onAppear {
+                    camera.onISBN = { session.add($0); show(.recognized) }
+                    camera.onOtherBarcode = { _ in show(.rejected) }
+                    camera.start()
+                }
+                .onDisappear { camera.stop() }
+                .transition(.move(edge: .leading))
+            }
         }
+        .clipped()
         .frame(minWidth: 760, minHeight: 440)
-        .onAppear {
-            camera.onISBN = { session.add($0) }
-            camera.start()
-        }
-        .onDisappear { camera.stop() }
+    }
+
+    private var editingBinding: Binding<ScannedBook?> {
+        Binding(
+            get: { session.books.first { $0.id == editing } },
+            set: { editing = $0?.id }
+        )
+    }
+
+    private func slide(to review: Bool) {
+        withAnimation(.easeInOut(duration: 0.35)) { reviewing = review }
     }
 
     private var cameraPane: some View {
@@ -27,14 +52,24 @@ struct ContentView: View {
             ZStack {
                 Color.black
                 switch camera.status {
-                case .running, .starting:
+                case .running:
+                    // Only once startRunning() has returned: attaching a preview layer
+                    // while the camera queue is starting the session crashes AVFoundation.
                     CameraPreview(session: camera.session)
+                case .starting:
+                    ProgressView().controlSize(.small)
                 case .denied:
                     notice("Camera access is off.", "Allow it in System Settings ▸ Privacy & Security ▸ Camera.")
                 case .unavailable:
                     notice("No camera found.", "You can still type or paste ISBNs below.")
                 case .idle:
                     notice("Camera stopped.", "")
+                }
+            }
+            .overlay {
+                if let feedback {
+                    ScanFeedbackView(kind: feedback.kind).id(feedback.id)
+                        .transition(.opacity)
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -50,6 +85,19 @@ struct ContentView: View {
         .padding()
     }
 
+    /// Flashes a check or X over the camera. Frames repeat the same barcode many
+    /// times a second, so further reads are ignored until the last flash is done.
+    private func show(_ kind: ScanFeedback.Kind) {
+        guard Date().timeIntervalSince(lastFeedbackAt) > 1.5 else { return }
+        lastFeedbackAt = Date()
+        let shown = ScanFeedback(kind: kind)
+        feedback = shown
+        Task {
+            try? await Task.sleep(for: .seconds(1))
+            if feedback == shown { withAnimation(.easeOut(duration: 0.3)) { feedback = nil } }
+        }
+    }
+
     private func notice(_ title: String, _ detail: String) -> some View {
         VStack(spacing: 4) {
             Text(title).font(.headline)
@@ -61,7 +109,11 @@ struct ContentView: View {
     private var listPane: some View {
         VStack(spacing: 0) {
             List(session.books, selection: $selection) { book in
-                row(book).contextMenu {
+                row(book)
+                    .contentShape(Rectangle())
+                    .onTapGesture(count: 2) { editing = book.id }
+                    .contextMenu {
+                    Button("Edit…") { editing = book.id }
                     Button("Remove") { session.remove(selection.contains(book.id) ? selection : [book.id]) }
                 }
             }
@@ -71,16 +123,16 @@ struct ContentView: View {
                 }
             }
             .onDeleteCommand { session.remove(selection) }
+            .sheet(item: editingBinding) { book in
+                BookEditForm(book: book) { session.update(book.id, with: $0) }
+            }
             Divider()
             HStack {
-                if let message { Text(message).font(.callout).foregroundStyle(.secondary) }
+                Text("\(session.books.count) scanned").font(.callout.weight(.medium))
                 Spacer()
-                Menu("Export") {
-                    Button("Zotero (CSL JSON)…") { export(.zotero) }
-                    Button("BibTeX…") { export(.bibtex) }
-                }
-                .fixedSize()
-                .disabled(session.foundBooks.isEmpty)
+                Button { slide(to: true) } label: { Label("Next", systemImage: "chevron.right").labelStyle(.titleAndIcon) }
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(session.books.isEmpty)
             }
             .padding(10)
         }
@@ -117,11 +169,5 @@ struct ContentView: View {
     private func addManual() {
         session.add(manualISBN)
         manualISBN = ""
-    }
-
-    private func export(_ format: ExportService.Format) {
-        let chosen = session.books.filter { selection.contains($0.id) }.compactMap(\.metadata)
-        let books = chosen.isEmpty ? session.foundBooks : chosen
-        if let result = ExportService.exportWithSavePanel(books, format: format) { message = result }
     }
 }
