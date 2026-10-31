@@ -44,6 +44,13 @@ enum BarcodeReader {
         var others: [String] = []
     }
 
+    /// Frames from the iPhone's back camera arrive rotated a quarter turn from a portrait screen.
+    #if os(iOS)
+    private static let cameraOrientation = CGImagePropertyOrientation.right
+    #else
+    private static let cameraOrientation = CGImagePropertyOrientation.up
+    #endif
+
     static func classify(_ payload: String?, symbology: VNBarcodeSymbology) -> Kind {
         guard let payload = payload?.trimmingCharacters(in: .whitespacesAndNewlines), !payload.isEmpty else {
             return .ignore
@@ -92,7 +99,7 @@ enum BarcodeReader {
     }
 
     static func scan(in sampleBuffer: CMSampleBuffer) -> Scan {
-        scan(handler: VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: .up, options: [:]))
+        scan(handler: VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: cameraOrientation, options: [:]))
     }
 
     static func isbns(in image: CGImage, orientation: CGImagePropertyOrientation = .up) -> [String] {
@@ -116,7 +123,7 @@ enum BarcodeReader {
     /// Every ISBN barcode in one video frame from the camera.
     static func isbns(in sampleBuffer: CMSampleBuffer) -> [String] {
         let request = request()
-        let handler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: .up, options: [:])
+        let handler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: cameraOrientation, options: [:])
         guard (try? handler.perform([request])) != nil else { return [] }
         return isbns(from: request)
     }

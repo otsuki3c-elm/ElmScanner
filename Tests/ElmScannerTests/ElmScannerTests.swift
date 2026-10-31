@@ -39,4 +39,24 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertEqual(items.first?["type"] as? String, "book")
         XCTAssertEqual(items.first?["ISBN"] as? String, "9780441172719")
     }
+
+    @MainActor
+    func testUnexportedBooksSurviveARestart() throws {
+        let url = FileManager.default.temporaryDirectory.appending(path: "ElmScannerTests-\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: url) }
+        ScanStore.save([
+            ScannedBook(isbn: dune.isbn, state: .found(dune)),
+            ScannedBook(isbn: "9780857073006", state: .failed("offline")),
+        ], to: url)
+
+        let session = ScanSession(storeURL: url)
+        XCTAssertEqual(session.books.map(\.isbn), [dune.isbn, "9780857073006"])
+        XCTAssertEqual(session.books[0].metadata, dune)
+
+        session.markExported()
+        XCTAssertEqual(ScanSession(storeURL: url).books.map(\.isbn), ["9780857073006"])
+
+        session.removeAll()
+        XCTAssertTrue(ScanSession(storeURL: url).books.isEmpty)
+    }
 }

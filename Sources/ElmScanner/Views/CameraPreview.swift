@@ -1,6 +1,7 @@
 import AVFoundation
 import SwiftUI
 
+#if os(macOS)
 /// Shows the live camera feed for a capture session.
 struct CameraPreview: NSViewRepresentable {
     let session: AVCaptureSession
@@ -16,3 +17,23 @@ struct CameraPreview: NSViewRepresentable {
 
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
+#else
+/// Shows the live camera feed for a capture session.
+struct CameraPreview: UIViewRepresentable {
+    final class PreviewView: UIView {
+        override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
+        var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
+    }
+
+    let session: AVCaptureSession
+
+    func makeUIView(context: Context) -> PreviewView {
+        let view = PreviewView()
+        view.previewLayer.session = session
+        view.previewLayer.videoGravity = .resizeAspectFill
+        return view
+    }
+
+    func updateUIView(_ uiView: PreviewView, context: Context) {}
+}
+#endif

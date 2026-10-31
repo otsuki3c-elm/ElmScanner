@@ -78,12 +78,17 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     /// so a nearby iPhone isn't picked up unasked.
     private func configure() -> Bool {
         if configured { return true }
+        #if os(iOS)
+        let found = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        #else
         let discovery = AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInWideAngleCamera, .external, .continuityCamera],
             mediaType: .video,
             position: .unspecified
         )
-        guard let device = discovery.devices.first ?? AVCaptureDevice.default(for: .video),
+        let found = discovery.devices.first
+        #endif
+        guard let device = found ?? AVCaptureDevice.default(for: .video),
               let input = try? AVCaptureDeviceInput(device: device) else { return false }
         let output = AVCaptureVideoDataOutput()
         output.alwaysDiscardsLateVideoFrames = true

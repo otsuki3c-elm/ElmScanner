@@ -2,7 +2,7 @@ import Foundation
 
 /// A person's name split into given/family parts. Organizational authors
 /// live entirely in the family name.
-struct AuthorName: Hashable {
+struct AuthorName: Hashable, Codable {
     var givenName: String = ""
     var familyName: String
 
@@ -33,7 +33,7 @@ struct AuthorName: Hashable {
 }
 
 /// What an online lookup found for one ISBN.
-struct BookMetadata: Equatable {
+struct BookMetadata: Equatable, Codable {
     var title: String
     var subtitle: String?
     var authors: [AuthorName]
@@ -60,9 +60,15 @@ struct ScannedBook: Identifiable {
         case failed(String)
     }
 
-    let id = UUID()
+    let id: UUID
     let isbn: String
-    var state: State = .looking
+    var state: State
+
+    init(id: UUID = UUID(), isbn: String, state: State = .looking) {
+        self.id = id
+        self.isbn = isbn
+        self.state = state
+    }
 
     var metadata: BookMetadata? {
         if case .found(let metadata) = state { return metadata }

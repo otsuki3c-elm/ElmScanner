@@ -1,5 +1,8 @@
+#if os(macOS)
 import AppKit
+#endif
 import Foundation
+import SwiftUI
 import UniformTypeIdentifiers
 
 /// Writes scanned books as CSL JSON (Zotero ▸ File ▸ Import) or BibTeX.
@@ -28,6 +31,7 @@ enum ExportService {
         }
     }
 
+    #if os(macOS)
     /// Asks where to save, then writes. Returns a message to show, or nil if cancelled.
     @MainActor
     static func exportWithSavePanel(_ books: [BookMetadata], format: Format) -> String? {
@@ -43,6 +47,8 @@ enum ExportService {
             return "Couldn't export: \(error.localizedDescription)"
         }
     }
+
+    #endif
 
     // MARK: CSL JSON
 
@@ -118,4 +124,17 @@ enum ExportService {
     private static func escape(_ value: String) -> String {
         value.replacingOccurrences(of: "{", with: "(").replacingOccurrences(of: "}", with: ")")
     }
+}
+
+/// The exported file, handed to SwiftUI's file exporter (the Files app on iPhone).
+struct ExportDocument: FileDocument {
+    static let bibType = UTType(filenameExtension: "bib") ?? .plainText
+    static var readableContentTypes: [UTType] { [.json, .plainText, bibType] }
+    static var writableContentTypes: [UTType] { readableContentTypes }
+
+    var data: Data
+
+    init(data: Data) { self.data = data }
+    init(configuration: ReadConfiguration) throws { data = configuration.file.regularFileContents ?? Data() }
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper { FileWrapper(regularFileWithContents: data) }
 }

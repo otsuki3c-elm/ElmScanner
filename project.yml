@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.otsuki.elmscanner
   deploymentTarget:
     macOS: "14.0"
+    iOS: "17.0"
   createIntermediateGroups: true
 settings:
   base:
@@ -16,6 +17,7 @@ targets:
     deploymentTarget: "14.0"
     sources:
       - path: Sources/ElmScanner
+      - path: Resources/Mac
     entitlements:
       path: ElmScanner.entitlements
       properties:
@@ -24,6 +26,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScanner
         PRODUCT_NAME: ElmScanner
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_KEY_CFBundleDisplayName: ElmScanner
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
@@ -34,6 +37,33 @@ targets:
         ENABLE_USER_SELECTED_FILES: readwrite
         # ISBN lookup (Open Library) and the camera.
         ENABLE_OUTGOING_NETWORK_CONNECTIONS: true
+        INFOPLIST_KEY_NSCameraUsageDescription: ElmScanner uses the camera to scan the ISBN barcode on a book.
+  ElmScannerPhone:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Sources/ElmScanner
+        excludes:
+          # Mac-only screens; the iPhone has its own in Sources/ElmScannerPhone.
+          - App/ElmScannerApp.swift
+          - Views/ContentView.swift
+          - Views/ReviewView.swift
+      - path: Sources/ElmScannerPhone
+      - path: Resources/Phone
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScannerPhone
+        PRODUCT_NAME: ElmScanner
+        TARGETED_DEVICE_FAMILY: "1"
+        DEVELOPMENT_TEAM: 3SW5MDWRVL
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_CFBundleDisplayName: ElmScanner
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_NSCameraUsageDescription: ElmScanner uses the camera to scan the ISBN barcode on a book.
   ElmScannerTests:
     type: bundle.unit-test
@@ -47,6 +77,14 @@ targets:
     dependencies:
       - target: ElmScanner
 schemes:
+  ElmScannerPhone:
+    build:
+      targets:
+        ElmScannerPhone: all
+    run:
+      config: Debug
+    archive:
+      config: Release
   ElmScanner:
     build:
       targets:

@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct ContentView: View {
@@ -7,6 +8,7 @@ struct ContentView: View {
     @State private var manualISBN = ""
     @State private var reviewing = false
     @State private var editing: ScannedBook.ID?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var feedback: ScanFeedback?
     @State private var lastFeedbackAt = Date.distantPast
 
@@ -24,7 +26,7 @@ struct ContentView: View {
                         .frame(minWidth: 360)
                 }
                 .onAppear {
-                    camera.onISBN = { session.add($0); show(.recognized) }
+                    camera.onISBN = { handle($0) }
                     camera.onOtherBarcode = { _ in show(.rejected) }
                     camera.start()
                 }
@@ -108,15 +110,36 @@ struct ContentView: View {
 
     private var listPane: some View {
         VStack(spacing: 0) {
-            List(session.books, selection: $selection) { book in
-                row(book)
+            ScrollViewReader { proxy in
+                List(session.books, selection: $selection) { book in
+                    HStack(spacing: 10) {
+                        Image(systemName: "book.closed.fill")
+                            .foregroundStyle(.secondary)
+                            .symbolEffect(.bounce, options: .nonRepeating, value: session.flashCounts[book.id, default: 0])
+                        row(book)
+                    }
                     .contentShape(Rectangle())
-                    .onTapGesture(count: 2) { editing = book.id }
-                    .contextMenu {
-                    Button("Edit…") { editing = book.id }
-                    Button("Remove") { session.remove(selection.contains(book.id) ? selection : [book.id]) }
+                        .onTapGesture(count: 2) { editing = book.id }
+                        .contextMenu {
+                            Button("Edit…") { editing = book.id }
+                            Button("Remove") { session.remove(selection.contains(book.id) ? selection : [book.id]) }
+                        }
                 }
-            }
+                .onChange(of: session.flashing) { old, new in
+                    // The rescanned book is selected (the system highlight) while it flashes.
+                    guard let id = new else {
+                        if let old, selection == [old] { selection = [] }
+                        return
+                    }
+                    selection = [id]
+                    if reduceMotion { proxy.scrollTo(id, anchor: .center) }
+                    else { withAnimation { proxy.scrollTo(id, anchor: .center) } }
+                    NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .now)
+                    NSAccessibility.post(
+                        element: NSApp as Any, notification: .announcementRequested,
+                        userInfo: [.announcement: "Already scanned", .priority: NSAccessibilityPriorityLevel.high.rawValue]
+                    )
+                }
             .overlay {
                 if session.books.isEmpty {
                     Text("No books scanned yet").foregroundStyle(.secondary)
@@ -125,6 +148,7 @@ struct ContentView: View {
             .onDeleteCommand { session.remove(selection) }
             .sheet(item: editingBinding) { book in
                 BookEditForm(book: book) { session.update(book.id, with: $0) }
+            }
             }
             Divider()
             HStack {
@@ -166,8 +190,17 @@ struct ContentView: View {
             .filter { !$0.isEmpty }.joined(separator: " · ")
     }
 
+    /// A scanned book gets the green check; one already in the list flashes its row instead.
+    private func handle(_ isbn: String) {
+        switch session.add(isbn) {
+        case .added: show(.recognized)
+        case .duplicate(let id): session.flash(id)
+        case .invalid: break
+        }
+    }
+
     private func addManual() {
-        session.add(manualISBN)
+        if case .duplicate(let id) = session.add(manualISBN) { session.flash(id) }
         manualISBN = ""
     }
 }
