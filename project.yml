@@ -18,6 +18,7 @@ targets:
     sources:
       - path: Sources/ElmScanner
       - path: Resources/Mac
+      - path: Resources/Shared
     entitlements:
       path: ElmScanner.entitlements
       properties:
@@ -51,6 +52,7 @@ targets:
           - Views/ReviewView.swift
       - path: Sources/ElmScannerPhone
       - path: Resources/Phone
+      - path: Resources/Shared
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScannerPhone

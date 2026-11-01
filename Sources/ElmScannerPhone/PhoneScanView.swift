@@ -20,6 +20,7 @@ struct PhoneScanView: View {
                 cameraPane
                     .frame(height: 280)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .cameraDisplay()
                     .padding([.horizontal, .top])
                 HStack {
                     TextField("Or type an ISBN", text: $manualISBN)
@@ -59,6 +60,7 @@ struct PhoneScanView: View {
                     if session.books.isEmpty { Text("No books scanned yet").foregroundStyle(.secondary) }
                 }
             }
+            .achievementPopup(session.achievements)
             .navigationTitle("\(session.books.count) scanned")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

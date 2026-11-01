@@ -1,0 +1,14 @@
+{
+  "_comment": "Edit this file to change the rank popups. 'books' is the number of different books scanned that earns the rank. The text is placeholder for now. Rebuild the app after editing.",
+  "ranks": [
+    { "books": 1,    "title": "Rank 1 (placeholder)",    "message": "Placeholder text for the rank earned at 1 book." },
+    { "books": 5,    "title": "Rank 2 (placeholder)",    "message": "Placeholder text for the rank earned at 5 books." },
+    { "books": 10,   "title": "Rank 3 (placeholder)",    "message": "Placeholder text for the rank earned at 10 books." },
+    { "books": 30,   "title": "Rank 4 (placeholder)",    "message": "Placeholder text for the rank earned at 30 books." },
+    { "books": 100,  "title": "Rank 5 (placeholder)",    "message": "Placeholder text for the rank earned at 100 books." },
+    { "books": 150,  "title": "Rank 6 (placeholder)",    "message": "Placeholder text for the rank earned at 150 books." },
+    { "books": 300,  "title": "Rank 7 (placeholder)",    "message": "Placeholder text for the rank earned at 300 books." },
+    { "books": 500,  "title": "Rank 8 (placeholder)",    "message": "Placeholder text for the rank earned at 500 books." },
+    { "books": 1000, "title": "Rank 9 (placeholder)",    "message": "Placeholder text for the rank earned at 1000 books." }
+  ]
+}

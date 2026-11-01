@@ -15,6 +15,8 @@ final class ScanSession {
     var foundBooks: [BookMetadata] { books.compactMap(\.metadata) }
 
     @ObservationIgnored private let storeURL: URL?
+    /// Counts the different books ever scanned; nil where achievements aren't wanted.
+    let achievements: AchievementTracker?
     /// Books already exported: still listed, but no longer worth restoring.
     @ObservationIgnored private var exported = Set<UUID>()
 
@@ -23,12 +25,15 @@ final class ScanSession {
         URL.applicationSupportDirectory.appending(path: "ElmScanner/scanned-books.json")
     }
 
-    init(storeURL: URL? = nil) {
+    init(storeURL: URL? = nil, achievements: AchievementTracker? = nil) {
         self.storeURL = storeURL
+        self.achievements = achievements
         guard let storeURL else { return }
         // Assigned here, so the didSet doesn't rewrite the file mid-load.
         books = ScanStore.load(from: storeURL)
         for book in books where book.metadata == nil { lookUp(book.isbn) }
+        // Books restored from before achievements existed still count.
+        achievements?.record(all: books.map(\.isbn))
     }
 
     /// What `add` did with an ISBN.
@@ -49,7 +54,10 @@ final class ScanSession {
     @discardableResult
     func add(_ raw: String) -> AddResult {
         guard let isbn = BookLookup.normalizedISBN(raw) else { return .invalid }
-        if let existing = books.first(where: { $0.isbn == isbn }) { return .duplicate(existing.id) }
+        // The same book as ISBN-10 or ISBN-13 is still the same book.
+        let key = ISBN.canonical13(isbn) ?? isbn
+        if let existing = books.first(where: { (ISBN.canonical13($0.isbn) ?? $0.isbn) == key }) { return .duplicate(existing.id) }
+        achievements?.record(isbn)
         books.append(ScannedBook(isbn: isbn))
         lastAdded = isbn
         lookUp(isbn)

@@ -122,4 +122,77 @@ final class ElmScannerTests: XCTestCase {
             XCTAssertTrue(text.contains("author = {{Statistical Office} and Herbert, Frank}"), text)
         }
     }
+
+    // MARK: Achievements
+
+    private func tempURL() -> URL {
+        FileManager.default.temporaryDirectory.appending(path: "ElmScannerTests-\(UUID().uuidString)")
+    }
+
+    func testISBN10AndISBN13AreTheSameBook() {
+        XCTAssertEqual(ISBN.canonical13("0441172717"), "9780441172719")
+        XCTAssertEqual(ISBN.canonical13("978-0-441-17271-9"), "9780441172719")
+        XCTAssertNil(ISBN.canonical13("0441172718"))
+        XCTAssertNil(ISBN.canonical13("9780441172718"))
+    }
+
+    @MainActor
+    func testEachBookIsCountedOnceAndOnlyAHashIsKept() throws {
+        let url = tempURL()
+        defer { try? FileManager.default.removeItem(at: url) }
+        let ranks = [Rank(books: 1, title: "One", message: "m"), Rank(books: 2, title: "Two", message: "m")]
+        let tracker = AchievementTracker(logURL: url, ranks: ranks)
+
+        tracker.record("9780441172719")
+        XCTAssertEqual(tracker.count, 1)
+        XCTAssertEqual(tracker.pending?.rank.title, "One")
+        tracker.dismiss()
+
+        tracker.record("0441172717")        // the same book as ISBN-10
+        tracker.record("9780441172719")     // scanned again
+        tracker.record("9780441172718")     // bad check digit
+        XCTAssertEqual(tracker.count, 1)
+        XCTAssertNil(tracker.pending)
+
+        tracker.record("9780857073006")
+        XCTAssertEqual(tracker.count, 2)
+        XCTAssertEqual(tracker.pending?.rank.title, "Two")
+
+        let log = try String(contentsOf: url, encoding: .utf8)
+        XCTAssertFalse(log.contains("9780441172719"))
+        XCTAssertFalse(log.contains("9780857073006"))
+        XCTAssertEqual(AchievementTracker(logURL: url, ranks: ranks).count, 2)
+    }
+
+    @MainActor
+    func testRemovingABookDoesNotLowerOrRepeatTheCount() {
+        let url = tempURL()
+        defer { try? FileManager.default.removeItem(at: url) }
+        let tracker = AchievementTracker(logURL: url, ranks: [])
+        let session = ScanSession(achievements: tracker)
+        session.add("9780441172719")
+        XCTAssertEqual(tracker.count, 1)
+        session.removeAll()
+        XCTAssertEqual(tracker.count, 1)
+        session.add("9780441172719")
+        XCTAssertEqual(tracker.count, 1)
+        XCTAssertEqual(session.add("0441172717"), .duplicate(session.books[0].id))
+    }
+
+    @MainActor
+    func testSeveralRanksAtOnceShowTheHighest() {
+        let ranks = [1, 2, 3].map { Rank(books: $0, title: "R\($0)", message: "m") }
+        let tracker = AchievementTracker(logURL: nil, ranks: ranks)
+        tracker.record(all: ["9780441172719", "9780857073006", "9780061120084"])
+        XCTAssertEqual(tracker.pending?.rank.title, "R3")
+    }
+
+    func testBundledRanksFileHasTheRequestedThresholds() {
+        let file = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .appending(path: "Resources/Shared/Ranks.json")
+        let ranks = Rank.load(from: file)
+        XCTAssertEqual(ranks.map(\.books), [1, 5, 10, 30, 100, 150, 300, 500, 1000])
+        XCTAssertTrue(ranks.allSatisfy { !$0.title.isEmpty && !$0.message.isEmpty })
+    }
 }

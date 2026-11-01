@@ -3,9 +3,11 @@ import SwiftUI
 
 @main
 struct ElmScannerApp: App {
+    @State private var session = ScanSession(achievements: .standard())
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(session: session)
         }
         .commands {
             CommandGroup(replacing: .appInfo) {

@@ -2,7 +2,7 @@ import AppKit
 import SwiftUI
 
 struct ContentView: View {
-    @State private var session = ScanSession()
+    var session: ScanSession
     @State private var camera = BarcodeCamera()
     @State private var selection = Set<UUID>()
     @State private var manualISBN = ""
@@ -35,6 +35,7 @@ struct ContentView: View {
             }
         }
         .clipped()
+        .achievementPopup(session.achievements)
         .frame(minWidth: 760, minHeight: 440)
     }
 
@@ -75,6 +76,7 @@ struct ContentView: View {
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .cameraDisplay()
             Text("Hold a book's back-cover barcode up to the camera.")
                 .font(.callout).foregroundStyle(.secondary)
             HStack {
