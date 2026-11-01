@@ -24,7 +24,7 @@ struct AboutView: View {
                     .accessibilityHidden(true)
                 Text("ElmScanner").font(.title.bold()).padding(.top, 8)
                 Text(version).font(.subheadline).foregroundStyle(.secondary)
-                Text("Prompted by Grant Jun Otsuki\nCode by Claude")
+                Text("Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)

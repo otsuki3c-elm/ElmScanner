@@ -195,4 +195,25 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertEqual(ranks.map(\.books), [1, 5, 10, 30, 100, 150, 300, 500, 1000])
         XCTAssertTrue(ranks.allSatisfy { !$0.title.isEmpty && !$0.message.isEmpty })
     }
+
+    func testLookupQueueAllowsFiveRequestsPerTwoSeconds() async {
+        let limiter = RateLimiter(maxRequests: 5, perSeconds: 2)
+        let t0 = Date(timeIntervalSinceReferenceDate: 1000)
+        var slots: [Date] = []
+        for _ in 0..<12 { slots.append(await limiter.reserve(now: t0)) }
+        // The first 5 go at once, the next 5 two seconds later, the next 2 two seconds after that.
+        XCTAssertEqual(slots.map { $0.timeIntervalSince(t0) }, [0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 4, 4])
+        // Never more than 5 starts in any 2-second window.
+        for slot in slots {
+            let inWindow = slots.filter { $0 >= slot && $0 < slot.addingTimeInterval(2) }.count
+            XCTAssertLessThanOrEqual(inWindow, 5)
+        }
+        // A request arriving much later isn't held up.
+        let late = await limiter.reserve(now: t0.addingTimeInterval(60))
+        XCTAssertEqual(late, t0.addingTimeInterval(60))
+    }
+
+    func testLookupIdentifiesTheApp() {
+        XCTAssertTrue(BookLookup.userAgent.contains("elmscanner@gjotsuki.net"))
+    }
 }

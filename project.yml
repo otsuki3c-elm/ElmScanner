@@ -8,7 +8,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "0.1"
+    MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "1"
 targets:
   ElmScanner:
@@ -39,6 +39,8 @@ targets:
         # ISBN lookup (Open Library) and the camera.
         ENABLE_OUTGOING_NETWORK_CONNECTIONS: true
         INFOPLIST_KEY_NSCameraUsageDescription: ElmScanner uses the camera to scan the ISBN barcode on a book.
+        # Only ordinary HTTPS and hashing: exempt, so App Store Connect skips the export questions.
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: false
   ElmScannerPhone:
     type: application
     platform: iOS
@@ -67,6 +69,8 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: true
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_NSCameraUsageDescription: ElmScanner uses the camera to scan the ISBN barcode on a book.
+        # Only ordinary HTTPS and hashing: exempt, so App Store Connect skips the export questions.
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: false
   ElmScannerTests:
     type: bundle.unit-test
     platform: macOS

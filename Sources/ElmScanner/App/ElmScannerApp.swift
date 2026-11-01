@@ -20,7 +20,7 @@ struct ElmScannerApp: App {
     /// app's name and version.
     private func showAbout() {
         let credits = NSMutableAttributedString(
-            string: "Prompted by Grant Jun Otsuki\nCode by Claude",
+            string: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library",
             attributes: [
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
                 .foregroundColor: NSColor.labelColor

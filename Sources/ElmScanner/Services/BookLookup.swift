@@ -28,6 +28,16 @@ enum BookLookup {
         }
     }
 
+    /// Open Library's own guidance is to identify the app with a contact address, which
+    /// also earns a higher request limit.
+    static let userAgent = "ElmScanner (elmscanner@gjotsuki.net)"
+
+    /// All lookups share this limit: at most 5 requests start in any 2 seconds.
+    static let limiter = RateLimiter(maxRequests: 5, perSeconds: 2)
+
+    /// How many times a "slow down" answer (HTTP 429 or 503) is waited out before giving up.
+    private static let maxRetries = 2
+
     static func lookup(isbn: String, session: URLSession = .shared) async throws -> BookMetadata {
         guard let isbn = normalizedISBN(isbn) else { throw LookupError.invalidISBN }
         var components = URLComponents(string: "https://openlibrary.org/api/books")!
@@ -37,21 +47,34 @@ enum BookLookup {
             URLQueryItem(name: "jscmd", value: "data")
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 15)
-        request.setValue("ElmScanner (ISBN scanner)", forHTTPHeaderField: "User-Agent")
-        let data: Data
-        do {
-            let (body, response) = try await session.data(for: request)
-            if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-                throw LookupError.network("HTTP \(http.statusCode)")
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        var attempt = 0
+        while true {
+            try await limiter.waitForTurn()
+            let data: Data
+            do {
+                let (body, response) = try await session.data(for: request)
+                if let http = response as? HTTPURLResponse {
+                    if (http.statusCode == 429 || http.statusCode == 503) && attempt < maxRetries {
+                        attempt += 1
+                        // Honor Retry-After if it's a number of seconds; otherwise wait a few.
+                        let wait = http.value(forHTTPHeaderField: "Retry-After").flatMap(Double.init) ?? 5
+                        try await Task.sleep(for: .seconds(min(max(wait, 1), 30)))
+                        continue
+                    }
+                    if !(200..<300).contains(http.statusCode) { throw LookupError.network("HTTP \(http.statusCode)") }
+                }
+                data = body
+            } catch let error as LookupError {
+                throw error
+            } catch is CancellationError {
+                throw CancellationError()
+            } catch {
+                throw LookupError.network(error.localizedDescription)
             }
-            data = body
-        } catch let error as LookupError {
-            throw error
-        } catch {
-            throw LookupError.network(error.localizedDescription)
+            guard let metadata = parse(data, isbn: isbn) else { throw LookupError.notFound }
+            return metadata
         }
-        guard let metadata = parse(data, isbn: isbn) else { throw LookupError.notFound }
-        return metadata
     }
 
     /// Reads Open Library's `jscmd=data` response.
@@ -80,5 +103,36 @@ enum BookLookup {
 
     static func year(in text: String) -> Int? {
         text.range(of: #"\b(1[5-9]\d\d|20\d\d)\b"#, options: .regularExpression).flatMap { Int(text[$0]) }
+    }
+}
+
+/// Allows at most `maxRequests` to start in any `perSeconds`, handing out start times
+/// in the order requests arrive: a queue that keeps the app within Open Library's limits.
+actor RateLimiter {
+    private let maxRequests: Int
+    private let window: TimeInterval
+    /// The most recent start times handed out (some may be in the future).
+    private var starts: [Date] = []
+
+    init(maxRequests: Int, perSeconds: TimeInterval) {
+        self.maxRequests = maxRequests
+        self.window = perSeconds
+    }
+
+    /// The time a request that arrives at `now` may start.
+    func reserve(now: Date = Date()) -> Date {
+        var slot = now
+        if starts.count >= maxRequests {
+            slot = max(now, starts[starts.count - maxRequests].addingTimeInterval(window))
+        }
+        starts.append(slot)
+        starts = Array(starts.suffix(maxRequests))
+        return slot
+    }
+
+    /// Returns once this request may start.
+    func waitForTurn() async throws {
+        let wait = reserve().timeIntervalSinceNow
+        if wait > 0 { try await Task.sleep(for: .seconds(wait)) }
     }
 }
