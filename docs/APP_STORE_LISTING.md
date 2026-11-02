@@ -2,6 +2,15 @@
 
 *Draft text for App Store Connect. Character limits are Apple's; the counts below were checked.*
 
+## One app, both platforms (universal purchase)
+
+The Mac and iPhone apps share the bundle ID `com.otsuki.elmscanner.ElmScanner`, so they can live in a single App Store Connect app record: one purchase of 0.99 USD unlocks both. Apple does not allow a bundle ID to change after submission.
+
+1. Create the app record (platform iOS) with that bundle ID.
+2. In the same record, click the "+" next to the platform list and add **macOS**. The bundle ID must match.
+3. Upload an iOS build and a macOS build (Xcode: Product > Archive, once per scheme). Build numbers are counted separately per platform.
+4. Set the price once, for the whole app. Fill in the iPhone and Mac versions' screenshots and review notes separately; the name, privacy policy and price are shared.
+
 ## Basics
 
 | Field | Text |
@@ -10,7 +19,7 @@
 | Subtitle (max 30) | Scan book ISBNs, export refs |
 | Primary category | Productivity (the project is currently set to this) |
 | Secondary category | Reference |
-| Price | 0.99 USD (Price Tier 1) |
+| Price | 0.99 USD (set as the base price point; Apple generates the other storefronts' prices from it) |
 | Support URL | [your support page or email page] |
 | Privacy policy URL | [where docs/PRIVACY.md is published] |
 | Copyright | © [year] [your legal name] |

@@ -57,7 +57,7 @@ targets:
       - path: Resources/Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScannerPhone
+        PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScanner
         PRODUCT_NAME: ElmScanner
         TARGETED_DEVICE_FAMILY: "1"
         DEVELOPMENT_TEAM: 3SW5MDWRVL
