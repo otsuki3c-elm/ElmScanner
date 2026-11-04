@@ -3,6 +3,7 @@ import SwiftUI
 /// The iPhone's About screen: the icon, name and version, and who made it.
 struct AboutView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var editingEmail = false
 
     private var version: String {
         let info = Bundle.main.infoDictionary
@@ -28,6 +29,8 @@ struct AboutView: View {
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
+                Button("Change email address…") { editingEmail = true }
+                    .padding(.top, 8)
                 Spacer()
             }
             .frame(maxWidth: .infinity)
@@ -36,6 +39,10 @@ struct AboutView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
             }
+        }
+        .sheet(isPresented: $editingEmail) {
+            ContactEmailForm(contact: .shared, mode: .edit) { editingEmail = false }
+                .presentationDetents([.medium, .large])
         }
         .presentationDetents([.medium, .large])
     }

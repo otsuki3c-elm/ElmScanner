@@ -34,6 +34,16 @@ final class StubProtocol: URLProtocol {
     }
 }
 
+final class ContactBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var stored: String?
+    init(_ value: String?) { stored = value }
+    var value: String? {
+        get { lock.lock(); defer { lock.unlock() }; return stored }
+        set { lock.lock(); stored = newValue; lock.unlock() }
+    }
+}
+
 final class TestClock: @unchecked Sendable {
     private let lock = NSLock()
     private var current = Date(timeIntervalSinceReferenceDate: 1_000_000)
@@ -45,19 +55,24 @@ final class LookupServiceTests: XCTestCase {
     private let dune13 = "9780441172719"
     private let duneJSON = #"{"ISBN:9780441172719":{"title":"Dune","authors":[{"name":"Frank Herbert"}],"publish_date":"June 2006","publishers":[{"name":"Ace"}]}}"#
     private var clock = TestClock()
+    /// The email address the service sees; nil means none has been entered.
+    private var contact = ContactBox("reader@example.com")
 
     override func setUp() {
         StubProtocol.reset()
         clock = TestClock()
+        contact = ContactBox("reader@example.com")
     }
 
     private func makeService(cacheURL: URL? = nil) -> OpenLibraryBookLookupService {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [StubProtocol.self]
         let clock = clock
+        let contact = contact
         return OpenLibraryBookLookupService(
             session: URLSession(configuration: config), cacheURL: cacheURL,
-            limiter: RateLimiter(maxRequests: 1000, perSeconds: 1), now: { clock.date })
+            limiter: RateLimiter(maxRequests: 1000, perSeconds: 1), now: { clock.date },
+            contact: { contact.value })
     }
 
     func testSecondLookupComesFromTheCache() async throws {
@@ -68,7 +83,7 @@ final class LookupServiceTests: XCTestCase {
         XCTAssertEqual(first?.title, "Dune")
         XCTAssertEqual(first, second)
         XCTAssertEqual(StubProtocol.requestCount, 1)
-        XCTAssertEqual(StubProtocol.requests[0].value(forHTTPHeaderField: "User-Agent"), "ElmScanner/1.0 (elmscanner@gjotsuki.net)")
+        XCTAssertEqual(StubProtocol.requests[0].value(forHTTPHeaderField: "User-Agent"), "ElmScanner/1.0 (elmscanner@gjotsuki.net; reader@example.com)")
     }
 
     func testISBN10SharesTheISBN13Entry() async throws {
@@ -141,6 +156,30 @@ final class LookupServiceTests: XCTestCase {
         StubProtocol.handler = { [duneJSON] _ in (200, duneJSON) }
         let retry = try? await service.lookup(isbn: dune13)
         XCTAssertEqual(retry?.title, "Dune")
+    }
+
+    func testNoEmailAddressMeansNoRequest() async throws {
+        contact.value = nil
+        StubProtocol.handler = { [duneJSON] _ in (200, duneJSON) }
+        let service = makeService()
+        do {
+            _ = try await service.lookup(isbn: dune13)
+            XCTFail("expected an error")
+        } catch let error as BookLookup.LookupError {
+            guard case .contactMissing = error else { return XCTFail("wrong error \(error)") }
+        }
+        XCTAssertEqual(StubProtocol.requestCount, 0)
+        // Once an address is entered, the same lookup goes through.
+        contact.value = "reader@example.com"
+        let found = try await service.lookup(isbn: dune13)
+        XCTAssertEqual(found?.title, "Dune")
+    }
+
+    func testEmailValidation() {
+        for good in ["a@b.co", "first.last+tag@sub.example.org"] { XCTAssertTrue(ContactEmail.isValid(good), good) }
+        for bad in ["", "no-at.example.com", "a@b", "a b@c.de", "a@b.c.", "x(y)@z.com", "a@b.com; evil"] {
+            XCTAssertFalse(ContactEmail.isValid(bad), bad)
+        }
     }
 
     func testPublishDateParsing() {

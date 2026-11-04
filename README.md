@@ -29,6 +29,7 @@ The defaults in `Config/Signing.xcconfig` have no developer team and a placehold
 ### If you fork this
 
 - **Change the Open Library contact address** in `Sources/ElmScanner/Services/BookLookup.swift` (`contactAddress`). Open Library asks apps to identify themselves, and it holds whoever is named responsible for the traffic. The code keeps within their published limits. Please keep it that way.
+- The app also asks each user for their own email address at first use and adds it to the `User-Agent`, as Open Library requests. Nothing is looked up until it is entered.
 - Use your own app name and icon if you publish your own version. The app icon was generated with AI.
 - `Resources/Shared/Ranks.json` holds the text for the achievement ranks. Edit it freely.
 

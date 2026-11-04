@@ -64,7 +64,7 @@ FREE AND OPEN SOURCE
 
 PRIVATE BY DESIGN
 • No account, no ads, no tracking.
-• The camera image never leaves your device. Only a book's ISBN is sent to Open Library to look up its details.
+• The camera image never leaves your device. Only a book's ISBN and your email address (which Open Library asks every app to send) go to Open Library to look up its details.
 
 ElmScanner works with Zotero's import formats but is not made by or endorsed by Zotero.
 
@@ -85,7 +85,7 @@ ElmScanner reads ISBN barcodes with the camera. If you cannot scan a physical bo
 - 9780857073006 (The Search for WondLa)
 - 9780061120084 (To Kill a Mockingbird)
 
-Book details are looked up from Open Library, so an internet connection is needed the first time a book is scanned. No sign-in is required. Tap Next to review the books, then Export.
+Book details are looked up from Open Library, so an internet connection is needed the first time a book is scanned. No sign-in is required, but the app asks for an email address at first use (any address works; see below). Tap Next to review the books, then Export.
 
 ## Export compliance
 
@@ -101,4 +101,6 @@ Open Library replied on 3 November 2026 that it does not review or approve indiv
 
 ## Privacy "nutrition label" suggestion
 
-Nothing is collected for tracking or linked to the user. The ISBN sent to Open Library (with the IP address inherent to any request) is the only data that leaves the device. Review Apple's definitions in App Store Connect and answer accordingly; "Data Not Collected" is the likely answer, but it's your call to confirm.
+Nothing is used for tracking. The ISBN and the user's email address are sent to Open Library (a third party), along with the IP address inherent to any request. Because the email address leaves the device, "Data Not Collected" is probably no longer the right answer: read Apple's definitions in App Store Connect and consider declaring **Contact Info > Email Address**, used for App Functionality, not for tracking. This is your call to confirm.
+
+App Review notes: the app asks for an email address at first use. Enter any address (for example review@example.com) to continue. It is only passed to Open Library, as the explanation on screen says.

@@ -7,12 +7,15 @@ enum BookLookup {
         case invalidISBN
         case notFound
         case network(String)
+        /// No email address entered yet; nothing is sent until there is one.
+        case contactMissing
 
         var errorDescription: String? {
             switch self {
             case .invalidISBN: return "Not a valid ISBN"
             case .notFound: return "No match found"
             case .network(let detail): return "Couldn't reach Open Library (\(detail))"
+            case .contactMissing: return "Enter your email address to look up books"
             }
         }
     }
@@ -34,7 +37,10 @@ enum BookLookup {
     /// IF YOU FORK THIS APP, CHANGE THIS to your own address. Open Library sees this
     /// on every request and treats whoever it names as responsible for the traffic.
     static let contactAddress = "elmscanner@gjotsuki.net"
-    static let userAgent = "ElmScanner/1.0 (\(contactAddress))"
+    ///
+    /// The header also carries the user's own address (asked for at first use), so Open
+    /// Library can tell the users of the app apart.
+    static func userAgent(contact: String) -> String { "ElmScanner/1.0 (\(contactAddress); \(contact))" }
 
     /// All lookups share this limit: at most 5 requests start in any 2 seconds.
     static let limiter = RateLimiter(maxRequests: 5, perSeconds: 2)

@@ -214,6 +214,8 @@ final class ElmScannerTests: XCTestCase {
     }
 
     func testLookupIdentifiesTheApp() {
-        XCTAssertTrue(BookLookup.userAgent.contains("elmscanner@gjotsuki.net"))
+        let agent = BookLookup.userAgent(contact: "reader@example.com")
+        XCTAssertTrue(agent.contains("elmscanner@gjotsuki.net"))
+        XCTAssertTrue(agent.contains("reader@example.com"))
     }
 }

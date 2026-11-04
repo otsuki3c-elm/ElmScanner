@@ -9,6 +9,9 @@ struct ElmScannerApp: App {
         WindowGroup {
             ContentView(session: session)
         }
+        Settings {
+            ContactEmailForm(contact: .shared, mode: .edit)
+        }
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button("About ElmScanner") { showAbout() }

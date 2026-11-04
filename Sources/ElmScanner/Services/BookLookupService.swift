@@ -58,6 +58,7 @@ actor OpenLibraryBookLookupService: BookLookupService {
     private let session: URLSession
     private let limiter: RateLimiter
     private let now: @Sendable () -> Date
+    private let contact: @Sendable () -> String?
     private var cache: LookupCache
     private var inFlight: [String: Task<BookMetadata?, Error>] = [:]
 
@@ -65,7 +66,9 @@ actor OpenLibraryBookLookupService: BookLookupService {
     init(session: URLSession = .shared,
          cacheURL: URL? = nil,
          limiter: RateLimiter = BookLookup.limiter,
-         now: @escaping @Sendable () -> Date = { Date() }) {
+         now: @escaping @Sendable () -> Date = { Date() },
+         contact: @escaping @Sendable () -> String? = { ContactEmail.stored() }) {
+        self.contact = contact
         self.session = session
         self.limiter = limiter
         self.now = now
@@ -102,6 +105,8 @@ actor OpenLibraryBookLookupService: BookLookupService {
     }
 
     private func fetch(_ isbn13: String) async throws -> BookMetadata? {
+        // Open Library wants every request to name a contact; with none, send nothing.
+        guard let contact = contact() else { throw BookLookup.LookupError.contactMissing }
         var components = URLComponents(string: "https://openlibrary.org/api/books")!
         components.queryItems = [
             URLQueryItem(name: "bibkeys", value: "ISBN:\(isbn13)"),
@@ -109,7 +114,7 @@ actor OpenLibraryBookLookupService: BookLookupService {
             URLQueryItem(name: "jscmd", value: "data")
         ]
         var request = URLRequest(url: components.url!, timeoutInterval: 10)
-        request.setValue(BookLookup.userAgent, forHTTPHeaderField: "User-Agent")
+        request.setValue(BookLookup.userAgent(contact: contact), forHTTPHeaderField: "User-Agent")
         try await limiter.waitForTurn()
         do {
             let (data, response) = try await session.data(for: request)

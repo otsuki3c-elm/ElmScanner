@@ -12,6 +12,7 @@ struct PhoneScanView: View {
     @State private var reviewing = false
     @State private var confirmingClear = false
     @State private var showingAbout = false
+    private let contact = ContactEmail.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -67,6 +68,7 @@ struct PhoneScanView: View {
                 }
             }
             .achievementPopup(session.achievements)
+            .requiresContactEmail(contact)
             .navigationTitle("\(session.books.count) scanned")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -94,8 +96,10 @@ struct PhoneScanView: View {
             .onAppear {
                 camera.onISBN = { handle($0) }
                 camera.onOtherBarcode = { _ in show(.rejected) }
-                camera.start()
+                // Not until the email address is in: a scan would look up a book.
+                if contact.isSet { camera.start() }
             }
+            .onChange(of: contact.isSet) { if contact.isSet { camera.start() } }
             .onDisappear { camera.stop() }
         }
     }

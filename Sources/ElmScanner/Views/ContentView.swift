@@ -11,6 +11,7 @@ struct ContentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var feedback: ScanFeedback?
     @State private var lastFeedbackAt = Date.distantPast
+    private let contact = ContactEmail.shared
 
     var body: some View {
         ZStack {
@@ -28,14 +29,17 @@ struct ContentView: View {
                 .onAppear {
                     camera.onISBN = { handle($0) }
                     camera.onOtherBarcode = { _ in show(.rejected) }
-                    camera.start()
+                    // Not until the email address is in: a scan would look up a book.
+                    if contact.isSet { camera.start() }
                 }
+                .onChange(of: contact.isSet) { if contact.isSet { camera.start() } }
                 .onDisappear { camera.stop() }
                 .transition(reduceMotion ? .opacity : .move(edge: .leading))
             }
         }
         .clipped()
         .achievementPopup(session.achievements)
+        .requiresContactEmail(contact)
         .frame(minWidth: 760, minHeight: 440)
     }
 
