@@ -102,6 +102,7 @@ struct BookEditForm: View {
             if missing {
                 Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange)
                     .help("Missing: you may want to enter it")
+                    .accessibilityLabel("\(label) is missing")
             }
         }
     }

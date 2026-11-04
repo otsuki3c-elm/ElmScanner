@@ -13,12 +13,14 @@ struct PhoneScanView: View {
     @State private var confirmingClear = false
     @State private var showingAbout = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 cameraPane
-                    .frame(height: 280)
+                    // Leaves room for the list when the text size is very large.
+                    .frame(height: typeSize.isAccessibilitySize ? 180 : 280)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .cameraDisplay()
                     .padding([.horizontal, .top])
@@ -40,9 +42,13 @@ struct PhoneScanView: View {
                                 Image(systemName: "book.closed.fill")
                                     .foregroundStyle(.secondary)
                                     .symbolEffect(.bounce, options: .nonRepeating, value: session.flashCounts[book.id, default: 0])
+                                    .accessibilityHidden(true)
                                 row(book)
                             }
                             .tag(book.id)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityAddTraits(.isButton)
+                            .accessibilityHint("Opens it for editing")
                             .contentShape(Rectangle())
                             .onTapGesture { editing = book.id }
                         }
@@ -53,7 +59,7 @@ struct PhoneScanView: View {
                         if reduceMotion { proxy.scrollTo(id, anchor: .center) }
                         else { withAnimation { proxy.scrollTo(id, anchor: .center) } }
                         UINotificationFeedbackGenerator().notificationOccurred(.warning)
-                        UIAccessibility.post(notification: .announcement, argument: "Already scanned")
+                        Announcer.post("Already scanned", urgent: true)
                     }
                 }
                 .overlay {
@@ -102,8 +108,10 @@ struct PhoneScanView: View {
                 // Only once startRunning() has returned: attaching a preview layer
                 // while the camera queue is starting the session crashes AVFoundation.
                 CameraPreview(session: camera.session)
+                    .accessibilityLabel("Camera view")
+                    .accessibilityHint("Hold a book's back-cover barcode up to the camera. Each scan is announced.")
             case .starting:
-                ProgressView()
+                ProgressView().accessibilityLabel("Starting camera")
             case .denied:
                 notice("Camera access is off.", "Allow it in Settings ▸ ElmScanner ▸ Camera.")
             case .unavailable:
@@ -143,6 +151,7 @@ struct PhoneScanView: View {
                 }
                 Spacer()
                 Button("Retry") { session.retry(book.id) }.buttonStyle(.borderless)
+                    .accessibilityLabel("Retry looking up \(book.isbn)")
             }
         }
     }
@@ -181,6 +190,7 @@ struct PhoneScanView: View {
         lastFeedbackAt = Date()
         UINotificationFeedbackGenerator().notificationOccurred(kind == .recognized ? .success : .error)
         let shown = ScanFeedback(kind: kind)
+        Announcer.post(kind == .recognized ? "Book scanned" : "Not a book barcode")
         feedback = shown
         Task {
             try? await Task.sleep(for: .seconds(1))

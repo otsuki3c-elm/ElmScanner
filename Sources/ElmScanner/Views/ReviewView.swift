@@ -14,6 +14,8 @@ struct ReviewView: View {
         VStack(spacing: 0) {
             List(session.books, selection: $selection) { book in
                 row(book)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAction(named: "Edit") { editing = book.id }
                     .contentShape(Rectangle())
                     .onTapGesture(count: 2) { editing = book.id }
                     .contextMenu {
@@ -53,6 +55,7 @@ struct ReviewView: View {
             }
             .padding(10)
         }
+        .onChange(of: message) { if let message { Announcer.post(message) } }
         .sheet(item: editingBinding) { book in
             BookEditForm(book: book) { session.update(book.id, with: $0) }
         }

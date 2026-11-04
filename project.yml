@@ -1,10 +1,12 @@
 name: ElmScanner
 options:
-  bundleIdPrefix: com.otsuki.elmscanner
   deploymentTarget:
     macOS: "14.0"
     iOS: "17.0"
   createIntermediateGroups: true
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -25,7 +27,7 @@ targets:
         com.apple.security.device.camera: true
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScanner
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
         PRODUCT_NAME: ElmScanner
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
@@ -57,10 +59,9 @@ targets:
       - path: Resources/Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.otsuki.elmscanner.ElmScanner
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
         PRODUCT_NAME: ElmScanner
         TARGETED_DEVICE_FAMILY: "1"
-        DEVELOPMENT_TEAM: 3SW5MDWRVL
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true

@@ -30,52 +30,17 @@ enum BookLookup {
 
     /// Open Library's own guidance is to identify the app with a contact address, which
     /// also earns a higher request limit.
-    static let userAgent = "ElmScanner (elmscanner@gjotsuki.net)"
+    ///
+    /// IF YOU FORK THIS APP, CHANGE THIS to your own address. Open Library sees this
+    /// on every request and treats whoever it names as responsible for the traffic.
+    static let contactAddress = "elmscanner@gjotsuki.net"
+    static let userAgent = "ElmScanner/1.0 (\(contactAddress))"
 
     /// All lookups share this limit: at most 5 requests start in any 2 seconds.
     static let limiter = RateLimiter(maxRequests: 5, perSeconds: 2)
 
-    /// How many times a "slow down" answer (HTTP 429 or 503) is waited out before giving up.
-    private static let maxRetries = 2
-
-    static func lookup(isbn: String, session: URLSession = .shared) async throws -> BookMetadata {
-        guard let isbn = normalizedISBN(isbn) else { throw LookupError.invalidISBN }
-        var components = URLComponents(string: "https://openlibrary.org/api/books")!
-        components.queryItems = [
-            URLQueryItem(name: "bibkeys", value: "ISBN:\(isbn)"),
-            URLQueryItem(name: "format", value: "json"),
-            URLQueryItem(name: "jscmd", value: "data")
-        ]
-        var request = URLRequest(url: components.url!, timeoutInterval: 15)
-        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        var attempt = 0
-        while true {
-            try await limiter.waitForTurn()
-            let data: Data
-            do {
-                let (body, response) = try await session.data(for: request)
-                if let http = response as? HTTPURLResponse {
-                    if (http.statusCode == 429 || http.statusCode == 503) && attempt < maxRetries {
-                        attempt += 1
-                        // Honor Retry-After if it's a number of seconds; otherwise wait a few.
-                        let wait = http.value(forHTTPHeaderField: "Retry-After").flatMap(Double.init) ?? 5
-                        try await Task.sleep(for: .seconds(min(max(wait, 1), 30)))
-                        continue
-                    }
-                    if !(200..<300).contains(http.statusCode) { throw LookupError.network("HTTP \(http.statusCode)") }
-                }
-                data = body
-            } catch let error as LookupError {
-                throw error
-            } catch is CancellationError {
-                throw CancellationError()
-            } catch {
-                throw LookupError.network(error.localizedDescription)
-            }
-            guard let metadata = parse(data, isbn: isbn) else { throw LookupError.notFound }
-            return metadata
-        }
-    }
+    /// The lookup the app uses: Open Library, with results kept on the device.
+    static let shared = OpenLibraryBookLookupService(cacheURL: LookupCache.defaultURL)
 
     /// Reads Open Library's `jscmd=data` response.
     static func parse(_ data: Data, isbn: String) -> BookMetadata? {

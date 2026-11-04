@@ -1,0 +1,6 @@
+// Copy this file to Local.xcconfig and fill in your own values.
+// Your Apple developer team ID (needed to run on a real iPhone):
+DEVELOPMENT_TEAM = ABCDE12345
+// Your own reverse-DNS bundle ID. Use the same one for the Mac and iPhone apps
+// if you want a single App Store listing for both.
+APP_BUNDLE_ID = com.yourname.ElmScanner

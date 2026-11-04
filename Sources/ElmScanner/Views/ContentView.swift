@@ -16,7 +16,7 @@ struct ContentView: View {
         ZStack {
             if reviewing {
                 ReviewView(session: session) { slide(to: false) }
-                    .transition(.move(edge: .trailing))
+                    .transition(reduceMotion ? .opacity : .move(edge: .trailing))
             } else {
                 HStack(spacing: 0) {
                     cameraPane
@@ -31,7 +31,7 @@ struct ContentView: View {
                     camera.start()
                 }
                 .onDisappear { camera.stop() }
-                .transition(.move(edge: .leading))
+                .transition(reduceMotion ? .opacity : .move(edge: .leading))
             }
         }
         .clipped()
@@ -59,8 +59,10 @@ struct ContentView: View {
                     // Only once startRunning() has returned: attaching a preview layer
                     // while the camera queue is starting the session crashes AVFoundation.
                     CameraPreview(session: camera.session)
+                        .accessibilityLabel("Camera view")
+                        .accessibilityHint("Hold a book's back-cover barcode up to the camera. Each scan is announced.")
                 case .starting:
-                    ProgressView().controlSize(.small)
+                    ProgressView().controlSize(.small).accessibilityLabel("Starting camera")
                 case .denied:
                     notice("Camera access is off.", "Allow it in System Settings ▸ Privacy & Security ▸ Camera.")
                 case .unavailable:
@@ -95,6 +97,7 @@ struct ContentView: View {
         guard Date().timeIntervalSince(lastFeedbackAt) > 1.5 else { return }
         lastFeedbackAt = Date()
         let shown = ScanFeedback(kind: kind)
+        Announcer.post(kind == .recognized ? "Book scanned" : "Not a book barcode")
         feedback = shown
         Task {
             try? await Task.sleep(for: .seconds(1))
@@ -118,8 +121,11 @@ struct ContentView: View {
                         Image(systemName: "book.closed.fill")
                             .foregroundStyle(.secondary)
                             .symbolEffect(.bounce, options: .nonRepeating, value: session.flashCounts[book.id, default: 0])
+                            .accessibilityHidden(true)
                         row(book)
                     }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAction(named: "Edit") { editing = book.id }
                     .contentShape(Rectangle())
                         .onTapGesture(count: 2) { editing = book.id }
                         .contextMenu {
@@ -137,10 +143,7 @@ struct ContentView: View {
                     if reduceMotion { proxy.scrollTo(id, anchor: .center) }
                     else { withAnimation { proxy.scrollTo(id, anchor: .center) } }
                     NSHapticFeedbackManager.defaultPerformer.perform(.generic, performanceTime: .now)
-                    NSAccessibility.post(
-                        element: NSApp as Any, notification: .announcementRequested,
-                        userInfo: [.announcement: "Already scanned", .priority: NSAccessibilityPriorityLevel.high.rawValue]
-                    )
+                    Announcer.post("Already scanned", urgent: true)
                 }
             .overlay {
                 if session.books.isEmpty {
@@ -182,6 +185,7 @@ struct ContentView: View {
                 }
                 Spacer()
                 Button("Retry") { session.retry(book.id) }
+                    .accessibilityLabel("Retry looking up \(book.isbn)")
             }
         }
     }

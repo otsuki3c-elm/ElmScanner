@@ -15,6 +15,7 @@ final class ScanSession {
     var foundBooks: [BookMetadata] { books.compactMap(\.metadata) }
 
     @ObservationIgnored private let storeURL: URL?
+    @ObservationIgnored private let lookupService: any BookLookupService
     /// Counts the different books ever scanned; nil where achievements aren't wanted.
     let achievements: AchievementTracker?
     /// Books already exported: still listed, but no longer worth restoring.
@@ -25,8 +26,10 @@ final class ScanSession {
         URL.applicationSupportDirectory.appending(path: "ElmScanner/scanned-books.json")
     }
 
-    init(storeURL: URL? = nil, achievements: AchievementTracker? = nil) {
+    init(storeURL: URL? = nil, achievements: AchievementTracker? = nil,
+         lookup: any BookLookupService = BookLookup.shared) {
         self.storeURL = storeURL
+        self.lookupService = lookup
         self.achievements = achievements
         guard let storeURL else { return }
         // Assigned here, so the didSet doesn't rewrite the file mid-load.
@@ -60,7 +63,7 @@ final class ScanSession {
         achievements?.record(isbn)
         books.append(ScannedBook(isbn: isbn))
         lastAdded = isbn
-        lookUp(isbn)
+        lookUp(isbn, announce: true)
         return .added
     }
 
@@ -106,13 +109,22 @@ final class ScanSession {
         ScanStore.save(books.filter { !exported.contains($0.id) }, to: storeURL)
     }
 
-    private func lookUp(_ isbn: String) {
+    /// - Parameter announce: say the result aloud for VoiceOver; only for books the user
+    ///   just scanned, not ones restored at launch.
+    private func lookUp(_ isbn: String, announce: Bool = false) {
         Task {
             let state: ScannedBook.State
             do {
-                state = .found(try await BookLookup.lookup(isbn: isbn))
+                if let metadata = try await lookupService.lookup(isbn: isbn) {
+                    state = .found(metadata)
+                    if announce { Announcer.post(metadata.fullTitle) }
+                } else {
+                    state = .failed(BookLookup.LookupError.notFound.localizedDescription)
+                    if announce { Announcer.post("No details found for \(isbn)") }
+                }
             } catch {
                 state = .failed(error.localizedDescription)
+                if announce { Announcer.post("Couldn't look up \(isbn)") }
             }
             if let index = books.firstIndex(where: { $0.isbn == isbn }) { books[index].state = state }
         }

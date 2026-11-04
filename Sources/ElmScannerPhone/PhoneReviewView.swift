@@ -16,6 +16,9 @@ struct PhoneReviewView: View {
         List {
             ForEach(session.books) { book in
                 row(book)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityHint("Opens it for editing")
                     .contentShape(Rectangle())
                     .onTapGesture { editing = book.id }
             }
@@ -45,6 +48,7 @@ struct PhoneReviewView: View {
                 .disabled(session.foundBooks.isEmpty)
             }
         }
+        .onChange(of: message) { if let message { Announcer.post(message) } }
         .sheet(item: editingBinding) { book in
             BookEditForm(book: book) { session.update(book.id, with: $0) }
         }

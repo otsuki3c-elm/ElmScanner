@@ -20,6 +20,7 @@ struct ExportPreview: View {
             .font(.callout)
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .combine)
     }
 
     @ViewBuilder

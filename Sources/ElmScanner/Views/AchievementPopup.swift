@@ -40,6 +40,7 @@ struct AchievementPopup: View {
                 Color.black.opacity(0.35)
                     .ignoresSafeArea()
                     .onTapGesture { tracker.dismiss() }
+                    .accessibilityHidden(true)
                     .transition(.opacity)
                 // Confetti thrown out from the camera display, behind the card; skipped when Reduce Motion is on.
                 if !reduceMotion {
@@ -55,12 +56,18 @@ struct AchievementPopup: View {
             if tracker.pending != nil { UINotificationFeedbackGenerator().notificationOccurred(.success) }
         }
         #endif
+        .onChange(of: tracker.pending) {
+            if let award = tracker.pending {
+                Announcer.post("New rank: \(award.rank.title). \(award.rank.message)", urgent: true)
+            }
+        }
     }
 
     private func card(_ award: Award) -> some View {
         VStack(spacing: 10) {
             Image(systemName: "rosette")
                 .font(.system(size: 56))
+                .accessibilityHidden(true)
                 .foregroundStyle(.yellow)
                 .symbolEffect(.bounce, value: award.id)
             Text("New rank!").font(.subheadline).foregroundStyle(.secondary)
@@ -80,5 +87,6 @@ struct AchievementPopup: View {
         .shadow(radius: 20)
         .padding()
         .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isModal)
     }
 }

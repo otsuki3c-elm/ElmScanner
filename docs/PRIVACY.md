@@ -1,8 +1,8 @@
 # ElmScanner Privacy Policy
 
-*Draft. Fill in the three `[bracketed]` items, then publish this page at a public web address and enter that address in App Store Connect.*
+*Draft. Check the effective date, then publish this page at a public web address and enter that address in App Store Connect.*
 
-**Effective date:** [date]
+**Effective date:** 4 November 2026
 
 ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you export a list of books. It has no accounts, no ads, no analytics and no tracking. This page explains what the app does with your information.
 
@@ -10,6 +10,7 @@ ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you 
 
 - **The camera.** ElmScanner uses the camera only to read barcodes. Camera images are processed on your device. They are never saved and never sent anywhere.
 - **Your scanned list (iPhone).** The iPhone app saves the books you have scanned but not yet exported, so a crash or force-quit doesn't lose them. They are stored only on your iPhone, in the app's private storage, and removed from the saved list once you export them or tap Clear.
+- **Book details already looked up.** So that scanning the same book again needs no internet connection, the app remembers the details Open Library returned (title, authors, publisher, year) for up to 6 months, or 2 weeks for books it could not find. They are stored only on your device, in the app's private storage, and are never sent anywhere. Deleting the app removes them.
 - **Your rank count (iPhone and Mac).** To count how many different books you have scanned, the app keeps a hidden log. For each book it stores only a one-way hash (a scrambled code) of the ISBN, never the ISBN, title or author. The hash can't be turned back into a title, and it is used only to avoid counting the same book twice.
 - **Nothing is synced.** ElmScanner does not use iCloud or any server of ours. Deleting the app deletes this data.
 
@@ -32,4 +33,4 @@ If this policy changes, the new version will be posted at this address with a ne
 
 ## Contact
 
-[Your name] · [your email address]
+Grant Jun Otsuki · elmscanner@gjotsuki.net
