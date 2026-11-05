@@ -42,8 +42,15 @@ enum BookLookup {
     /// Library can tell the users of the app apart.
     static func userAgent(contact: String) -> String { "ElmScanner/1.0 (\(contactAddress); \(contact))" }
 
-    /// All lookups share this limit: at most 5 requests start in any 2 seconds.
+    /// What NDL Search is sent: the app and its developer's address, but not the user's.
+    static let plainUserAgent = "ElmScanner/1.0 (\(contactAddress))"
+
+    /// All Open Library lookups share this limit: at most 5 requests start in any 2 seconds.
     static let limiter = RateLimiter(maxRequests: 5, perSeconds: 2)
+
+    /// NDL Search publishes no number, only a limit on simultaneous requests and a request
+    /// to avoid parallel access: one request a second, and waits when it says "too many".
+    static let ndlLimiter = RateLimiter(maxRequests: 1, perSeconds: 1)
 
     /// The lookup the app uses: Open Library, with results kept on the device.
     static let shared = OpenLibraryBookLookupService(cacheURL: LookupCache.defaultURL)

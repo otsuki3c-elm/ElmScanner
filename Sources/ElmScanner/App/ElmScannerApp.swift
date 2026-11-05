@@ -8,9 +8,10 @@ struct ElmScannerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(session: session)
+                .task { TipJar.shared.start() }
         }
         Settings {
-            ContactEmailForm(contact: .shared, mode: .edit)
+            SettingsView()
         }
         .commands {
             CommandGroup(replacing: .appInfo) {
@@ -23,7 +24,7 @@ struct ElmScannerApp: App {
     /// app's name and version.
     private func showAbout() {
         let credits = NSMutableAttributedString(
-            string: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library",
+            string: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)",
             attributes: [
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
                 .foregroundColor: NSColor.labelColor

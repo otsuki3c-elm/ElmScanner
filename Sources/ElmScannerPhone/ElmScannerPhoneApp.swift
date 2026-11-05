@@ -7,6 +7,7 @@ struct ElmScannerPhoneApp: App {
     var body: some Scene {
         WindowGroup {
             PhoneScanView(session: session)
+                .task { TipJar.shared.start() }
         }
     }
 }

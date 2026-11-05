@@ -14,6 +14,7 @@ struct AboutView: View {
 
     var body: some View {
         NavigationStack {
+            ScrollView {
             VStack(spacing: 8) {
                 Spacer()
                 Image("AboutIcon")
@@ -25,15 +26,19 @@ struct AboutView: View {
                     .accessibilityHidden(true)
                 Text("ElmScanner").font(.title.bold()).padding(.top, 8)
                 Text(version).font(.subheadline).foregroundStyle(.secondary)
-                Text("Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library")
+                Text("Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
                 Button("Change email address…") { editingEmail = true }
                     .padding(.top, 8)
+                TipJarSection()
+                    .padding(.top, 24)
+                    .padding(.horizontal)
                 Spacer()
             }
             .frame(maxWidth: .infinity)
+            }
             .navigationTitle("About")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

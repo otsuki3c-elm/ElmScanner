@@ -83,6 +83,7 @@ targets:
         GENERATE_INFOPLIST_FILE: true
     dependencies:
       - target: ElmScanner
+      - sdk: StoreKitTest.framework
 schemes:
   ElmScannerPhone:
     build:
@@ -90,6 +91,8 @@ schemes:
         ElmScannerPhone: all
     run:
       config: Debug
+      # Lets "Leave a tip" be tried in Xcode without App Store Connect (product ID = bundle ID + ".tip").
+      storeKitConfiguration: Config/ElmScanner.storekit
     archive:
       config: Release
   ElmScanner:
@@ -103,5 +106,6 @@ schemes:
         - ElmScannerTests
     run:
       config: Debug
+      storeKitConfiguration: Config/ElmScanner.storekit
     archive:
       config: Release

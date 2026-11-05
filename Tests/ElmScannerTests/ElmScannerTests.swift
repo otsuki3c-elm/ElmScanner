@@ -218,4 +218,17 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertTrue(agent.contains("elmscanner@gjotsuki.net"))
         XCTAssertTrue(agent.contains("reader@example.com"))
     }
+
+    func testTipProductIsNamedAfterTheBundleID() {
+        XCTAssertEqual(TipJar.productID(bundleID: "com.otsuki.elmscanner.ElmScanner"), "com.otsuki.elmscanner.ElmScanner.tip")
+        XCTAssertEqual(TipJar.productID(bundleID: nil), "ElmScanner.tip")
+    }
+
+    @MainActor
+    func testTipJarStartsLoadingAndNothingDependsOnIt() {
+        // A fresh tip jar has bought nothing and gates nothing: it only reports its own state.
+        let jar = TipJar(productID: "test.tip")
+        XCTAssertEqual(jar.state, .loading)
+        XCTAssertNil(jar.product)
+    }
 }
