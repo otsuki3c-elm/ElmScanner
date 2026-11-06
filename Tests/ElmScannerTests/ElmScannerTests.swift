@@ -231,4 +231,46 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertEqual(jar.state, .loading)
         XCTAssertNil(jar.product)
     }
+
+    func testRegistrationGroups() {
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9780441172719"), "0")
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9784003101018"), "4")
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9783161484100"), "3")      // German
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9788804668282"), "88")     // Italian
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9789577290427"), "957")    // Taiwan
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9791190000000"), "11")     // Korea (979-11)
+        XCTAssertEqual(ISBNRegion.group(ofISBN13: "9798000000007"), "8")      // USA (979-8)
+        XCTAssertNil(ISBNRegion.group(ofISBN13: "123"))
+    }
+
+    func testOnlyOtherLanguageAreasGetANotice() {
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9780441172719"))   // English
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9784003101018"))   // Japanese
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9798000000007"))   // USA (979-8)
+        XCTAssertNil(ISBNRegion.notice(forISBN: "12345"))           // not an ISBN
+        let german = ISBNRegion.notice(forISBN: "9783161484100")
+        XCTAssertTrue(german?.contains("German-language area") == true, german ?? "nil")
+        // An ISBN-10 is placed by its ISBN-13 form.
+        XCTAssertTrue(ISBNRegion.notice(forISBN: "3-16-148410-X")?.contains("German") == true)
+        // A group the table doesn't name still gets a notice, worded generally.
+        let unnamed = ISBNRegion.notice(forISBN: "9786000000004")
+        XCTAssertTrue(unnamed?.contains("outside the English- and Japanese-language areas") == true, unnamed ?? "nil")
+    }
+
+    @MainActor
+    func testNotFoundBookFromAnotherLanguageAreaShowsTheNotice() async throws {
+        struct NotFound: BookLookupService {
+            func lookup(isbn: String) async throws -> BookMetadata? { nil }
+        }
+        let session = ScanSession(lookup: NotFound())
+        session.add("9783161484100")
+        session.add("9780441172719")
+        try await Task.sleep(for: .milliseconds(300))
+        func reason(_ isbn: String) -> String? {
+            if case .failed(let text) = session.books.first(where: { $0.isbn == isbn })?.state { return text }
+            return nil
+        }
+        XCTAssertTrue(reason("9783161484100")?.contains("German-language area") == true)
+        XCTAssertEqual(reason("9780441172719"), "No match found")
+    }
 }

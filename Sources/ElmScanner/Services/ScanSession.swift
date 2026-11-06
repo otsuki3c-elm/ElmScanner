@@ -119,8 +119,11 @@ final class ScanSession {
                     state = .found(metadata)
                     if announce { Announcer.post(metadata.fullTitle) }
                 } else {
-                    state = .failed(BookLookup.LookupError.notFound.localizedDescription)
-                    if announce { Announcer.post("No details found for \(isbn)") }
+                    // A book from a language area the catalogues cover poorly says so,
+                    // instead of a bare "No match found".
+                    let notice = ISBNRegion.notice(forISBN: isbn)
+                    state = .failed(notice ?? BookLookup.LookupError.notFound.localizedDescription)
+                    if announce { Announcer.post(notice ?? "No details found for \(isbn)", urgent: notice != nil) }
                 }
             } catch {
                 state = .failed(error.localizedDescription)
