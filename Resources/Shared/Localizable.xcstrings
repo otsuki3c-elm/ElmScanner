@@ -198,17 +198,6 @@
         }
       }
     },
-    "A home with 80 or more books helps children's literacy.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "本が80冊以上ある家庭は、子どもの読み書きの力を育てます。"
-          }
-        }
-      }
-    },
     "About": {
       "localizations": {
         "ja": {
@@ -865,13 +854,13 @@
       },
       "extractionState": "manual"
     },
-    "Five books in. Something is starting to grow.": {
+    "Five books in. You're getting the hang of this.": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "5冊め。何かが育ちはじめています。"
+            "value": "5冊め。すっかりコツをつかんできましたね。"
           }
         }
       }
@@ -919,6 +908,17 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Growing up in a home with 80 or more books is linked to better literacy.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本が80冊以上ある家庭で育つことは、読み書きの力の高さと関係があるとされています。"
+          }
+        }
+      }
     },
     "Hebrew": {
       "localizations": {
@@ -1677,13 +1677,13 @@
         }
       }
     },
-    "This is how many books are owned by the average Estonian (according to the Guardian).": {
+    "This is how many books are in the average Estonian home (according to the Guardian).": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "エストニアの人が持っている本の平均冊数です（ガーディアン紙による）。"
+            "value": "エストニアの平均的な家庭にある本の冊数です（ガーディアン紙による）。"
           }
         }
       }
