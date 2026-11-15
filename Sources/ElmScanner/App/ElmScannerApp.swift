@@ -32,7 +32,8 @@ struct ElmScannerApp: App {
     /// app's name and version.
     private func showAbout() {
         let credits = NSMutableAttributedString(
-            string: "ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.\n\nPrompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)",
+            string: String(localized: "ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.") + "\n\n"
+                + String(localized: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)"),
             attributes: [
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
                 .foregroundColor: NSColor.labelColor

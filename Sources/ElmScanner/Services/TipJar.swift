@@ -65,7 +65,7 @@ final class TipJar {
                 await transaction.finish()
                 state = .thanked
             case .success(.unverified):
-                state = .failed("The purchase couldn't be verified, so it wasn't completed.")
+                state = .failed(String(localized: "The purchase couldn't be verified, so it wasn't completed."))
             case .userCancelled, .pending:
                 state = .ready
             @unknown default:

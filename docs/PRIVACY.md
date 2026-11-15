@@ -8,7 +8,7 @@ ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you 
 
 ## What stays on your device
 
-- **The camera.** ElmScanner uses the camera only to read barcodes. Camera images are processed on your device. They are never saved and never sent anywhere.
+- **The camera.** ElmScanner uses the camera to read barcodes, and to notice when someone smiles at it so it can say "Hello!" over the preview. Camera images are processed on your device. They are never saved and never sent anywhere, and nothing about a face is kept.
 - **Your scanned list (iPhone).** The iPhone app saves the books you have scanned but not yet exported, so a crash or force-quit doesn't lose them. They are stored only on your iPhone, in the app's private storage, and removed from the saved list once you export them or tap Clear.
 - **Book details already looked up.** So that scanning the same book again needs no internet connection, the app remembers the details Open Library or the National Diet Library returned (title, authors, publisher, year) for up to 6 months, or 2 weeks for books it could not find. They are stored only on your device, in the app's private storage, and are never sent anywhere. Deleting the app removes them.
 - **Your email address.** The first time you use the app, it asks for your email address (you can change it later: Settings on the Mac, About on the iPhone). It is stored only on your device. See "What is sent over the internet" for why it is asked for.
@@ -26,7 +26,7 @@ ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you 
 
 ElmScanner is free, and nothing in it depends on payment. If you choose to leave an optional tip, the purchase is made through Apple's in-app purchase system. Apple handles your payment details and Apple ID; ElmScanner and its author receive no personal information from a tip, and the app doesn't record whether you made one.
 
-The Mac version downloaded from GitHub has no in-app purchase. Its tip button opens a PayPal page in your browser. Nothing is sent to PayPal until you choose to pay, and then PayPal's own privacy policy applies; the app doesn't record whether you tipped.
+The Mac version downloaded from GitHub has no in-app purchase. Its tip section just shows a PayPal address to send to. The app never contacts PayPal and doesn't record whether you tipped; if you send a tip, PayPal's own privacy policy applies.
 
 ## Exporting
 

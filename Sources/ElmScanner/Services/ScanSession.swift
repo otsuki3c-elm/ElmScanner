@@ -128,11 +128,11 @@ final class ScanSession {
                     // instead of a bare "No match found".
                     let notice = ISBNRegion.notice(forISBN: isbn)
                     state = .failed(notice ?? BookLookup.LookupError.notFound.localizedDescription)
-                    if announce { Announcer.post(notice ?? "No details found for \(isbn)", urgent: notice != nil) }
+                    if announce { Announcer.post(notice ?? String(localized: "No details found for \(isbn)"), urgent: notice != nil) }
                 }
             } catch {
                 state = .failed(error.localizedDescription)
-                if announce { Announcer.post("Couldn't look up \(isbn)") }
+                if announce { Announcer.post(String(localized: "Couldn't look up \(isbn)")) }
             }
             if let index = books.firstIndex(where: { $0.isbn == isbn }) { books[index].state = state }
             if case .found(let metadata) = state { library?.send(metadata) }

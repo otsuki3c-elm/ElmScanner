@@ -12,10 +12,10 @@ enum BookLookup {
 
         var errorDescription: String? {
             switch self {
-            case .invalidISBN: return "Not a valid ISBN"
-            case .notFound: return "No match found"
-            case .network(let detail): return "Couldn't reach Open Library (\(detail))"
-            case .contactMissing: return "Enter your email address to look up books"
+            case .invalidISBN: return String(localized: "Not a valid ISBN")
+            case .notFound: return String(localized: "No match found")
+            case .network(let detail): return String(localized: "Couldn't reach Open Library (\(detail))")
+            case .contactMissing: return String(localized: "Enter your email address to look up books")
             }
         }
     }

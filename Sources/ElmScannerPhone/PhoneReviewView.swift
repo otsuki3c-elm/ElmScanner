@@ -28,11 +28,11 @@ struct PhoneReviewView: View {
             if session.books.isEmpty { Text("No books to export").foregroundStyle(.secondary) }
         }
         .safeAreaInset(edge: .bottom) {
-            Text(message ?? "Tap a book to edit it.")
+            Text(message ?? String(localized: "Tap a book to edit it."))
                 .font(.footnote).foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity).padding(8).background(.bar)
         }
-        .navigationTitle("\(session.books.count) book\(session.books.count == 1 ? "" : "s")")
+        .navigationTitle("\(session.books.count) books")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -55,7 +55,7 @@ struct PhoneReviewView: View {
         .sheet(item: $mailAttachment) { attachment in
             MailComposer(attachment: attachment) { result in
                 if result == .sent {
-                    message = "Email sent."
+                    message = String(localized: "Email sent.")
                     session.markExported()
                 }
             }
@@ -69,10 +69,10 @@ struct PhoneReviewView: View {
         ) { result in
             switch result {
             case .success:
-                message = "Exported \(session.foundBooks.count) book\(session.foundBooks.count == 1 ? "" : "s")."
+                message = String(localized: "Exported \(session.foundBooks.count) books.")
                 session.markExported()
             case .failure(let error):
-                if (error as? CocoaError)?.code != .userCancelled { message = "Couldn't export: \(error.localizedDescription)" }
+                if (error as? CocoaError)?.code != .userCancelled { message = String(localized: "Couldn't export: \(error.localizedDescription)") }
             }
         }
     }
@@ -120,13 +120,13 @@ struct PhoneReviewView: View {
             format = chosen
             exporting = true
         } catch {
-            message = "Couldn't export: \(error.localizedDescription)"
+            message = String(localized: "Couldn't export: \(error.localizedDescription)")
         }
     }
 
     private func email(_ chosen: ExportService.Format) {
         guard MailComposer.canSend else {
-            message = "Mail isn't set up on this iPhone. Add an account in Settings ▸ Mail, or save to Files."
+            message = String(localized: "Mail isn't set up on this iPhone. Add an account in Settings ▸ Mail, or save to Files.")
             return
         }
         do {
@@ -136,10 +136,10 @@ struct PhoneReviewView: View {
                 data: try ExportService.data(for: session.foundBooks, format: chosen),
                 fileName: chosen.fileName,
                 mimeType: chosen.mimeType,
-                subject: "ElmScanner export: \(count) book\(count == 1 ? "" : "s"), \(when)"
+                subject: String(localized: "ElmScanner export: \(String(localized: "\(count) books")), \(when)")
             )
         } catch {
-            message = "Couldn't export: \(error.localizedDescription)"
+            message = String(localized: "Couldn't export: \(error.localizedDescription)")
         }
     }
 }

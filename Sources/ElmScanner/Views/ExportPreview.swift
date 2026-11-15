@@ -6,7 +6,7 @@ struct ExportPreview: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(book.fullTitle.isEmpty ? "Untitled" : book.fullTitle).font(.headline)
+            Text(book.fullTitle.isEmpty ? String(localized: "Untitled") : book.fullTitle).font(.headline)
             Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 8, verticalSpacing: 2) {
                 field("Authors", BookEditForm.authorsText(book.authors), missing: book.authors.isEmpty)
                 field("Publisher", book.publisher, missing: book.publisher?.isEmpty ?? true)
@@ -24,7 +24,7 @@ struct ExportPreview: View {
     }
 
     @ViewBuilder
-    private func field(_ label: String, _ value: String?, missing: Bool = false) -> some View {
+    private func field(_ label: LocalizedStringResource, _ value: String?, missing: Bool = false) -> some View {
         if let value, !value.isEmpty {
             GridRow {
                 Text(label).foregroundStyle(.secondary).gridColumnAlignment(.trailing)

@@ -1,0 +1,1520 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ Double-click to enter the details by hand; the book isn't exported until then.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ダブルクリックして詳細を手入力してください。入力するまで、この本は書き出されません。"
+          }
+        }
+      }
+    },
+    "%@ Tap to enter the details by hand; the book isn't exported until then.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ タップして詳細を手入力してください。入力するまで、この本は書き出されません。"
+          }
+        }
+      }
+    },
+    "%@ is missing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@が未入力です"
+          }
+        }
+      }
+    },
+    "%@, %lld selected": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@、%lld冊選択中"
+          }
+        }
+      }
+    },
+    "%lld books": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld book"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld books"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld冊"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld books scanned": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld book scanned"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld books scanned"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld冊スキャン済み"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld scanned": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld scanned"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld scanned"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld冊スキャン済み"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    ":)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ":)"
+          }
+        }
+      }
+    },
+    "About": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "情報"
+          }
+        }
+      }
+    },
+    "About ElmScanner": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerについて"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加"
+          }
+        }
+      }
+    },
+    "Allow it in Settings ▸ ElmScanner ▸ Camera.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「設定」▸「ElmScanner」▸「カメラ」で許可してください。"
+          }
+        }
+      }
+    },
+    "Allow it in System Settings ▸ Privacy & Security ▸ Camera.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「システム設定」▸「プライバシーとセキュリティ」▸「カメラ」で許可してください。"
+          }
+        }
+      }
+    },
+    "Already scanned": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スキャン済みです"
+          }
+        }
+      }
+    },
+    "Authors": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "著者"
+          }
+        }
+      }
+    },
+    "Authors (Family, Given; …)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "著者（姓, 名; …）"
+          }
+        }
+      }
+    },
+    "Back": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "戻る"
+          }
+        }
+      }
+    },
+    "Before you start": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はじめに"
+          }
+        }
+      }
+    },
+    "Book scanned": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本をスキャンしました"
+          }
+        }
+      }
+    },
+    "Brazilian Portuguese": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ブラジルポルトガル語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Bulgarian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ブルガリア語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Camera access is off.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラへのアクセスがオフになっています。"
+          }
+        }
+      }
+    },
+    "Camera stopped.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラが停止しました。"
+          }
+        }
+      }
+    },
+    "Camera view": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラ映像"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャンセル"
+          }
+        }
+      }
+    },
+    "Change email address…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メールアドレスを変更…"
+          }
+        }
+      }
+    },
+    "Chinese": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中国語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Chinese (Hong Kong)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中国語（香港）"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Chinese (Taiwan)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中国語（台湾）"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Clear": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クリア"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "続ける"
+          }
+        }
+      }
+    },
+    "Copied": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コピーしました"
+          }
+        }
+      }
+    },
+    "Copy address": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アドレスをコピー"
+          }
+        }
+      }
+    },
+    "Couldn't export: %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出せませんでした：%@"
+          }
+        }
+      }
+    },
+    "Couldn't look up %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@を検索できませんでした"
+          }
+        }
+      }
+    },
+    "Couldn't reach Open Library (%@)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Libraryに接続できませんでした（%@）"
+          }
+        }
+      }
+    },
+    "Czech and Slovak": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チェコ語・スロバキア語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Danish": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デンマーク語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Done": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
+          }
+        }
+      }
+    },
+    "Double-click a book to edit it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本をダブルクリックすると編集できます。"
+          }
+        }
+      }
+    },
+    "Dutch": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オランダ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Edit": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編集"
+          }
+        }
+      }
+    },
+    "Edit…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編集…"
+          }
+        }
+      }
+    },
+    "ElmScanner": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScanner"
+          }
+        }
+      }
+    },
+    "ElmScanner export: %@, %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerの書き出し：%@、%@"
+          }
+        }
+      }
+    },
+    "ElmScanner is free and open source, and every feature works without a tip. If you find it useful, you can leave a one-time tip to support its development. The purchase is handled by Apple.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerは無料のオープンソースで、すべての機能をチップなしでお使いいただけます。お役に立てたら、開発を支援する1回限りのチップをお願いできます。購入手続きはAppleが行います。"
+          }
+        }
+      }
+    },
+    "ElmScanner is free and open source, and every feature works without a tip. If you find it useful, you can send a tip of about %@ (one coffee!) with PayPal to support its development.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerは無料のオープンソースで、すべての機能をチップなしでお使いいただけます。お役に立てたら、開発を支援するため、PayPalで%@ほど（コーヒー1杯分！）のチップを送っていただけます。"
+          }
+        }
+      }
+    },
+    "ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerは、バーコードをスキャンするだけで、Zoteroなどの文献管理ソフトに本をすばやく追加できるアプリです。"
+          }
+        }
+      }
+    },
+    "ElmScanner looks up books on Open Library, a free service run by the Internet Archive. Open Library asks every app to include an email address, so that it can tell who is using its service and reach them if something goes wrong.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerは、Internet Archiveが運営する無料サービス「Open Library」で本を検索します。Open Libraryは、利用者を把握し、問題が起きたときに連絡できるよう、すべてのアプリにメールアドレスを含めることを求めています。"
+          }
+        }
+      }
+    },
+    "Email": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メール"
+          }
+        }
+      }
+    },
+    "Email address": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メールアドレス"
+          }
+        }
+      }
+    },
+    "Email sent.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メールを送信しました。"
+          }
+        }
+      }
+    },
+    "Enter an address like name@example.com.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "name@example.com のような形式で入力してください。"
+          }
+        }
+      }
+    },
+    "Enter your email address to look up books": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本を検索するには、メールアドレスを入力してください"
+          }
+        }
+      }
+    },
+    "Export": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出す"
+          }
+        }
+      }
+    },
+    "Exported %lld books.": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Exported %lld book."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Exported %lld books."
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld冊を書き出しました。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Files App": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイル App"
+          }
+        }
+      }
+    },
+    "Finnish": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フィンランド語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "French": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フランス語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "German": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドイツ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Greek": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ギリシャ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Hebrew": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ヘブライ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Hello!": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こんにちは！"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Hi!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やあ！"
+          }
+        }
+      }
+    },
+    "Hold a book's back-cover barcode up to the camera.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本の裏表紙のバーコードをカメラにかざしてください。"
+          }
+        }
+      }
+    },
+    "Hold a book's back-cover barcode up to the camera. Each scan is announced.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本の裏表紙のバーコードをカメラにかざしてください。スキャンのたびに読み上げられます。"
+          }
+        }
+      }
+    },
+    "How's it going?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "調子はどう？"
+          }
+        }
+      }
+    },
+    "Hungarian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ハンガリー語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "ISBN": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ISBN"
+          }
+        }
+      }
+    },
+    "Italian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "イタリア語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Korean": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "韓国語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Leave a tip: %@ (one coffee!)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チップを贈る：%@（コーヒー1杯分！）"
+          }
+        }
+      }
+    },
+    "Mail isn't set up on this iPhone. Add an account in Settings ▸ Mail, or save to Files.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このiPhoneではメールが設定されていません。「設定」▸「メール」でアカウントを追加するか、「ファイル」に保存してください。"
+          }
+        }
+      }
+    },
+    "Missing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未入力"
+          }
+        }
+      }
+    },
+    "Missing: you may want to enter it": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未入力です。入力しておくとよいかもしれません"
+          }
+        }
+      }
+    },
+    "More…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その他…"
+          }
+        }
+      }
+    },
+    "New rank!": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ランクアップ！"
+          }
+        }
+      }
+    },
+    "New rank: %@. %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいランク：%@。%@"
+          }
+        }
+      }
+    },
+    "Next": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次へ"
+          }
+        }
+      }
+    },
+    "Nice smile!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いい笑顔！"
+          }
+        }
+      }
+    },
+    "No books scanned yet": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ本をスキャンしていません"
+          }
+        }
+      }
+    },
+    "No books to export": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出す本がありません"
+          }
+        }
+      }
+    },
+    "No camera found.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラが見つかりません。"
+          }
+        }
+      }
+    },
+    "No details found for %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@の詳細が見つかりませんでした"
+          }
+        }
+      }
+    },
+    "No match found": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一致する本が見つかりません"
+          }
+        }
+      }
+    },
+    "No match found. This ISBN is from %@, and ElmScanner's catalogues cover English and Japanese books best.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一致する本が見つかりません。このISBNは%@のものです。ElmScannerが利用する書誌データベースは、英語と日本語の本に最も強く対応しています。"
+          }
+        }
+      }
+    },
+    "Norwegian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノルウェー語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Not a book barcode": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本のバーコードではありません"
+          }
+        }
+      }
+    },
+    "Not a valid ISBN": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有効なISBNではありません"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Opens it for editing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開いて編集します"
+          }
+        }
+      }
+    },
+    "Or type an ISBN": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ISBNを入力"
+          }
+        }
+      }
+    },
+    "Pages": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ページ数"
+          }
+        }
+      }
+    },
+    "Place": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出版地"
+          }
+        }
+      }
+    },
+    "Place of Publication": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出版地"
+          }
+        }
+      }
+    },
+    "Polish": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポーランド語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Portuguese": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ポルトガル語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "企画：大槻 グラント 潤\nコード：Claude\n書誌データ：Open Library、国立国会図書館（NDLサーチ）"
+          }
+        }
+      }
+    },
+    "Publisher": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出版社"
+          }
+        }
+      }
+    },
+    "Remove": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
+          }
+        }
+      }
+    },
+    "Remove All": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて削除"
+          }
+        }
+      }
+    },
+    "Remove all %lld scanned books?": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Remove the scanned book?"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Remove all %lld scanned books?"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "スキャンした%lld冊をすべて削除しますか？"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Retry": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再試行"
+          }
+        }
+      }
+    },
+    "Retry looking up %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@の検索を再試行"
+          }
+        }
+      }
+    },
+    "Romanian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ルーマニア語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Russian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロシア語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Save": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存"
+          }
+        }
+      }
+    },
+    "Send scanned books to ElmLibrary": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スキャンした本をElmLibraryに送信"
+          }
+        }
+      }
+    },
+    "Spanish": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スペイン語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Starting camera": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラを起動中"
+          }
+        }
+      }
+    },
+    "Subtitle": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "副題"
+          }
+        }
+      }
+    },
+    "Support ElmScanner": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerを応援する"
+          }
+        }
+      }
+    },
+    "Swedish": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スウェーデン語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Tags": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タグ"
+          }
+        }
+      }
+    },
+    "Tags (comma separated)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タグ（カンマ区切り）"
+          }
+        }
+      }
+    },
+    "Tap a book to edit it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本をタップすると編集できます。"
+          }
+        }
+      }
+    },
+    "Thai": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Thank you!": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ありがとうございます！"
+          }
+        }
+      }
+    },
+    "Thanks for using ElmScanner!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerをご利用いただき、ありがとうございます！"
+          }
+        }
+      }
+    },
+    "The purchase couldn't be verified, so it wasn't completed.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を確認できなかったため、完了しませんでした。"
+          }
+        }
+      }
+    },
+    "Tips aren't available right now.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在、チップはご利用いただけません。"
+          }
+        }
+      }
+    },
+    "Title": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイトル"
+          }
+        }
+      }
+    },
+    "Turkish": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トルコ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "URL": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URL"
+          }
+        }
+      }
+    },
+    "Ukrainian": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウクライナ語"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Untitled": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無題"
+          }
+        }
+      }
+    },
+    "Uses your private iCloud. ElmLibrary on your Mac adds the books automatically (a Premium feature of ElmLibrary); otherwise export a file and import it there.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなた専用のiCloudを使います。Macの ElmLibrary が本を自動的に追加します（ElmLibraryのプレミアム機能）。使わない場合は、ファイルを書き出してElmLibraryで読み込んでください。"
+          }
+        }
+      }
+    },
+    "Version %@ (%@)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バージョン %@（%@）"
+          }
+        }
+      }
+    },
+    "Welcome to ElmScanner": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerへようこそ"
+          }
+        }
+      }
+    },
+    "Year": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出版年"
+          }
+        }
+      }
+    },
+    "You can still type ISBNs below.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下にISBNを入力することもできます。"
+          }
+        }
+      }
+    },
+    "You can still type or paste ISBNs below.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下にISBNを入力または貼り付けることもできます。"
+          }
+        }
+      }
+    },
+    "Your address is sent to Open Library with each book lookup. It is stored only on this device and is not sent anywhere else.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのアドレスは、本を検索するたびにOpen Libraryへ送信されます。このデバイスにのみ保存され、それ以外には送信されません。"
+          }
+        }
+      }
+    },
+    "Your email address": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのメールアドレス"
+          }
+        }
+      }
+    },
+    "a region outside the English- and Japanese-language areas": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "英語圏・日本語圏以外の地域"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "the %@-language area": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@圏"
+          }
+        }
+      },
+      "extractionState": "manual"
+    }
+  },
+  "version": "1.0"
+}

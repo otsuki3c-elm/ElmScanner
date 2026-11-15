@@ -16,7 +16,7 @@ xcodegen generate
 open ElmScanner.xcodeproj
 ```
 
-The Xcode project is generated from `project.yml` and isn't checked in. There are three apps: **ElmScanner** (Mac, App Store build, tips through In-App Purchase), **ElmScannerDirect** (Mac, for direct download, tips through a PayPal link; built with the `DIRECT_DOWNLOAD` flag) and **ElmScannerPhone** (iPhone, App Store only). Run the tests with the ElmScanner scheme.
+The Xcode project is generated from `project.yml` and isn't checked in. There are three apps: **ElmScanner** (Mac, App Store build, tips through In-App Purchase), **ElmScannerDirect** (Mac, for direct download, tips by showing a PayPal address; built with the `DIRECT_DOWNLOAD` flag) and **ElmScannerPhone** (iPhone, App Store only). Run the tests with the ElmScanner scheme.
 
 ### Signing and bundle ID
 

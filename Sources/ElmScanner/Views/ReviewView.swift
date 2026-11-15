@@ -35,7 +35,7 @@ struct ReviewView: View {
                 Button { onBack() } label: { Label("Back", systemImage: "chevron.left") }
                 Text(countText)
                     .font(.callout.weight(.medium))
-                Text(message ?? "Double-click a book to edit it.")
+                Text(message ?? String(localized: "Double-click a book to edit it."))
                     .font(.callout).foregroundStyle(.secondary)
                 Spacer()
                 Button("Remove") { session.remove(selection) }
@@ -63,8 +63,8 @@ struct ReviewView: View {
 
     private var countText: String {
         let count = session.books.count
-        let books = "\(count) book\(count == 1 ? "" : "s")"
-        return selection.isEmpty ? books : "\(books), \(selection.count) selected"
+        let books = String(localized: "\(count) books")
+        return selection.isEmpty ? books : String(localized: "\(books), \(selection.count) selected")
     }
 
     private var editingBinding: Binding<ScannedBook?> {

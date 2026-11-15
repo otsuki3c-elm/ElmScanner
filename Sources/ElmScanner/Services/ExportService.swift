@@ -106,9 +106,9 @@ enum ExportService {
         guard panel.runModal() == .OK, let url = panel.url else { return nil }
         do {
             try data(for: books, format: format).write(to: url)
-            return "Exported \(books.count) book\(books.count == 1 ? "" : "s")."
+            return String(localized: "Exported \(books.count) books.")
         } catch {
-            return "Couldn't export: \(error.localizedDescription)"
+            return String(localized: "Couldn't export: \(error.localizedDescription)")
         }
     }
 

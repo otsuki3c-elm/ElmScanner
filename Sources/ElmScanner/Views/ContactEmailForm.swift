@@ -20,7 +20,7 @@ struct ContactEmailForm: View {
                 Text("Welcome to ElmScanner").font(.largeTitle.bold())
                 Text("ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.")
             }
-            Text(mode == .firstUse ? "Before you start" : "Your email address").font(.title2.bold())
+            Text(mode == .firstUse ? LocalizedStringKey("Before you start") : LocalizedStringKey("Your email address")).font(.title2.bold())
             Text("ElmScanner looks up books on Open Library, a free service run by the Internet Archive. Open Library asks every app to include an email address, so that it can tell who is using its service and reach them if something goes wrong.")
             Text("Your address is sent to Open Library with each book lookup. It is stored only on this device and is not sent anywhere else.")
                 .foregroundStyle(.secondary)
@@ -42,7 +42,7 @@ struct ContactEmailForm: View {
                     Button("Cancel") { text = contact.address; onDone() }
                 }
                 Spacer()
-                Button(mode == .firstUse ? "Continue" : "Save", action: save)
+                Button(mode == .firstUse ? LocalizedStringKey("Continue") : LocalizedStringKey("Save"), action: save)
                     .keyboardShortcut(.defaultAction)
                     .buttonStyle(.borderedProminent)
                     .disabled(!valid)

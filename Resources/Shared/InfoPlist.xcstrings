@@ -1,0 +1,16 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSCameraUsageDescription": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerは、本のISBNバーコードをスキャンし、あなたの笑顔に挨拶するためにカメラを使います。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -60,7 +60,7 @@ struct PhoneScanView: View {
                         if reduceMotion { proxy.scrollTo(id, anchor: .center) }
                         else { withAnimation { proxy.scrollTo(id, anchor: .center) } }
                         UINotificationFeedbackGenerator().notificationOccurred(.warning)
-                        Announcer.post("Already scanned", urgent: true)
+                        Announcer.post(String(localized: "Already scanned"), urgent: true)
                     }
                 }
                 .overlay {
@@ -95,6 +95,7 @@ struct PhoneScanView: View {
             }
             .onAppear {
                 camera.onISBN = { handle($0) }
+                camera.totalScanned = { session.achievements?.count ?? 0 }
                 camera.onOtherBarcode = { _ in show(.rejected) }
                 // Not until the email address is in: a scan would look up a book.
                 if contact.isSet { camera.start() }
@@ -112,6 +113,8 @@ struct PhoneScanView: View {
                 // Only once startRunning() has returned: attaching a preview layer
                 // while the camera queue is starting the session crashes AVFoundation.
                 CameraPreview(session: camera.session)
+                    .overlay { if camera.smiling { GreetingView(greeting: camera.greeting) } }
+                    .animation(.easeOut(duration: 0.2), value: camera.smiling)
                     .accessibilityLabel("Camera view")
                     .accessibilityHint("Hold a book's back-cover barcode up to the camera. Each scan is announced.")
             case .starting:
@@ -129,7 +132,7 @@ struct PhoneScanView: View {
         }
     }
 
-    private func notice(_ title: String, _ detail: String) -> some View {
+    private func notice(_ title: LocalizedStringKey, _ detail: LocalizedStringKey) -> some View {
         VStack(spacing: 4) {
             Text(title).font(.headline)
             Text(detail).font(.callout)
@@ -194,7 +197,7 @@ struct PhoneScanView: View {
         lastFeedbackAt = Date()
         UINotificationFeedbackGenerator().notificationOccurred(kind == .recognized ? .success : .error)
         let shown = ScanFeedback(kind: kind)
-        Announcer.post(kind == .recognized ? "Book scanned" : "Not a book barcode")
+        Announcer.post(kind == .recognized ? String(localized: "Book scanned") : String(localized: "Not a book barcode"))
         feedback = shown
         Task {
             try? await Task.sleep(for: .seconds(1))

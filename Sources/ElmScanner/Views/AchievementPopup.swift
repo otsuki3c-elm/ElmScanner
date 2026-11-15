@@ -58,7 +58,7 @@ struct AchievementPopup: View {
         #endif
         .onChange(of: tracker.pending) {
             if let award = tracker.pending {
-                Announcer.post("New rank: \(award.rank.title). \(award.rank.message)", urgent: true)
+                Announcer.post(String(localized: "New rank: \(award.rank.title). \(award.rank.message)"), urgent: true)
             }
         }
     }
@@ -73,7 +73,7 @@ struct AchievementPopup: View {
             Text("New rank!").font(.subheadline).foregroundStyle(.secondary)
             Text(award.rank.title).font(.title2.bold()).multilineTextAlignment(.center)
             Text(award.rank.message).font(.callout).multilineTextAlignment(.center)
-            Text("\(award.count) book\(award.count == 1 ? "" : "s") scanned")
+            Text("\(award.count) books scanned")
                 .font(.footnote).foregroundStyle(.secondary).padding(.top, 4)
             Button("OK") { tracker.dismiss() }
                 .keyboardShortcut(.defaultAction)

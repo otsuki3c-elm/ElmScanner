@@ -96,13 +96,13 @@ struct BookEditForm: View {
         #endif
     }
 
-    private func field(_ label: String, _ text: Binding<String>, missing: Bool = false) -> some View {
+    private func field(_ label: LocalizedStringResource, _ text: Binding<String>, missing: Bool = false) -> some View {
         HStack {
-            TextField(label, text: text)
+            TextField(String(localized: label), text: text)
             if missing {
                 Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange)
                     .help("Missing: you may want to enter it")
-                    .accessibilityLabel("\(label) is missing")
+                    .accessibilityLabel(String(localized: "\(String(localized: label)) is missing"))
             }
         }
     }
