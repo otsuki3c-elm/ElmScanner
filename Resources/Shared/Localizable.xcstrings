@@ -640,6 +640,16 @@
         }
       }
     },
+    "ElmLibrary Premium required": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmLibraryのプレミアム版が必要です"
+          }
+        }
+      }
+    },
     "ElmScanner": {
       "localizations": {
         "ja": {
@@ -700,7 +710,17 @@
         }
       }
     },
-    "ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.": {
+    "ElmScanner is open source under the MIT license.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerはMITライセンスのオープンソースです。"
+          }
+        }
+      }
+    },
+    "ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.": {
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -1318,7 +1338,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "企画：大槻 グラント 潤\nコード：Claude\n書誌データ：Open Library、国立国会図書館（NDLサーチ）"
+            "value": "企画：オオツキ　グラント　ジュン\nコード：Claude\n書誌データ：Open Library、国立国会図書館（NDLサーチ）"
           }
         }
       }
@@ -1329,6 +1349,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "出版社"
+          }
+        }
+      }
+    },
+    "Rank: %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ランク：%@"
+          }
+        }
+      }
+    },
+    "Receiving books from ElmScanner requires the Premium version of ElmLibrary.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerから本を受け取るには、ElmLibraryのプレミアム版が必要です。"
           }
         }
       }

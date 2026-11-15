@@ -89,7 +89,7 @@ struct PhoneScanView: View {
                 Button("Remove All", role: .destructive) { session.removeAll() }
             }
             .navigationDestination(isPresented: $reviewing) { PhoneReviewView(session: session) }
-            .sheet(isPresented: $showingAbout) { AboutView() }
+            .sheet(isPresented: $showingAbout) { AboutView(rank: session.achievements?.currentRank) }
             .sheet(item: editingBinding) { book in
                 BookEditForm(book: book) { session.update(book.id, with: $0) }
             }

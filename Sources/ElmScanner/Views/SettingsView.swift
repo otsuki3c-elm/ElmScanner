@@ -7,10 +7,12 @@ struct SettingsView: View {
             ContactEmailForm(contact: .shared, mode: .edit)
             Divider().padding(.horizontal, 24)
             #if !DIRECT_DOWNLOAD
-            SendToLibraryToggle()
-                .padding(24)
-                .frame(maxWidth: 460, alignment: .leading)
-            Divider().padding(.horizontal, 24)
+            if LibrarySender.isAvailable {
+                SendToLibraryToggle()
+                    .padding(24)
+                    .frame(maxWidth: 460, alignment: .leading)
+                Divider().padding(.horizontal, 24)
+            }
             #endif
             tip
                 .padding(24)

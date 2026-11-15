@@ -187,6 +187,19 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertEqual(tracker.pending?.rank.title, "R3")
     }
 
+    @MainActor
+    func testCurrentRankIsNilUntilTheFirstRankThenTheHighestReached() {
+        let ranks = [1, 3].map { Rank(books: $0, title: "R\($0)", message: "m") }
+        let tracker = AchievementTracker(logURL: nil, ranks: ranks)
+        XCTAssertNil(tracker.currentRank)
+        tracker.record("9780441172719")
+        XCTAssertEqual(tracker.currentRank?.title, "R1")
+        tracker.record("9780857073006")
+        XCTAssertEqual(tracker.currentRank?.title, "R1")
+        tracker.record("9780061120084")
+        XCTAssertEqual(tracker.currentRank?.title, "R3")
+    }
+
     func testBundledRanksFileHasTheRequestedThresholds() {
         let file = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()

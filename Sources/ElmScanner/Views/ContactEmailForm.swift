@@ -18,7 +18,7 @@ struct ContactEmailForm: View {
         VStack(alignment: .leading, spacing: 12) {
             if mode == .firstUse {
                 Text("Welcome to ElmScanner").font(.largeTitle.bold())
-                Text("ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.")
+                Text("ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.")
             }
             Text(mode == .firstUse ? LocalizedStringKey("Before you start") : LocalizedStringKey("Your email address")).font(.title2.bold())
             // swiftlint:disable:next line_length

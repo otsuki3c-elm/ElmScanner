@@ -2,6 +2,8 @@ import SwiftUI
 
 /// The iPhone's About screen: the icon, name and version, and who made it.
 struct AboutView: View {
+    /// The user's current rank; nil until they have one.
+    var rank: Rank?
     @Environment(\.dismiss) private var dismiss
     @State private var editingEmail = false
 
@@ -26,20 +28,35 @@ struct AboutView: View {
                     .padding(.top, 24)
                 Text("ElmScanner").font(.title.bold()).padding(.top, 8)
                 Text(version).font(.subheadline).foregroundStyle(.secondary)
-                Text("ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.")
+                Text("ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
                     .padding(.horizontal)
+                if let rank {
+                    VStack(spacing: 2) {
+                        Text("Rank: \(rank.title)").font(.subheadline.weight(.semibold))
+                        Text(rank.message).font(.footnote)
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 16)
+                    .padding(.horizontal)
+                }
                 Text("Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
+                Text("ElmScanner is open source under the MIT license.")
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
                 Button("Change email address…") { editingEmail = true }
                     .padding(.top, 8)
-                SendToLibraryToggle()
-                    .padding(.top, 16)
-                    .padding(.horizontal)
+                if LibrarySender.isAvailable {
+                    SendToLibraryToggle()
+                        .padding(.top, 16)
+                        .padding(.horizontal)
+                }
                 TipJarSection()
                     .padding(.top, 24)
                     .padding(.horizontal)

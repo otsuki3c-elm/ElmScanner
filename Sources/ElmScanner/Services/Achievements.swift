@@ -109,6 +109,9 @@ final class AchievementTracker {
         }
     }
 
+    /// The highest rank reached so far, or nil before the first.
+    var currentRank: Rank? { ranks.last { $0.books <= count } }
+
     func dismiss() { pending = nil }
 
     private func save() {

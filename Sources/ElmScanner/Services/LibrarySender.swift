@@ -18,7 +18,7 @@ protocol LibrarySending: AnyObject {
 ///
 /// A book that can't be sent (offline, not signed in to iCloud) is kept and
 /// tried again at the next scan and when the app returns to the foreground.
-/// Turn it off with `enabledKey` (Settings on the Mac, About on the iPhone).
+/// Off until turned on with `enabledKey` (Settings on the Mac, About on the iPhone).
 @MainActor
 final class LibrarySender: LibrarySending {
     static let enabledKey = "sendToElmLibrary"
@@ -26,13 +26,17 @@ final class LibrarySender: LibrarySending {
     static let zoneName = "ScannedBooks"
     static let pendingKey = "pendingLibraryBooks"
 
-    /// The sender the apps use. Nil in the direct-download build, which has
-    /// no iCloud entitlement.
+    /// Whether this version offers sending to ElmLibrary at all. Off until ElmLibrary is
+    /// released: the switch is hidden and nothing is ever sent. Set to true to turn it on.
+    static let isAvailable = false
+
+    /// The sender the apps use. Nil while the feature isn't available, and in the
+    /// direct-download build, which has no iCloud entitlement.
     static let shared: LibrarySender? = {
         #if DIRECT_DOWNLOAD
         return nil
         #else
-        return LibrarySender()
+        return isAvailable ? LibrarySender() : nil
         #endif
     }()
 
@@ -45,7 +49,9 @@ final class LibrarySender: LibrarySending {
     private(set) var pending: [BookMetadata] = LibrarySender.loadPending()
 
     var isEnabled: Bool {
-        (UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true) && Self.hasCloudEntitlement
+        Self.isAvailable
+            && (UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? false)
+            && Self.hasCloudEntitlement
     }
 
     /// A build without the iCloud entitlement (unsigned, or signed by a team

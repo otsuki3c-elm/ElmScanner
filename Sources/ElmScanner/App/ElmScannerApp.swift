@@ -45,9 +45,15 @@ struct ElmScannerApp: App {
     /// The standard About panel, with the credits line added under the
     /// app's name and version.
     private func showAbout() {
+        // The user's rank, if they have one, goes under the description.
+        let rankText = session.achievements?.currentRank.map {
+            String(localized: "Rank: \($0.title)") + "\n" + $0.message + "\n\n"
+        } ?? ""
         let credits = NSMutableAttributedString(
-            string: String(localized: "ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.") + "\n\n"
-                + String(localized: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)"),
+            string: String(localized: "ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.") + "\n\n"
+                + rankText
+                + String(localized: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)") + "\n\n"
+                + String(localized: "ElmScanner is open source under the MIT license."),
             attributes: [
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
                 .foregroundColor: NSColor.labelColor
