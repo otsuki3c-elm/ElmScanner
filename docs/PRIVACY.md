@@ -26,6 +26,8 @@ ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you 
 
 ElmScanner is free, and nothing in it depends on payment. If you choose to leave an optional tip, the purchase is made through Apple's in-app purchase system. Apple handles your payment details and Apple ID; ElmScanner and its author receive no personal information from a tip, and the app doesn't record whether you made one.
 
+The Mac version downloaded from GitHub has no in-app purchase. Its tip button opens a PayPal page in your browser. Nothing is sent to PayPal until you choose to pay, and then PayPal's own privacy policy applies; the app doesn't record whether you tipped.
+
 ## Exporting
 
 When you export, the file goes only where you send it: to a location you pick in the Files app or a Mac save dialog, or to an email you send with the Mail app. ElmScanner never uploads your exported file itself.

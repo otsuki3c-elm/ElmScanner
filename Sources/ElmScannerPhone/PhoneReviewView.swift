@@ -87,7 +87,7 @@ struct PhoneReviewView: View {
         case .failed(let reason):
             VStack(alignment: .leading, spacing: 2) {
                 Text(book.isbn).font(.headline)
-                Label("Not found (\(reason)). Tap to enter it by hand; it isn't exported until then.",
+                Label("\(reason) Tap to enter the details by hand; the book isn't exported until then.",
                       systemImage: "exclamationmark.triangle.fill")
                     .font(.callout).foregroundStyle(.orange)
             }

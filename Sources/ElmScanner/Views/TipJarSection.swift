@@ -19,7 +19,7 @@ struct TipJarSection: View {
                 Text("Tips aren't available right now.").font(.callout).foregroundStyle(.secondary)
             case .ready, .purchasing, .failed:
                 Button { Task { await tipJar.buy { try await purchase($0) } } } label: {
-                    Label("Leave a tip (\(tipJar.product?.displayPrice ?? ""))", systemImage: "heart")
+                    Label("Leave a tip: \(tipJar.product?.displayPrice ?? "") (one coffee!)", systemImage: "heart")
                 }
                 .disabled(tipJar.state == .purchasing)
                 if case .failed(let message) = tipJar.state {

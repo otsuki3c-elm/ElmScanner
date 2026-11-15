@@ -107,8 +107,9 @@ actor OpenLibraryBookLookupService: BookLookupService {
             cache.store(LookupCacheEntry(isbn13: isbn13, metadata: metadata, fetchedAt: now(), source: source))
             return metadata
         } catch let error as BookLookup.LookupError {
-            // An old answer beats none. Errors themselves are never cached.
-            if let stale { return stale.metadata }
+            // An old answer beats none. Errors themselves are never cached. A stale
+            // "not found" doesn't count: showing it would hide that the network failed.
+            if let stale, let metadata = stale.metadata { return metadata }
             throw error
         }
     }

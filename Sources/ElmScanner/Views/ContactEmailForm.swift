@@ -16,6 +16,10 @@ struct ContactEmailForm: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if mode == .firstUse {
+                Text("Welcome to ElmScanner").font(.largeTitle.bold())
+                Text("ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.")
+            }
             Text(mode == .firstUse ? "Before you start" : "Your email address").font(.title2.bold())
             Text("ElmScanner looks up books on Open Library, a free service run by the Internet Archive. Open Library asks every app to include an email address, so that it can tell who is using its service and reach them if something goes wrong.")
             Text("Your address is sent to Open Library with each book lookup. It is stored only on this device and is not sent anywhere else.")

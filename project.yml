@@ -12,8 +12,8 @@ settings:
     SWIFT_VERSION: "5.0"
     MARKETING_VERSION: "1.0"
     CURRENT_PROJECT_VERSION: "1"
-targets:
-  ElmScanner:
+targetTemplates:
+  MacApp:
     type: application
     platform: macOS
     deploymentTarget: "14.0"
@@ -46,6 +46,21 @@ targets:
         INFOPLIST_KEY_NSCameraUsageDescription: ElmScanner uses the camera to scan the ISBN barcode on a book.
         # Only ordinary HTTPS and hashing: exempt, so App Store Connect skips the export questions.
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: false
+targets:
+  ElmScanner:
+    templates: [MacApp]
+  # The build for direct download (GitHub): no In-App Purchase; the tip is a PayPal link.
+  ElmScannerDirect:
+    templates: [MacApp]
+    # No iCloud here (a direct download has no provisioning profile for it): books aren't sent to ElmLibrary.
+    entitlements:
+      path: ElmScannerDirect.entitlements
+      properties:
+        com.apple.security.device.camera: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).direct
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) DIRECT_DOWNLOAD"
   ElmScannerPhone:
     type: application
     platform: iOS
@@ -115,5 +130,13 @@ schemes:
     run:
       config: Debug
       storeKitConfiguration: Config/ElmScanner.storekit
+    archive:
+      config: Release
+  ElmScannerDirect:
+    build:
+      targets:
+        ElmScannerDirect: all
+    run:
+      config: Debug
     archive:
       config: Release

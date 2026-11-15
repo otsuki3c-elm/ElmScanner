@@ -96,7 +96,9 @@ final class LookupServiceTests: XCTestCase {
         XCTAssertEqual(first?.title, "Dune")
         XCTAssertEqual(first, second)
         XCTAssertEqual(StubProtocol.requestCount, 1)
-        XCTAssertEqual(StubProtocol.requests[0].value(forHTTPHeaderField: "User-Agent"), "ElmScanner/1.0 (elmscanner@gjotsuki.net; reader@example.com)")
+        let agent = StubProtocol.requests[0].value(forHTTPHeaderField: "User-Agent") ?? ""
+        XCTAssertTrue(agent.hasPrefix("ElmScanner/"), agent)
+        XCTAssertTrue(agent.hasSuffix("(elmscanner@gjotsuki.net; reader@example.com)"), agent)
     }
 
     func testISBN10SharesTheISBN13Entry() async throws {
@@ -156,6 +158,21 @@ final class LookupServiceTests: XCTestCase {
         let stale = try await service.lookup(isbn: dune13)
         XCTAssertEqual(stale?.title, "Dune")
         XCTAssertEqual(StubProtocol.requestCount, 3)  // the first answer, then both catalogues failing
+    }
+
+    func testStaleNotFoundDoesNotHideANetworkFailure() async throws {
+        stub(ol: (200, "{}"))
+        let service = makeService()
+        let first = try await service.lookup(isbn: dune13)
+        XCTAssertNil(first)
+        clock.advance(days: 15)
+        stub(ol: (500, ""), ndl: (500, ""))
+        do {
+            _ = try await service.lookup(isbn: dune13)
+            XCTFail("expected a network error, not a silent 'not found'")
+        } catch let error as BookLookup.LookupError {
+            guard case .network = error else { return XCTFail("wrong error \(error)") }
+        }
     }
 
     func testNetworkFailureWithNoCacheThrows() async {
@@ -243,7 +260,9 @@ final class LookupServiceTests: XCTestCase {
         XCTAssertEqual(StubProtocol.requestCount, 1)
         let request = StubProtocol.requests[0]
         XCTAssertEqual(request.url?.host, "ndlsearch.ndl.go.jp")
-        XCTAssertEqual(request.value(forHTTPHeaderField: "User-Agent"), "ElmScanner/1.0 (elmscanner@gjotsuki.net)")
+        let agent = request.value(forHTTPHeaderField: "User-Agent") ?? ""
+        XCTAssertTrue(agent.hasPrefix("ElmScanner/"), agent)
+        XCTAssertTrue(agent.hasSuffix("(elmscanner@gjotsuki.net)"), agent)  // no user address
         XCTAssertTrue(request.url!.absoluteString.contains("isbn=\(soseki13)"))
     }
 

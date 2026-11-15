@@ -97,7 +97,7 @@ A single consumable in-app purchase lets users leave a tip. No feature depends o
 
 1. In App Store Connect, open the app, then Monetization > In-App Purchases, and create a **Consumable**.
 2. **Product ID:** the bundle ID plus `.tip`, for example `com.otsuki.elmscanner.ElmScanner.tip`. It must match exactly.
-3. **Reference name** "Tip"; **display name** "Tip"; **description** "A one-time tip to support ElmScanner's development. Nothing in the app depends on it." Pick a price point (the local test file uses 0.99 USD).
+3. **Reference name** "Tip"; **display name** "Tip"; **description** "A one-time tip to support ElmScanner's development. Nothing in the app depends on it." Pick a price point (the local test file uses 3.99 USD).
 4. Add the screenshot Apple asks for (the Settings window on the Mac, or the About sheet on the iPhone), then submit the purchase together with the app's first version. Both the Mac and iPhone apps share the product.
 5. The Paid Apps Agreement, tax and bank details are needed before it can be sold, even though the app itself is free.
 

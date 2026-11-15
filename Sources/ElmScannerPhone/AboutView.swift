@@ -16,7 +16,6 @@ struct AboutView: View {
         NavigationStack {
             ScrollView {
             VStack(spacing: 8) {
-                Spacer()
                 Image("AboutIcon")
                     .resizable()
                     .scaledToFit()
@@ -24,8 +23,14 @@ struct AboutView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 128 * 0.2237, style: .continuous))
                     .shadow(radius: 6, y: 3)
                     .accessibilityHidden(true)
+                    .padding(.top, 24)
                 Text("ElmScanner").font(.title.bold()).padding(.top, 8)
                 Text(version).font(.subheadline).foregroundStyle(.secondary)
+                Text("ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.")
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 16)
+                    .padding(.horizontal)
                 Text("Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
@@ -38,7 +43,7 @@ struct AboutView: View {
                 TipJarSection()
                     .padding(.top, 24)
                     .padding(.horizontal)
-                Spacer()
+                    .padding(.bottom, 24)
             }
             .frame(maxWidth: .infinity)
             }

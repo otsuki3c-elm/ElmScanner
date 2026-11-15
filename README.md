@@ -16,7 +16,7 @@ xcodegen generate
 open ElmScanner.xcodeproj
 ```
 
-The Xcode project is generated from `project.yml` and isn't checked in. There are two apps, **ElmScanner** (Mac) and **ElmScannerPhone** (iPhone). Run the tests with the ElmScanner scheme.
+The Xcode project is generated from `project.yml` and isn't checked in. There are three apps: **ElmScanner** (Mac, App Store build, tips through In-App Purchase), **ElmScannerDirect** (Mac, for direct download, tips through a PayPal link; built with the `DIRECT_DOWNLOAD` flag) and **ElmScannerPhone** (iPhone, App Store only). Run the tests with the ElmScanner scheme.
 
 ### Signing and bundle ID
 
@@ -30,6 +30,7 @@ The defaults in `Config/Signing.xcconfig` have no developer team and a placehold
 
 - **Change the Open Library contact address** in `Sources/ElmScanner/Services/BookLookup.swift` (`contactAddress`). Open Library asks apps to identify themselves, and it holds whoever is named responsible for the traffic. The code keeps within their published limits. Please keep it that way.
 - NDL Search asks apps that use its API to say so (the About screens and this README do), and to send its form to tell NDL about continuing use. The app asks for one lookup a second and waits when NDL says it is busy.
+- If you fork the direct-download build, change the PayPal address in `Sources/ElmScanner/Views/PayPalTipSection.swift`.
 - The optional "Leave a tip" purchase is a consumable in-app purchase whose product ID is your bundle ID plus `.tip`. `Config/ElmScanner.storekit` (used when running from Xcode) has the default one; change its `productID` to match yours. Without a product in App Store Connect the button just says tips aren't available.
 - The app also asks each user for their own email address at first use and adds it to the `User-Agent`, as Open Library requests. Nothing is looked up until it is entered.
 - Use your own app name and icon if you publish your own version. The app icon was generated with AI.

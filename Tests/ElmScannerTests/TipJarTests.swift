@@ -21,7 +21,7 @@ final class TipJarTests: XCTestCase {
         let jar = TipJar(productID: "com.otsuki.elmscanner.ElmScanner.tip")
         await jar.load()
         XCTAssertEqual(jar.state, .ready)
-        XCTAssertEqual(jar.product?.displayPrice, "$0.99")
+        XCTAssertEqual(jar.product?.displayPrice, "$3.99")
         await jar.buy { try await $0.purchase() }
         XCTAssertEqual(jar.state, .thanked)
         // A consumable can be bought again: a second tip goes through too.

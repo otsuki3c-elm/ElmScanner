@@ -5,10 +5,17 @@ import SwiftUI
 struct ElmScannerApp: App {
     @State private var session = ScanSession(achievements: .standard(), library: LibrarySender.shared)
 
+    init() {
+        // One window per scan; no tabs, so View > Show Tab Bar goes away.
+        NSWindow.allowsAutomaticWindowTabbing = false
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView(session: session)
+                #if !DIRECT_DOWNLOAD
                 .task { TipJar.shared.start() }
+                #endif
                 .task { await LibrarySender.shared?.flush() }
         }
         Settings {
@@ -25,7 +32,7 @@ struct ElmScannerApp: App {
     /// app's name and version.
     private func showAbout() {
         let credits = NSMutableAttributedString(
-            string: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)",
+            string: "ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.\n\nPrompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)",
             attributes: [
                 .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
                 .foregroundColor: NSColor.labelColor

@@ -40,10 +40,13 @@ enum BookLookup {
     ///
     /// The header also carries the user's own address (asked for at first use), so Open
     /// Library can tell the users of the app apart.
-    static func userAgent(contact: String) -> String { "ElmScanner/1.0 (\(contactAddress); \(contact))" }
+    static func userAgent(contact: String) -> String { "ElmScanner/\(version) (\(contactAddress); \(contact))" }
+
+    /// The app's marketing version, so the header keeps up with releases.
+    static var version: String { Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0" }
 
     /// What NDL Search is sent: the app and its developer's address, but not the user's.
-    static let plainUserAgent = "ElmScanner/1.0 (\(contactAddress))"
+    static var plainUserAgent: String { "ElmScanner/\(version) (\(contactAddress))" }
 
     /// All Open Library lookups share this limit: at most 5 requests start in any 2 seconds.
     static let limiter = RateLimiter(maxRequests: 5, perSeconds: 2)

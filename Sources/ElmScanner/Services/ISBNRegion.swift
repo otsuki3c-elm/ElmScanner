@@ -58,6 +58,6 @@ enum ISBNRegion {
               let group = group(ofISBN13: isbn13) else { return nil }
         let area = isbn13.hasPrefix("979") ? names979[group] : names[group]
         let place = area.map { "the \($0)-language area" } ?? "a region outside the English- and Japanese-language areas"
-        return "No match found. This ISBN is from \(place), and ElmScanner's catalogues cover English and Japanese books best. You can enter the details by hand."
+        return "No match found. This ISBN is from \(place), and ElmScanner's catalogues cover English and Japanese books best."
     }
 }
