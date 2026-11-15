@@ -6,8 +6,8 @@ struct ElmScannerApp: App {
     @State private var session = ScanSession(achievements: .standard(), library: LibrarySender.shared)
     @Environment(\.openWindow) private var openWindow
 
-    private static let privacyURL = URL(string: "https://github.com/otsuki3c-star/ElmScanner/blob/main/docs/PRIVACY.md")!
-    private static let issuesURL = URL(string: "https://github.com/otsuki3c-star/ElmScanner/issues")!
+    private static let privacyURL = URL(string: "https://github.com/otsuki3c-elm/ElmScanner/blob/main/docs/PRIVACY.md")!
+    private static let issuesURL = URL(string: "https://github.com/otsuki3c-elm/ElmScanner/issues")!
 
     init() {
         // One window per scan; no tabs, so View > Show Tab Bar goes away.
