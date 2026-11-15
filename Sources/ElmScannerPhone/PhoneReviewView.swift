@@ -87,9 +87,15 @@ struct PhoneReviewView: View {
         case .failed(let reason):
             VStack(alignment: .leading, spacing: 2) {
                 Text(book.isbn).font(.headline)
-                Label("\(reason) Tap to enter the details by hand; the book isn't exported until then.",
-                      systemImage: "exclamationmark.triangle.fill")
-                    .font(.callout).foregroundStyle(.orange)
+                Label {
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(reason)
+                        Text("Tap to enter the details by hand; the book isn't exported until then.")
+                    }
+                } icon: {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                }
+                .font(.callout).foregroundStyle(.orange)
             }
         }
     }

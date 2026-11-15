@@ -1,3 +1,4 @@
+#if DIRECT_DOWNLOAD
 import AppKit
 import SwiftUI
 
@@ -32,3 +33,4 @@ struct PayPalTipSection: View {
         copied = true
     }
 }
+#endif

@@ -121,9 +121,11 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     }
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        if Date.now.timeIntervalSince(Self.launchedAt) >= Self.launchQuietTime,
-           smileDetector.isSmiling(in: sampleBuffer) == true {
-            DispatchQueue.main.async { [weak self] in self?.noticeSmile() }
+        if Date.now.timeIntervalSince(Self.launchedAt) >= Self.launchQuietTime {
+            smileDetector.look(at: sampleBuffer) { [weak self] smiling in
+                guard smiling else { return }
+                DispatchQueue.main.async { self?.noticeSmile() }
+            }
         }
         let scan = BarcodeReader.scan(in: sampleBuffer)
         guard !scan.isbns.isEmpty || !scan.others.isEmpty else { return }

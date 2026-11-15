@@ -1,26 +1,6 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "%@ Double-click to enter the details by hand; the book isn't exported until then.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ ダブルクリックして詳細を手入力してください。入力するまで、この本は書き出されません。"
-          }
-        }
-      }
-    },
-    "%@ Tap to enter the details by hand; the book isn't exported until then.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ タップして詳細を手入力してください。入力するまで、この本は書き出されません。"
-          }
-        }
-      }
-    },
     "%@ is missing": {
       "localizations": {
         "ja": {
@@ -594,6 +574,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "本をダブルクリックすると編集できます。"
+          }
+        }
+      }
+    },
+    "Double-click to enter the details by hand; the book isn't exported until then.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ダブルクリックして詳細を手入力してください。入力するまで、この本は書き出されません。"
           }
         }
       }
@@ -1587,6 +1577,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "本をタップすると編集できます。"
+          }
+        }
+      }
+    },
+    "Tap to enter the details by hand; the book isn't exported until then.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップして詳細を手入力してください。入力するまで、この本は書き出されません。"
           }
         }
       }

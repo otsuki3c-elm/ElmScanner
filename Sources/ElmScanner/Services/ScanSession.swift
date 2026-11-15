@@ -134,8 +134,11 @@ final class ScanSession {
                 state = .failed(error.localizedDescription)
                 if announce { Announcer.post(String(localized: "Couldn't look up \(isbn)")) }
             }
-            if let index = books.firstIndex(where: { $0.isbn == isbn }) { books[index].state = state }
-            if case .found(let metadata) = state { library?.send(metadata) }
+            // A book removed while it was being looked up is neither updated nor sent.
+            if let index = books.firstIndex(where: { $0.isbn == isbn }) {
+                books[index].state = state
+                if case .found(let metadata) = state { library?.send(metadata) }
+            }
         }
     }
 }
