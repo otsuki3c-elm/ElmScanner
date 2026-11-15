@@ -1,5 +1,6 @@
 import CloudKit
 import Foundation
+import Security
 
 /// Where a freshly looked-up book goes after it is scanned.
 @MainActor
@@ -44,8 +45,19 @@ final class LibrarySender: LibrarySending {
     private(set) var pending: [BookMetadata] = LibrarySender.loadPending()
 
     var isEnabled: Bool {
-        UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true
+        (UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true) && Self.hasCloudEntitlement
     }
+
+    /// A build without the iCloud entitlement (unsigned, or signed by a team
+    /// that can't use iCloud) must not touch CloudKit, which would crash it.
+    static let hasCloudEntitlement: Bool = {
+        #if os(macOS)
+        guard let task = SecTaskCreateFromSelf(nil) else { return false }
+        return SecTaskCopyValueForEntitlement(task, "com.apple.developer.icloud-services" as CFString, nil) != nil
+        #else
+        return true
+        #endif
+    }()
 
     func send(_ metadata: BookMetadata) {
         guard isEnabled else { return }
