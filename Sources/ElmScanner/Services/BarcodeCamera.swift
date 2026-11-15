@@ -40,6 +40,11 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     /// that arrives afterwards doesn't switch the camera on with nobody looking.
     @ObservationIgnored private var wantsRunning = false
 
+    override init() {
+        _ = Self.launchedAt
+        super.init()
+    }
+
     deinit {
         // Safety net: never leave the camera (and its light) on.
         let session = session
@@ -116,7 +121,8 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     }
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        if smileDetector.isSmiling(in: sampleBuffer) == true {
+        if Date.now.timeIntervalSince(Self.launchedAt) >= Self.launchQuietTime,
+           smileDetector.isSmiling(in: sampleBuffer) == true {
             DispatchQueue.main.async { [weak self] in self?.noticeSmile() }
         }
         let scan = BarcodeReader.scan(in: sampleBuffer)
@@ -134,6 +140,11 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     private static let greetingDuration: TimeInterval = 5
     private static let greetingPause: TimeInterval = 1
     /// After this many greetings in a row, smiles are ignored for the longer rest.
+    /// Smiles are ignored for this long after the app starts (this is first touched when the
+    /// first camera is made, as the window opens).
+    private static let launchQuietTime: TimeInterval = 10
+    private static let launchedAt = Date.now
+
     private static let greetingsPerRun = 2
     private static let longRest: TimeInterval = 45
 
@@ -141,7 +152,8 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
     /// is up, or in the second after it goes, are ignored; after the second in a row they
     /// are ignored for 45 seconds.
     private func noticeSmile() {
-        guard !smiling, Date.now >= nextGreetingAllowed else { return }
+        guard !smiling, Date.now >= nextGreetingAllowed,
+              Date.now.timeIntervalSince(Self.launchedAt) >= Self.launchQuietTime else { return }
         greeting = hasGreeted ? (GreetingView.greetings(totalScanned: totalScanned()).randomElement() ?? "Hello!") : "Hello!"
         hasGreeted = true
         smiling = true
