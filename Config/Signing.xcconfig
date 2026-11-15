@@ -2,4 +2,6 @@
 // Local.xcconfig.example to Local.xcconfig (it is not tracked by git) and edit it.
 DEVELOPMENT_TEAM =
 APP_BUNDLE_ID = org.example.ElmScanner
+// The iCloud container shared with ElmLibrary; scanned books travel through it.
+CLOUDKIT_CONTAINER = iCloud.org.example.ElmLibrary
 #include? "Local.xcconfig"

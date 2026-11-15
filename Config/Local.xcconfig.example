@@ -4,3 +4,5 @@ DEVELOPMENT_TEAM = ABCDE12345
 // Your own reverse-DNS bundle ID. Use the same one for the Mac and iPhone apps
 // if you want a single App Store listing for both.
 APP_BUNDLE_ID = com.yourname.ElmScanner
+// ElmLibrary's iCloud container; it must be the same one ElmLibrary uses.
+CLOUDKIT_CONTAINER = iCloud.com.yourname.ElmLibrary

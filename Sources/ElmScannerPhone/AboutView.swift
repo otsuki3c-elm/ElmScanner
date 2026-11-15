@@ -32,6 +32,9 @@ struct AboutView: View {
                     .padding(.top, 16)
                 Button("Change email address…") { editingEmail = true }
                     .padding(.top, 8)
+                SendToLibraryToggle()
+                    .padding(.top, 16)
+                    .padding(.horizontal)
                 TipJarSection()
                     .padding(.top, 24)
                     .padding(.horizontal)

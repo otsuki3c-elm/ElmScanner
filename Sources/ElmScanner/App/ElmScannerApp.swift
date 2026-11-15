@@ -3,12 +3,13 @@ import SwiftUI
 
 @main
 struct ElmScannerApp: App {
-    @State private var session = ScanSession(achievements: .standard())
+    @State private var session = ScanSession(achievements: .standard(), library: LibrarySender.shared)
 
     var body: some Scene {
         WindowGroup {
             ContentView(session: session)
                 .task { TipJar.shared.start() }
+                .task { await LibrarySender.shared?.flush() }
         }
         Settings {
             SettingsView()

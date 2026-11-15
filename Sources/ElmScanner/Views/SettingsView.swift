@@ -6,6 +6,10 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 0) {
             ContactEmailForm(contact: .shared, mode: .edit)
             Divider().padding(.horizontal, 24)
+            SendToLibraryToggle()
+                .padding(24)
+                .frame(maxWidth: 460, alignment: .leading)
+            Divider().padding(.horizontal, 24)
             TipJarSection()
                 .padding(24)
                 .frame(maxWidth: 460, alignment: .leading)

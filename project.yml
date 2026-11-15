@@ -25,6 +25,9 @@ targets:
       path: ElmScanner.entitlements
       properties:
         com.apple.security.device.camera: true
+        # Sends scanned books to ElmLibrary (see LibrarySender); the container is shared with ElmLibrary.
+        com.apple.developer.icloud-container-identifiers: [$(CLOUDKIT_CONTAINER)]
+        com.apple.developer.icloud-services: [CloudKit]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
@@ -57,6 +60,11 @@ targets:
       - path: Sources/ElmScannerPhone
       - path: Resources/Phone
       - path: Resources/Shared
+    entitlements:
+      path: ElmScannerPhone.entitlements
+      properties:
+        com.apple.developer.icloud-container-identifiers: [$(CLOUDKIT_CONTAINER)]
+        com.apple.developer.icloud-services: [CloudKit]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)

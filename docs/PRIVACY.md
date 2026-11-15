@@ -13,7 +13,8 @@ ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you 
 - **Book details already looked up.** So that scanning the same book again needs no internet connection, the app remembers the details Open Library or the National Diet Library returned (title, authors, publisher, year) for up to 6 months, or 2 weeks for books it could not find. They are stored only on your device, in the app's private storage, and are never sent anywhere. Deleting the app removes them.
 - **Your email address.** The first time you use the app, it asks for your email address (you can change it later: Settings on the Mac, About on the iPhone). It is stored only on your device. See "What is sent over the internet" for why it is asked for.
 - **Your rank count (iPhone and Mac).** To count how many different books you have scanned, the app keeps a hidden log. For each book it stores only a one-way hash (a scrambled code) of the ISBN, never the ISBN, title or author. The hash can't be turned back into a title, and it is used only to avoid counting the same book twice.
-- **Nothing is synced.** ElmScanner does not use iCloud or any server of ours. Deleting the app deletes this data.
+- **Sent to ElmLibrary through your own iCloud.** Unless you turn it off (Settings on the Mac, About on the iPhone), each scanned book's details (title, authors, publisher, year, ISBN) are saved to your private iCloud (CloudKit) so that ElmLibrary can add them to your library. Only you, signed in to your Apple ID, can read them; ElmScanner's author never receives them, and ElmLibrary removes them from iCloud once they are in your library. ElmScanner uses no server of ours.
+- **Nothing else is synced.** Deleting the app deletes the data above that is stored on your device.
 
 ## What is sent over the internet
 

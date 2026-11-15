@@ -16,6 +16,8 @@ final class ScanSession {
 
     @ObservationIgnored private let storeURL: URL?
     @ObservationIgnored private let lookupService: any BookLookupService
+    /// Gets each book once it is found (and again when edited); nil where books aren't sent on.
+    @ObservationIgnored private let library: (any LibrarySending)?
     /// Counts the different books ever scanned; nil where achievements aren't wanted.
     let achievements: AchievementTracker?
     /// Books already exported: still listed, but no longer worth restoring.
@@ -27,8 +29,10 @@ final class ScanSession {
     }
 
     init(storeURL: URL? = nil, achievements: AchievementTracker? = nil,
-         lookup: any BookLookupService = BookLookup.shared) {
+         lookup: any BookLookupService = BookLookup.shared,
+         library: (any LibrarySending)? = nil) {
         self.storeURL = storeURL
+        self.library = library
         self.lookupService = lookup
         self.achievements = achievements
         guard let storeURL else { return }
@@ -92,6 +96,7 @@ final class ScanSession {
     func update(_ id: UUID, with metadata: BookMetadata) {
         guard let index = books.firstIndex(where: { $0.id == id }) else { return }
         books[index].state = .found(metadata)
+        library?.send(metadata)
     }
 
     func remove(_ ids: Set<UUID>) { books.removeAll { ids.contains($0.id) } }
@@ -130,6 +135,7 @@ final class ScanSession {
                 if announce { Announcer.post("Couldn't look up \(isbn)") }
             }
             if let index = books.firstIndex(where: { $0.isbn == isbn }) { books[index].state = state }
+            if case .found(let metadata) = state { library?.send(metadata) }
         }
     }
 }
