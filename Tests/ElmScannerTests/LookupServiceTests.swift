@@ -216,6 +216,7 @@ final class LookupServiceTests: XCTestCase {
 
     // MARK: National Diet Library
 
+    // swiftlint:disable line_length
     private let sosekiRSS = """
     <rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcndl="http://ndl.go.jp/dcndl/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/" version="2.0">
     <channel><title>x</title>
@@ -242,6 +243,7 @@ final class LookupServiceTests: XCTestCase {
     </item>
     </channel></rss>
     """
+    // swiftlint:enable line_length
     private let soseki13 = "9784003101018"
 
     func testJapaneseISBNIsLookedUpAtNDLFirst() async throws {
@@ -279,6 +281,7 @@ final class LookupServiceTests: XCTestCase {
         let book = try await makeService().lookup(isbn: soseki13.replacingOccurrences(of: "9784003101018", with: "9784003101018"))
         XCTAssertEqual(book?.title, "吾輩は猫である")
         // A non-Japanese ISBN goes the other way round: Open Library, then NDL.
+        // swiftlint:disable:next line_length
         stub(ol: (200, "{}"), ndl: (200, #"<rss><channel><item><dc:title xmlns:dc="x">T</dc:title><dc:identifier xmlns:dc="x" xmlns:xsi="y" xsi:type="dcndl:ISBN">9780441172719</dc:identifier></item></channel></rss>"#))
         StubProtocol.requests = []
         let other = try await makeService().lookup(isbn: dune13)
@@ -290,9 +293,9 @@ final class LookupServiceTests: XCTestCase {
         let attempts = ContactBox(nil)  // counts attempts: "1", "2", …
         let rss = sosekiRSS
         StubProtocol.handler = { _ in
-            let n = (Int(attempts.value ?? "0") ?? 0) + 1
-            attempts.value = String(n)
-            return n < 3 ? (429, "") : (200, rss)
+            let attempt = (Int(attempts.value ?? "0") ?? 0) + 1
+            attempts.value = String(attempt)
+            return attempt < 3 ? (429, "") : (200, rss)
         }
         let book = try await makeService().lookup(isbn: soseki13)
         XCTAssertEqual(book?.title, "吾輩は猫である")
@@ -333,9 +336,9 @@ final class LookupServiceTests: XCTestCase {
         stub(ol: (200, duneJSON))
         StubProtocol.delay = 0.3
         let service = makeService()
-        async let a = service.lookup(isbn: dune13)
-        async let b = service.lookup(isbn: "0441172717")
-        let (first, second) = try await (a, b)
+        async let firstLookup = service.lookup(isbn: dune13)
+        async let secondLookup = service.lookup(isbn: "0441172717")
+        let (first, second) = try await (firstLookup, secondLookup)
         XCTAssertEqual(first?.title, "Dune")
         XCTAssertEqual(first, second)
         XCTAssertEqual(StubProtocol.requestCount, 1)

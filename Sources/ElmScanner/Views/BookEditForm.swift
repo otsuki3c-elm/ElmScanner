@@ -21,16 +21,16 @@ struct BookEditForm: View {
         id = book.id
         isbn = book.isbn
         self.onSave = onSave
-        let m = book.metadata
-        _title = State(initialValue: m?.title ?? "")
-        _subtitle = State(initialValue: m?.subtitle ?? "")
-        _authors = State(initialValue: Self.editableAuthors(m?.authors ?? []))
-        _publisher = State(initialValue: m?.publisher ?? "")
-        _place = State(initialValue: m?.place ?? "")
-        _year = State(initialValue: m?.publicationYear.map(String.init) ?? "")
-        _pages = State(initialValue: m?.numberOfPages ?? "")
-        _url = State(initialValue: m?.url ?? "")
-        _tags = State(initialValue: m?.tags.joined(separator: ", ") ?? "")
+        let existing = book.metadata
+        _title = State(initialValue: existing?.title ?? "")
+        _subtitle = State(initialValue: existing?.subtitle ?? "")
+        _authors = State(initialValue: Self.editableAuthors(existing?.authors ?? []))
+        _publisher = State(initialValue: existing?.publisher ?? "")
+        _place = State(initialValue: existing?.place ?? "")
+        _year = State(initialValue: existing?.publicationYear.map(String.init) ?? "")
+        _pages = State(initialValue: existing?.numberOfPages ?? "")
+        _url = State(initialValue: existing?.url ?? "")
+        _tags = State(initialValue: existing?.tags.joined(separator: ", ") ?? "")
     }
 
     /// "Family, Given" per author, separated by semicolons.

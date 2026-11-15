@@ -9,6 +9,7 @@ struct TipJarSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Support ElmScanner").font(.headline)
+            // swiftlint:disable:next line_length
             Text("ElmScanner is free and open source, and every feature works without a tip. If you find it useful, you can leave a one-time tip to support its development. The purchase is handled by Apple.")
                 .font(.callout).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

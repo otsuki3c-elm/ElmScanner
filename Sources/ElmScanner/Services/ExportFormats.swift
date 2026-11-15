@@ -213,11 +213,11 @@ extension ExportService {
                 var bytes = Data()
                 let tag: String
                 switch field {
-                case .control(let t, let value):
-                    tag = t
+                case .control(let fieldTag, let value):
+                    tag = fieldTag
                     bytes.append(Data(value.utf8))
-                case .data(let t, let ind1, let ind2, let subfields):
-                    tag = t
+                case .data(let fieldTag, let ind1, let ind2, let subfields):
+                    tag = fieldTag
                     bytes.append(Data("\(ind1)\(ind2)".utf8))
                     for sub in subfields {
                         bytes.append(subfieldMark)

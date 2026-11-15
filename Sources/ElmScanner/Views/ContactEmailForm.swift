@@ -21,6 +21,7 @@ struct ContactEmailForm: View {
                 Text("ElmScanner lets you quickly add books to Zotero and other reference management software, by scanning bar codes.")
             }
             Text(mode == .firstUse ? LocalizedStringKey("Before you start") : LocalizedStringKey("Your email address")).font(.title2.bold())
+            // swiftlint:disable:next line_length
             Text("ElmScanner looks up books on Open Library, a free service run by the Internet Archive. Open Library asks every app to include an email address, so that it can tell who is using its service and reach them if something goes wrong.")
             Text("Your address is sent to Open Library with each book lookup. It is stored only on this device and is not sent anywhere else.")
                 .foregroundStyle(.secondary)

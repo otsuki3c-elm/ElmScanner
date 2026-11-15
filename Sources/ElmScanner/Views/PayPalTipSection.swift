@@ -14,6 +14,7 @@ struct PayPalTipSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Support ElmScanner").font(.headline)
+            // swiftlint:disable:next line_length
             Text("ElmScanner is free and open source, and every feature works without a tip. If you find it useful, you can send a tip of about \(Self.displayAmount) (one coffee!) with PayPal to support its development.")
                 .font(.callout).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
