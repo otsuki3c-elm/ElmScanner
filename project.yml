@@ -40,7 +40,7 @@ targetTemplates:
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_KEY_CFBundleDisplayName: ElmScanner
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
-        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Grant Jun Otsuki"
         ENABLE_HARDENED_RUNTIME: true
         # App Sandbox, with files picked in open/save panels.
         ENABLE_APP_SANDBOX: true
@@ -91,6 +91,7 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_KEY_CFBundleDisplayName: ElmScanner
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 Grant Jun Otsuki"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
         INFOPLIST_KEY_UILaunchScreen_Generation: true
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait

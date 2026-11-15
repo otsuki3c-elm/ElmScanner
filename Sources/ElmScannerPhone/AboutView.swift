@@ -28,6 +28,9 @@ struct AboutView: View {
                     .padding(.top, 24)
                 Text("ElmScanner").font(.title.bold()).padding(.top, 8)
                 Text(version).font(.subheadline).foregroundStyle(.secondary)
+                if let copyright = Bundle.main.object(forInfoDictionaryKey: "NSHumanReadableCopyright") as? String {
+                    Text(copyright).font(.caption).foregroundStyle(.secondary)
+                }
                 Text("ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.")
                     .font(.footnote)
                     .multilineTextAlignment(.center)

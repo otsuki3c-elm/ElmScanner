@@ -10,6 +10,16 @@
           }
         }
       }
+    },
+    "NSHumanReadableCopyright": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© 2026 オオツキ　グラント　ジュン"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
