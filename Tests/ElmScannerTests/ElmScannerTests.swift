@@ -192,7 +192,7 @@ final class ElmScannerTests: XCTestCase {
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
             .appending(path: "Resources/Shared/Ranks.json")
         let ranks = Rank.load(from: file)
-        XCTAssertEqual(ranks.map(\.books), [1, 5, 10, 30, 100, 150, 300, 500, 1000])
+        XCTAssertEqual(ranks.map(\.books), [1, 5, 10, 30, 80, 116, 218, 300, 500, 1000])
         XCTAssertTrue(ranks.allSatisfy { !$0.title.isEmpty && !$0.message.isEmpty })
     }
 

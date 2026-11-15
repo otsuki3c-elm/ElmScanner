@@ -34,7 +34,13 @@ struct Rank: Codable, Identifiable, Equatable {
 
     /// The ranks bundled with the app (`Ranks.json`).
     static var bundled: [Rank] {
-        Bundle.main.url(forResource: "Ranks", withExtension: "json").map(load(from:)) ?? []
+        let ranks = Bundle.main.url(forResource: "Ranks", withExtension: "json").map(load(from:)) ?? []
+        // The file holds the English; the title and message are looked up in the string catalog.
+        return ranks.map { Rank(books: $0.books, title: localized($0.title), message: localized($0.message)) }
+    }
+
+    private static func localized(_ text: String) -> String {
+        Bundle.main.localizedString(forKey: text, value: text, table: nil)
     }
 }
 

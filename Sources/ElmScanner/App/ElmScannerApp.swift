@@ -4,6 +4,10 @@ import SwiftUI
 @main
 struct ElmScannerApp: App {
     @State private var session = ScanSession(achievements: .standard(), library: LibrarySender.shared)
+    @Environment(\.openWindow) private var openWindow
+
+    private static let privacyURL = URL(string: "https://github.com/otsuki3c-star/ElmScanner/blob/main/docs/PRIVACY.md")!
+    private static let issuesURL = URL(string: "https://github.com/otsuki3c-star/ElmScanner/issues")!
 
     init() {
         // One window per scan; no tabs, so View > Show Tab Bar goes away.
@@ -18,10 +22,20 @@ struct ElmScannerApp: App {
                 #endif
                 .task { await LibrarySender.shared?.flush() }
         }
+        Window("ElmScanner Help", id: "help") {
+            HelpView()
+        }
         Settings {
             SettingsView()
         }
         .commands {
+            CommandGroup(replacing: .help) {
+                Button("ElmScanner Help") { openWindow(id: "help") }
+                    .keyboardShortcut("?")
+                Divider()
+                Link("Privacy Policy", destination: Self.privacyURL)
+                Link("Report an Issue…", destination: Self.issuesURL)
+            }
             CommandGroup(replacing: .appInfo) {
                 Button("About ElmScanner") { showAbout() }
             }

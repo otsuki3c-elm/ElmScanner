@@ -34,7 +34,7 @@ The defaults in `Config/Signing.xcconfig` have no developer team and a placehold
 - The optional "Leave a tip" purchase is a consumable in-app purchase whose product ID is your bundle ID plus `.tip`. `Config/ElmScanner.storekit` (used when running from Xcode) has the default one; change its `productID` to match yours. Without a product in App Store Connect the button just says tips aren't available.
 - The app also asks each user for their own email address at first use and adds it to the `User-Agent`, as Open Library requests. Nothing is looked up until it is entered.
 - Use your own app name and icon if you publish your own version. The app icon was generated with AI.
-- `Resources/Shared/Ranks.json` holds the text for the achievement ranks. Edit it freely.
+- `Resources/Shared/Ranks.json` holds the text for the achievement ranks. Edit it freely; the Japanese for each title and message is in `Localizable.xcstrings`.
 
 ## How it works
 

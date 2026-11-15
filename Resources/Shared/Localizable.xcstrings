@@ -143,6 +143,50 @@
         }
       }
     },
+    "1,000 books! The neighborhood is lucky to have you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1,000冊！ 街角に素敵な本屋さんができました。"
+          }
+        }
+      }
+    },
+    "116 books: about what Leonardo da Vinci owned. Good company!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "116冊。レオナルド・ダ・ヴィンチの蔵書とほぼ同じ数です。偉大な先達と肩を並べました！"
+          }
+        }
+      }
+    },
+    "300 books. You've mastered the art of owning more books than you've read.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "300冊。読んだ数より多くの本を持つ技を、すっかり身につけました。"
+          }
+        }
+      }
+    },
+    "500 books. You could open a tiny shop with this.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "500冊。これだけあれば、小さなお店が開けます。"
+          }
+        }
+      }
+    },
     ":)": {
       "extractionState": "manual",
       "localizations": {
@@ -150,6 +194,17 @@
           "stringUnit": {
             "state": "translated",
             "value": ":)"
+          }
+        }
+      }
+    },
+    "A home with 80 or more books helps children's literacy.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本が80冊以上ある家庭は、子どもの読み書きの力を育てます。"
           }
         }
       }
@@ -254,12 +309,33 @@
         }
       }
     },
+    "Beginner": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初心者"
+          }
+        }
+      }
+    },
     "Book scanned": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "本をスキャンしました"
+          }
+        }
+      }
+    },
+    "Books it can't find": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "見つからない本"
           }
         }
       }
@@ -274,6 +350,17 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Budding Library": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "芽吹く図書館"
+          }
+        }
+      }
     },
     "Bulgarian": {
       "localizations": {
@@ -336,6 +423,16 @@
         }
       }
     },
+    "Check the list": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リストを確認する"
+          }
+        }
+      }
+    },
     "Chinese": {
       "localizations": {
         "ja": {
@@ -369,12 +466,32 @@
       },
       "extractionState": "manual"
     },
+    "Choose Export, then a format such as RIS or BibTeX; More… has the rest. Import the file into Zotero or another reference manager. Exported books can be scanned again later.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「書き出す」を選び、RISやBibTeXなどの形式を選びます。その他の形式は「その他…」にあります。書き出したファイルをZoteroなどの文献管理ソフトに読み込んでください。書き出した本も、あとでもう一度スキャンできます。"
+          }
+        }
+      }
+    },
     "Clear": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "クリア"
+          }
+        }
+      }
+    },
+    "Click Next to review the books. If a book wasn't found, or a detail is missing, double-click it to enter the details by hand. A book that wasn't found isn't exported until you do.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「次へ」をクリックして本を確認します。本が見つからなかった場合や、未入力の項目がある場合は、ダブルクリックして詳細を手入力します。見つからなかった本は、入力するまで書き出されません。"
           }
         }
       }
@@ -450,6 +567,17 @@
       },
       "extractionState": "manual"
     },
+    "Da Vinci's Library": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ダ・ヴィンチの蔵書"
+          }
+        }
+      }
+    },
     "Danish": {
       "localizations": {
         "ja": {
@@ -522,6 +650,26 @@
         }
       }
     },
+    "ElmScanner Help": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScanner ヘルプ"
+          }
+        }
+      }
+    },
+    "ElmScanner asks for your email address once, because Open Library asks every app to send one. Change it in Settings (⌘,).": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Libraryがすべてのアプリにメールアドレスの送信を求めているため、ElmScannerは最初に一度だけメールアドレスをおたずねします。変更は「設定」（⌘,）で行えます。"
+          }
+        }
+      }
+    },
     "ElmScanner export: %@, %@": {
       "localizations": {
         "ja": {
@@ -558,6 +706,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "ElmScannerは、バーコードをスキャンするだけで、Zoteroなどの文献管理ソフトに本をすばやく追加できるアプリです。"
+          }
+        }
+      }
+    },
+    "ElmScanner looks books up at Open Library and the National Diet Library, which cover English and Japanese books best. For other languages, enter the details by hand.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerはOpen Libraryと国立国会図書館で本を検索します。どちらも英語と日本語の本に最も強く対応しています。それ以外の言語の本は、詳細を手入力してください。"
           }
         }
       }
@@ -687,6 +845,17 @@
       },
       "extractionState": "manual"
     },
+    "Five books in. Something is starting to grow.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5冊め。何かが育ちはじめています。"
+          }
+        }
+      }
+    },
     "French": {
       "localizations": {
         "ja": {
@@ -708,6 +877,17 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Good for the kids": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "子どもたちのために"
+          }
+        }
+      }
     },
     "Greek": {
       "localizations": {
@@ -773,6 +953,16 @@
         }
       }
     },
+    "Hold the barcode on a book's back cover up to the camera. ElmScanner reads the ISBN, looks the book up and adds it to the list. You can also type or paste an ISBN under the camera and click Add.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本の裏表紙のバーコードをカメラにかざします。ElmScannerがISBNを読み取り、本を検索してリストに追加します。カメラの下にISBNを入力または貼り付けて「追加」をクリックすることもできます。"
+          }
+        }
+      }
+    },
     "How's it going?": {
       "extractionState": "manual",
       "localizations": {
@@ -833,6 +1023,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "チップを贈る：%@（コーヒー1杯分！）"
+          }
+        }
+      }
+    },
+    "Little Bookstore on the Corner": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "街角の小さな本屋さん"
           }
         }
       }
@@ -1009,6 +1210,17 @@
         }
       }
     },
+    "Novice Collector": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "駆け出しコレクター"
+          }
+        }
+      }
+    },
     "OK": {
       "localizations": {
         "ja": {
@@ -1091,6 +1303,16 @@
       },
       "extractionState": "manual"
     },
+    "Privacy Policy": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシーポリシー"
+          }
+        }
+      }
+    },
     "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)": {
       "localizations": {
         "ja": {
@@ -1165,6 +1387,16 @@
         }
       }
     },
+    "Report an Issue…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "問題を報告…"
+          }
+        }
+      }
+    },
     "Retry": {
       "localizations": {
         "ja": {
@@ -1213,6 +1445,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "保存"
+          }
+        }
+      }
+    },
+    "Scan books": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本をスキャンする"
           }
         }
       }
@@ -1309,6 +1551,17 @@
         }
       }
     },
+    "Ten books. You have the start of a real library.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10冊。本物の図書館の始まりです。"
+          }
+        }
+      }
+    },
     "Thai": {
       "localizations": {
         "ja": {
@@ -1341,12 +1594,67 @@
         }
       }
     },
+    "The Estonian Average": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エストニア人の平均"
+          }
+        }
+      }
+    },
+    "The Kon-Mari Recommendation": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こんまり級"
+          }
+        }
+      }
+    },
     "The purchase couldn't be verified, so it wasn't completed.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "購入を確認できなかったため、完了しませんでした。"
+          }
+        }
+      }
+    },
+    "Thirty books. Does each one spark joy?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30冊。どの本も、ときめきますか？"
+          }
+        }
+      }
+    },
+    "This is how many books are owned by the average Estonian (according to the Guardian).": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エストニアの人が持っている本の平均冊数です（ガーディアン紙による）。"
+          }
+        }
+      }
+    },
+    "Tiny Bookstore": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "小さな書店"
           }
         }
       }
@@ -1367,6 +1675,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "タイトル"
+          }
+        }
+      }
+    },
+    "Tsundoku Pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "積ん読のプロ"
           }
         }
       }
@@ -1469,6 +1788,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "下にISBNを入力または貼り付けることもできます。"
+          }
+        }
+      }
+    },
+    "You've scanned your first book. Every library starts with one.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初の1冊です。どんな図書館も1冊から始まります。"
           }
         }
       }

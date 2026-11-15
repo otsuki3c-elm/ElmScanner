@@ -1,14 +1,15 @@
 {
-  "_comment": "Edit this file to change the rank popups. 'books' is the number of different books scanned that earns the rank. The text is placeholder for now. Rebuild the app after editing.",
+  "_comment": "Edit this file to change the rank popups. 'books' is the number of different books scanned that earns the rank. The title and message are keys in Localizable.xcstrings, which holds the Japanese; add a translation there if you change the English. Rebuild the app after editing.",
   "ranks": [
-    { "books": 1,    "title": "Rank 1 (placeholder)",    "message": "Placeholder text for the rank earned at 1 book." },
-    { "books": 5,    "title": "Rank 2 (placeholder)",    "message": "Placeholder text for the rank earned at 5 books." },
-    { "books": 10,   "title": "Rank 3 (placeholder)",    "message": "Placeholder text for the rank earned at 10 books." },
-    { "books": 30,   "title": "Rank 4 (placeholder)",    "message": "Placeholder text for the rank earned at 30 books." },
-    { "books": 100,  "title": "Rank 5 (placeholder)",    "message": "Placeholder text for the rank earned at 100 books." },
-    { "books": 150,  "title": "Rank 6 (placeholder)",    "message": "Placeholder text for the rank earned at 150 books." },
-    { "books": 300,  "title": "Rank 7 (placeholder)",    "message": "Placeholder text for the rank earned at 300 books." },
-    { "books": 500,  "title": "Rank 8 (placeholder)",    "message": "Placeholder text for the rank earned at 500 books." },
-    { "books": 1000, "title": "Rank 9 (placeholder)",    "message": "Placeholder text for the rank earned at 1000 books." }
+    { "books": 1, "title": "Beginner", "message": "You've scanned your first book. Every library starts with one." },
+    { "books": 5, "title": "Novice Collector", "message": "Five books in. Something is starting to grow." },
+    { "books": 10, "title": "Budding Library", "message": "Ten books. You have the start of a real library." },
+    { "books": 30, "title": "The Kon-Mari Recommendation", "message": "Thirty books. Does each one spark joy?" },
+    { "books": 80, "title": "Good for the kids", "message": "A home with 80 or more books helps children's literacy." },
+    { "books": 116, "title": "Da Vinci's Library", "message": "116 books: about what Leonardo da Vinci owned. Good company!" },
+    { "books": 218, "title": "The Estonian Average", "message": "This is how many books are owned by the average Estonian (according to the Guardian)." },
+    { "books": 300, "title": "Tsundoku Pro", "message": "300 books. You've mastered the art of owning more books than you've read." },
+    { "books": 500, "title": "Tiny Bookstore", "message": "500 books. You could open a tiny shop with this." },
+    { "books": 1000, "title": "Little Bookstore on the Corner", "message": "1,000 books! The neighborhood is lucky to have you." }
   ]
 }
