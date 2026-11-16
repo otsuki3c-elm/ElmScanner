@@ -85,12 +85,26 @@ final class LibrarySender: LibrarySending {
                 zoneReady = true
             }
             let records = batch.map { Self.record(for: $0, zoneID: zoneID) }
-            _ = try await database.modifyRecords(saving: records, deleting: [], savePolicy: .allKeys)
-            // Keep anything added or edited while this was in flight.
-            pending.removeAll { sent in batch.contains { $0 == sent } }
+            let outcome = try await database.modifyRecords(saving: records, deleting: [], savePolicy: .allKeys)
+            // The call succeeds even when some records fail, so look at each one: only books that
+            // were saved leave the queue. The others stay for the next attempt. Anything added or
+            // edited while this was in flight stays too.
+            let sent = Self.booksSaved(from: batch, results: outcome.saveResults, zoneID: zoneID)
+            pending.removeAll { book in sent.contains { $0 == book } }
             savePending()
         } catch {
             // Offline or not signed in to iCloud: stays pending for next time.
+        }
+    }
+
+    /// The books of `batch` whose records were saved, according to CloudKit's per-record results.
+    /// A book with no result, or a failed one, isn't in the list, so it is tried again.
+    static func booksSaved(from batch: [BookMetadata], results: [CKRecord.ID: Result<CKRecord, Error>],
+                           zoneID: CKRecordZone.ID) -> [BookMetadata] {
+        batch.filter { book in
+            let id = CKRecord.ID(recordName: recordName(for: book), zoneID: zoneID)
+            if case .success = results[id] { return true }
+            return false
         }
     }
 

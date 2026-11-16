@@ -61,4 +61,36 @@ final class LibrarySenderTests: XCTestCase {
         session.update(session.books[0].id, with: edited)
         XCTAssertEqual(spy.sent.last?.title, "Dune (edited)")
     }
+
+    // MARK: After a save: only the books whose record was saved leave the queue
+
+    private var zone: CKRecordZone.ID { CKRecordZone.ID(zoneName: LibrarySender.zoneName, ownerName: CKCurrentUserDefaultName) }
+
+    private func otherBook() -> BookMetadata {
+        var other = dune
+        other.title = "吾輩は猫である"
+        other.isbn = "9784003101018"
+        return other
+    }
+
+    func testOnlySavedBooksLeaveTheQueue() {
+        let soseki = otherBook()
+        let duneID = CKRecord.ID(recordName: LibrarySender.recordName(for: dune), zoneID: zone)
+        let sosekiID = CKRecord.ID(recordName: LibrarySender.recordName(for: soseki), zoneID: zone)
+        let results: [CKRecord.ID: Result<CKRecord, Error>] = [
+            duneID: .success(LibrarySender.record(for: dune, zoneID: zone)),
+            sosekiID: .failure(CKError(.networkFailure))
+        ]
+        XCTAssertEqual(LibrarySender.booksSaved(from: [dune, soseki], results: results, zoneID: zone), [dune])
+    }
+
+    func testABookWithNoResultStaysQueued() {
+        XCTAssertTrue(LibrarySender.booksSaved(from: [dune], results: [:], zoneID: zone).isEmpty)
+    }
+
+    func testEveryBookSavedEmptiesTheQueue() {
+        let id = CKRecord.ID(recordName: LibrarySender.recordName(for: dune), zoneID: zone)
+        let results: [CKRecord.ID: Result<CKRecord, Error>] = [id: .success(LibrarySender.record(for: dune, zoneID: zone))]
+        XCTAssertEqual(LibrarySender.booksSaved(from: [dune], results: results, zoneID: zone), [dune])
+    }
 }
