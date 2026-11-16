@@ -207,6 +207,7 @@ enum ExportService {
         if let year = book.publicationYear { item["issued"] = ["date-parts": [[year]]] }
         if let pages = book.numberOfPages { item["number-of-pages"] = pages }
         if let url = book.url { item["URL"] = url }
+        if let note = book.note { item["note"] = note }
         if !book.tags.isEmpty { item["keyword"] = book.tags.joined(separator: ", ") }
         return item
     }
@@ -248,6 +249,7 @@ enum ExportService {
         if let year = book.publicationYear { fields.append(("year", String(year))) }
         fields.append(("isbn", book.isbn))
         if let url = book.url { fields.append(("url", url)) }
+        if let note = book.note { fields.append(("note", note)) }
         let body = fields.map { key, value in "  \(key) = {\(key == "author" ? value : escape(value))}" }.joined(separator: ",\n")
         return "@book{\(citeKey(for: book, usedKeys: &usedKeys)),\n\(body)\n}"
     }

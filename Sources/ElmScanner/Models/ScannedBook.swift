@@ -44,6 +44,8 @@ struct BookMetadata: Equatable, Codable {
     var isbn: String
     var url: String?
     var tags: [String]
+    /// A note that travels with the record: where it came from, when a source's licence asks for that.
+    var note: String?
 
     /// Zotero has no subtitle field; "Title: Subtitle" is its convention.
     var fullTitle: String {

@@ -54,6 +54,10 @@ enum BookLookup {
     /// NDL Search publishes no number, only a limit on simultaneous requests and a request
     /// to avoid parallel access: one request a second, and waits when it says "too many".
     static let ndlLimiter = RateLimiter(maxRequests: 1, perSeconds: 1)
+    /// The national libraries of Germany, France and Spain ask for nothing special; one request a second is polite.
+    static let dnbLimiter = RateLimiter(maxRequests: 1, perSeconds: 1)
+    static let bnfLimiter = RateLimiter(maxRequests: 1, perSeconds: 1)
+    static let bneLimiter = RateLimiter(maxRequests: 1, perSeconds: 1)
 
     /// The lookup the app uses: Open Library, with results kept on the device.
     static let shared = OpenLibraryBookLookupService(cacheURL: LookupCache.defaultURL)

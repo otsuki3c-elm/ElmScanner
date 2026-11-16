@@ -60,6 +60,9 @@ actor OpenLibraryBookLookupService: BookLookupService {
     private let session: URLSession
     private let limiter: RateLimiter
     private let ndlLimiter: RateLimiter
+    private let dnbLimiter: RateLimiter
+    private let bnfLimiter: RateLimiter
+    private let bneLimiter: RateLimiter
     /// How long to wait before asking NDL again after "too many requests"; each retry waits longer.
     private let retryDelay: TimeInterval
     private let now: @Sendable () -> Date
@@ -72,6 +75,9 @@ actor OpenLibraryBookLookupService: BookLookupService {
          cacheURL: URL? = nil,
          limiter: RateLimiter = BookLookup.limiter,
          ndlLimiter: RateLimiter = BookLookup.ndlLimiter,
+         dnbLimiter: RateLimiter = BookLookup.dnbLimiter,
+         bnfLimiter: RateLimiter = BookLookup.bnfLimiter,
+         bneLimiter: RateLimiter = BookLookup.bneLimiter,
          retryDelay: TimeInterval = 3,
          now: @escaping @Sendable () -> Date = { Date() },
          contact: @escaping @Sendable () -> String? = { ContactEmail.stored() }) {
@@ -79,6 +85,9 @@ actor OpenLibraryBookLookupService: BookLookupService {
         self.session = session
         self.limiter = limiter
         self.ndlLimiter = ndlLimiter
+        self.dnbLimiter = dnbLimiter
+        self.bnfLimiter = bnfLimiter
+        self.bneLimiter = bneLimiter
         self.retryDelay = retryDelay
         self.now = now
         self.cache = LookupCache(url: cacheURL)
@@ -114,15 +123,20 @@ actor OpenLibraryBookLookupService: BookLookupService {
         }
     }
 
-    private enum Source: String { case openLibrary = "openlibrary", ndl }
+    private enum Source: String { case openLibrary = "openlibrary", ndl, dnb, bnf, bne }
 
-    /// Asks the catalogues in turn: NDL first for a Japanese ISBN, Open Library first for any
-    /// other. The first to know the book wins. If none knows it, that is cached as "not found"
+    /// Asks the catalogues in turn: the national library first for a Japanese (NDL), German (DNB),
+    /// French (BnF) or Spanish (BNE) ISBN, Open Library first for any other. The first to know the book wins. If none knows it, that is cached as "not found"
     /// only when every one of them answered; if one couldn't be reached, nothing is cached.
     private func fetch(_ isbn13: String) async throws -> (BookMetadata?, String?) {
         // Open Library wants every request to name a contact; with none, send nothing.
         guard let contact = contact() else { throw BookLookup.LookupError.contactMissing }
-        let order: [Source] = NDL.isJapanese(isbn13: isbn13) ? [.ndl, .openLibrary] : [.openLibrary, .ndl]
+        let order: [Source]
+        if NDL.isJapanese(isbn13: isbn13) { order = [.ndl, .openLibrary] }
+        else if DNB.isGerman(isbn13: isbn13) { order = [.dnb, .openLibrary, .ndl] }
+        else if BnF.isFrench(isbn13: isbn13) { order = [.bnf, .openLibrary, .ndl] }
+        else if BNE.isSpanish(isbn13: isbn13) { order = [.bne, .openLibrary, .ndl] }
+        else { order = [.openLibrary, .ndl] }
         var failure: BookLookup.LookupError?
         for source in order {
             do {
@@ -130,6 +144,12 @@ actor OpenLibraryBookLookupService: BookLookupService {
                 switch source {
                 case .openLibrary: found = try await fetchOpenLibrary(isbn13, contact: contact)
                 case .ndl: found = try await fetchNDL(isbn13)
+                case .dnb: found = try await fetchNationalLibrary(DNB.url(isbn13: isbn13), limiter: dnbLimiter) { DNB.parse($0, isbn13: isbn13) }
+                case .bnf:
+                    // The BnF's open licence asks for its name and the date the record was taken.
+                    found = try await fetchNationalLibrary(BnF.url(isbn13: isbn13), limiter: bnfLimiter) { BnF.parse($0, isbn13: isbn13) }
+                        .map { var book = $0; book.note = BnF.attribution(on: now()); return book }
+                case .bne: found = try await fetchNationalLibrary(BNE.url(isbn13: isbn13), limiter: bneLimiter) { BNE.parse($0, isbn13: isbn13) }
                 }
                 if let found { return (found, source.rawValue) }
             } catch let error as BookLookup.LookupError {
@@ -168,6 +188,15 @@ actor OpenLibraryBookLookupService: BookLookupService {
                 try await Task.sleep(for: .seconds(retryDelay * Double(attempt)))
             }
         }
+    }
+
+    /// One request to a national library that needs no contact address: the app's own User-Agent only.
+    private func fetchNationalLibrary(_ url: URL, limiter: RateLimiter,
+                                      parse: (Data) -> BookMetadata?) async throws -> BookMetadata? {
+        var request = URLRequest(url: url, timeoutInterval: 10)
+        request.setValue(BookLookup.plainUserAgent, forHTTPHeaderField: "User-Agent")
+        try await limiter.waitForTurn()
+        return parse(try await send(request))
     }
 
     private func send(_ request: URLRequest) async throws -> Data {

@@ -2,14 +2,14 @@
 
 *Draft text for App Store Connect. Character limits are Apple's; the counts below were checked. The app is free and open source (MIT); a bundle ID of your own goes in `Config/Local.xcconfig`.*
 
-## One app, all platforms (universal purchase)
+## One app, iPhone and Mac (universal purchase)
 
-The Mac app and the iPhone/iPad app share the bundle ID `com.otsuki.elmscanner.ElmScanner`, so they can live in a single App Store Connect app record: both apps are free. Apple does not allow a bundle ID to change after submission.
+The Mac app and the iPhone app share the bundle ID `com.otsuki.elmscanner.ElmScanner`, so they can live in a single App Store Connect app record: both apps are free. Apple does not allow a bundle ID to change after submission.
 
 1. Create the app record (platform iOS) with that bundle ID.
 2. In the same record, click the "+" next to the platform list and add **macOS**. The bundle ID must match.
 3. Upload an iOS build and a macOS build (Xcode: Product > Archive, once per scheme). Build numbers are counted separately per platform.
-4. Set the price to Free once, for the whole app. (The optional tip does need the Paid Apps Agreement, tax and bank details; see "Optional tip" below.) Fill in the iPhone/iPad and Mac versions' screenshots and review notes separately; the name, privacy policy and price are shared.
+4. Set the price to Free once, for the whole app. (The optional tip does need the Paid Apps Agreement, tax and bank details; see "Optional tip" below.) Fill in the iPhone and Mac versions' screenshots and review notes separately; the name, privacy policy and price are shared.
 
 ## Basics
 
@@ -37,23 +37,23 @@ isbn,barcode,scanner,books,citation,bibliography,reference,library,bibtex,ris,ca
 ElmScanner turns the barcode on the back of a book into a citation-ready record. Hold the book up to your camera, and the title, author, publisher, year and more are filled in for you. When you're done, export the whole list for your reference manager.
 
 SCAN OR TYPE
-• Point the camera at an ISBN barcode in any orientation. On iPhone and iPad it starts on the back camera, with a button to switch; on the Mac you can choose among connected cameras. A green check confirms a book was recognized; a red X means the barcode wasn't a book.
+• Point the camera at an ISBN barcode in any orientation. On iPhone it starts on the back camera, with a button to switch; on the Mac you can choose among connected cameras. A green check confirms a book was recognized; a red X means the barcode wasn't a book.
 • Or type an ISBN by hand.
 • Scan a book twice and ElmScanner won't add it again. It scrolls to the one you already have.
 • Books you've looked up before are remembered on your device, so scanning them again works without an internet connection.
 
 REVIEW AND EDIT
 • See exactly what will be exported for every book, with missing details flagged.
-• Tap (iPhone, iPad) or double-click (Mac) any book to correct or complete it.
-• Book details come from Open Library (a project of the Internet Archive) and, for Japanese books, the National Diet Library's NDL Search.
+• Tap (iPhone) or double-click (Mac) any book to correct or complete it.
+• Book details come from Open Library (a project of the Internet Archive) and from the national libraries of Japan (NDL Search), Germany (Deutsche Nationalbibliothek), France (Bibliothèque nationale de France) and Spain (Biblioteca Nacional de España) for books in those languages.
 
 EXPORT TO MANY FORMATS
 • RIS, BibTeX, Excel (.xlsx) and CSV first, then BibLaTeX, CSL JSON, MODS, MARC, MARCXML, EndNote XML, RefWorks, Web of Science, Refer/BibIX, Zotero RDF, Bibliontology RDF, Dublin Core RDF and XML ContextObject.
 • These are formats that reference managers such as Zotero can import.
 • Keep one running Excel list: choose an Excel or CSV file you exported earlier and the new books are added to the end (books already in it are skipped).
-• On iPhone and iPad, save to the Files app or send the file by email as an attachment.
+• On iPhone, save to the Files app or send the file by email as an attachment.
 
-NEVER LOSE YOUR LIST (iPHONE AND iPAD)
+NEVER LOSE YOUR LIST (iPHONE)
 • Books you've scanned but not yet exported are kept safely, even if the app closes unexpectedly.
 • One tap clears the list when you want a fresh start.
 
@@ -71,7 +71,7 @@ FREE AND OPEN SOURCE
 
 PRIVATE BY DESIGN
 • No account, no ads, no tracking.
-• The camera image never leaves your device (smile detection runs on the device too). Only a book's ISBN goes to Open Library or, for Japanese books, the National Diet Library, to look up its details; your email address (which Open Library asks every app to send) goes to Open Library only.
+• The camera image never leaves your device (smile detection runs on the device too). Only a book's ISBN goes to Open Library or, for Japanese, German, French and Spanish books, the national library of that country, to look up its details; your email address (which Open Library asks every app to send) goes to Open Library only.
 
 ElmScanner works with Zotero's import formats but is not made by or endorsed by Zotero.
 
@@ -94,20 +94,20 @@ ElmScannerは、本の裏表紙のバーコードを、そのまま文献情報�
 • ISBNを手入力することもできます。
 • 同じ本を2回スキャンしても重複して追加されません。すでにリストにある本が表示されます。
 • 一度調べた本は端末に記憶されるので、次回はオフラインでもスキャンできます。
-• iPhone・iPadは背面カメラで起動し、ボタンで切り替え可能。Macでは接続中のカメラから選べます。
+• iPhoneは背面カメラで起動し、ボタンで切り替え可能。Macでは接続中のカメラから選べます。
 
 確認と編集
 • 書き出す内容を本ごとに確認でき、不足している情報には印が付きます。
-• iPhone・iPadはタップ、Macはダブルクリックで、内容を修正・補完できます。
-• 書籍情報はOpen Library(Internet Archive)と、日本の本については国立国会図書館サーチから取得します。
+• iPhoneはタップ、Macはダブルクリックで、内容を修正・補完できます。
+• 書籍情報はOpen Library(Internet Archive)から取得します。日本・ドイツ・フランス・スペインの本は、それぞれの国立図書館（国立国会図書館サーチ、ドイツ国立図書館、フランス国立図書館、スペイン国立図書館）からも取得します。
 
 多彩な形式で書き出し
 • RIS、BibTeX、Excel（.xlsx）、CSVのほか、BibLaTeX、CSL JSON、MODS、MARC、MARCXML、EndNote XML、RefWorks、Web of Science、Refer/BibIX、Zotero RDF、Bibliontology RDF、Dublin Core RDF、XML ContextObjectに対応。
 • Zoteroなどの文献管理ソフトで読み込める形式です。
 • 以前書き出したExcelまたはCSVファイルを選ぶと、新しい本が末尾に追加されます（すでに入っている本は追加されません）。
-• iPhone・iPadでは「ファイル」への保存やメール添付で書き出せます。
+• iPhoneでは「ファイル」への保存やメール添付で書き出せます。
 
-リストが消えません(iPhone・iPad)
+リストが消えません(iPhone)
 • 書き出す前のスキャン結果は、アプリが突然終了しても保存されています。
 
 ランクを集めよう
@@ -134,19 +134,19 @@ First release.
 ## Screenshots to capture
 
 - iPhone (6.9-inch size): scanning with the green check; the review screen with the export preview; the Export menu; a rank popup with confetti.
-- iPad (13-inch size, required for iPad): portrait with the tall camera and the list on the right; landscape with the 3:4 camera.
+- (iPad is on hold: no iPad screenshots are needed until the iPad version ships.)
 - Shoot Japanese-language sets too (the Japanese listing can reuse the English shots, or use Japanese ones for a better look).
 - Mac: the scan window with a book list; the review screen; the rank popup.
 
 ## App Review notes
 
-ElmScanner reads ISBN barcodes with the camera (it also shows a greeting if the camera sees a smile; this runs on the device and nothing is stored). It runs on iPhone, iPad and Mac. If you cannot scan a physical book, type one of these ISBNs into the "Or type an ISBN" field and tap Add:
+ElmScanner reads ISBN barcodes with the camera (it also shows a greeting if the camera sees a smile; this runs on the device and nothing is stored). It runs on iPhone and Mac. If you cannot scan a physical book, type one of these ISBNs into the "Or type an ISBN" field and tap Add:
 
 - 9780441172719 (Dune)
 - 9780857073006 (The Search for WondLa)
 - 9780061120084 (To Kill a Mockingbird)
 
-Book details are looked up from Open Library or, for Japanese ISBNs (such as 9784003101018, 吾輩は猫である), the National Diet Library, so an internet connection is needed the first time a book is scanned. No sign-in is required, but the app asks for an email address at first use (any address works; see below). Tap Next to review the books, then Export.
+Book details are looked up from Open Library or, for Japanese ISBNs (such as 9784003101018, 吾輩は猫である), German ISBNs (such as 9783257069709, Elefant), French ISBNs (such as 9782226257017, Sapiens) and Spanish ISBNs (such as 9788420471839, Cien años de soledad), the national library of that country, so an internet connection is needed the first time a book is scanned. No sign-in is required, but the app asks for an email address at first use (any address works; see below). Tap Next to review the books, then Export.
 
 ## Export compliance
 
@@ -176,12 +176,24 @@ To try it without App Store Connect, run the app from Xcode: the scheme uses `Co
 
 NDL's [API page](https://ndlsearch.ndl.go.jp/help/api) says: individuals and non-profits earning no revenue need no application; an app must state that it uses the NDL Search API (the About screens and README do); and continuing users are asked to send NDL their contact and usage details through its form. There is no published numeric limit, only a limit on simultaneous requests, so the app asks for one lookup a second and waits when told "too many requests". Submit the contact form once before release.
 
+## Deutsche Nationalbibliothek, Bibliothèque nationale de France and Biblioteca Nacional de España
+
+All three are asked through their public search interfaces (SRU), which need no key or sign-up; the app sends one request a second to each and no personal information, and credits them in the About screens and README. Checked on their sites: the DNB's title data is CC0 (no attribution needed), and its SRU page says access is free and needs no registration. The BnF's records are under the Licence Ouverte v2.0, which asks for the source and the date: the app credits the BnF in About and adds a note to each BnF record ("Source: Bibliothèque nationale de France …, retrieved <date>"), which is exported in the formats that have a note field and in the Note column of the Excel and CSV files. For the BNE, its linked-data portal (datos.bne.es) is published under CC0 and its reuse plan rests on Spain's public-sector reuse law, but its website blocked my check of the SRU service's own terms, so confirm them before release. The BNE holds one record per printing and reuses ISBNs across printings, so the app takes the most recent. The BnF finds some older books by ISBN-10 only, so the app searches for both forms, and the DNB answer is checked to be for the right ISBN, since its search can also match related editions.
+
+## Other regions (checked 16 November 2026)
+
+- **Canada, Australia, New Zealand:** English-language books share ISBN groups 0 and 1 with the USA and UK, so Open Library already serves them. Quebec books (group 2) go to the BnF first, then Open Library. No open web interface was found for Library and Archives Canada (Z39.50 only); Australia's Trove needs an API key; nothing found for New Zealand.
+- **China:** no open national-library interface found. Open Library answers, but often without place or page count.
+- **Latin America:** no open national-library interface found for Mexico, Argentina, Chile, Colombia or Peru. Brazil has BrasilAPI, a community service that combines the Brazilian ISBN agency, Open Library and Google Books (free, no key, but not an official library service). Open Library has the author, publisher and year for most books from these countries sampled, with place and pages patchy (Mexico especially).
+- **South Asia (India, Pakistan, Bangladesh, Sri Lanka, Nepal):** no public ISBN lookup interface found for the national ISBN agencies or libraries. Open Library answers with author, publisher and year for most books sampled; place of publication is often missing.
+- **Google Books** would be the general fallback for all of these, but its free keyless quota was already used up for the day when I tried it, so it would need an API key of its own.
+
 ## Open Library
 
 Open Library replied on 3 November 2026 that it does not review or approve individual apps and pointed to its API page. The app follows that page: it identifies itself with a User-Agent and email (3 requests per second allowed; the app stays at 2.5), caches responses, and makes one request per scanned book. Do not add bulk downloading.
 
 ## Privacy "nutrition label" suggestion
 
-Nothing is used for tracking. The ISBN is sent to Open Library and the National Diet Library, and the user's email address to Open Library only (third parties), along with the IP address inherent to any request. Because the email address leaves the device, "Data Not Collected" is probably no longer the right answer: read Apple's definitions in App Store Connect and consider declaring **Contact Info > Email Address**, used for App Functionality, not for tracking. This is your call to confirm.
+Nothing is used for tracking. The ISBN is sent to Open Library and, for Japanese, German, French and Spanish books, the national library of that country (the National Diet Library, Deutsche Nationalbibliothek, Bibliothèque nationale de France or Biblioteca Nacional de España), and the user's email address to Open Library only (third parties), along with the IP address inherent to any request. Because the email address leaves the device, "Data Not Collected" is probably no longer the right answer: read Apple's definitions in App Store Connect and consider declaring **Contact Info > Email Address**, used for App Functionality, not for tracking. This is your call to confirm.
 
 App Review notes: the app asks for an email address at first use. Enter any address (for example review@example.com) to continue. It is only passed to Open Library, as the explanation on screen says.

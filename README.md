@@ -4,7 +4,7 @@ Scan the ISBN barcode on a book, and ElmScanner fills in its title, authors, pub
 
 - **Mac:** a SwiftUI app (macOS 14 or later). Scan with the camera or type an ISBN, review the list, then export through a save dialog.
 - **iPhone:** a SwiftUI app (iOS 17 or later). Export through the Files app or as an email attachment. Books you haven't exported are kept if the app closes.
-- Book details come from [Open Library](https://openlibrary.org) and, for Japanese books (ISBNs starting 978-4), from the [National Diet Library](https://ndlsearch.ndl.go.jp) (NDL Search). Each is tried as a fallback for the other. Answers are remembered on the device, so a book you've already scanned works offline.
+- Book details come from [Open Library](https://openlibrary.org) and from three national libraries, each asked first for its own language: Japanese books (ISBNs starting 978-4) from the [National Diet Library](https://ndlsearch.ndl.go.jp) (NDL Search), German books (978-3) from the [Deutsche Nationalbibliothek](https://www.dnb.de), French books (978-2 and 979-10) from the [Bibliothèque nationale de France](https://catalogue.bnf.fr) (Licence Ouverte; the exported record carries a note with the source and the date it was taken), and Spanish books (978-84) from the [Biblioteca Nacional de España](https://www.bne.es). Open Library is the fallback for them, and every other book is asked of Open Library first. Answers are remembered on the device, so a book you've already scanned works offline.
 - No account, no ads, no analytics. See [docs/PRIVACY.md](docs/PRIVACY.md).
 
 ## Build
@@ -30,6 +30,7 @@ The defaults in `Config/Signing.xcconfig` have no developer team and a placehold
 
 - **Change the Open Library contact address** in `Sources/ElmScanner/Services/BookLookup.swift` (`contactAddress`). Open Library asks apps to identify themselves, and it holds whoever is named responsible for the traffic. The code keeps within their published limits. Please keep it that way.
 - NDL Search asks apps that use its API to say so (the About screens and this README do), and to send its form to tell NDL about continuing use. The app asks for one lookup a second and waits when NDL says it is busy.
+- The German, French and Spanish lookups use the national libraries' public search interfaces (SRU), which need no key. The app sends one request a second to each and no personal information.
 - If you fork the direct-download build, change the PayPal address in `Sources/ElmScanner/Views/PayPalTipSection.swift`.
 - The optional "Leave a tip" purchase is a consumable in-app purchase whose product ID is your bundle ID plus `.tip`. `Config/ElmScanner.storekit` (used when running from Xcode) has the default one; change its `productID` to match yours. Without a product in App Store Connect the button just says tips aren't available.
 - The app also asks each user for their own email address at first use and adds it to the `User-Agent`, as Open Library requests. Nothing is looked up until it is entered.
@@ -43,7 +44,7 @@ The defaults in `Config/Signing.xcconfig` have no developer team and a placehold
 
 ## Credits
 
-Prompted by Grant Jun Otsuki. Code by Claude. Book data from Open Library and the National Diet Library (NDL Search); this app uses the NDL Search API.
+Prompted by Grant Jun Otsuki. Code by Claude. Book data from Open Library, the National Diet Library (NDL Search), the Deutsche Nationalbibliothek, the Bibliothèque nationale de France (Licence Ouverte) and the Biblioteca Nacional de España; this app uses the NDL Search API.
 
 ## License
 

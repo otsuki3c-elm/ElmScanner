@@ -29,7 +29,7 @@ final class XLSXTests: XCTestCase {
         let sheet = try sheetXML(file)
         XCTAssertTrue(sheet.contains("Fish &amp; &lt;Chips&gt;"))
         XCTAssertTrue(sheet.contains("<c r=\"F2\"><v>1990</v></c>"))
-        XCTAssertTrue(sheet.contains("<dimension ref=\"A1:J3\"/>"))
+        XCTAssertTrue(sheet.contains("<dimension ref=\"A1:K3\"/>"))
     }
 
     func testZipChecksumsMatch() throws {
@@ -46,7 +46,7 @@ final class XLSXTests: XCTestCase {
         let sheet = try sheetXML(result.data)
         XCTAssertTrue(sheet.contains("<row r=\"3\">"))
         XCTAssertTrue(sheet.contains("Fish &amp; &lt;Chips&gt;"))
-        XCTAssertTrue(sheet.contains("<dimension ref=\"A1:J3\"/>"))
+        XCTAssertTrue(sheet.contains("<dimension ref=\"A1:K3\"/>"))
         // Still a readable workbook that can be added to again.
         let third = BookMetadata(title: "Third", subtitle: nil, authors: [], publisher: nil, place: nil,
                                  publicationYear: nil, numberOfPages: nil, isbn: "9780061120084", url: nil, tags: [])

@@ -10,7 +10,7 @@ import Foundation
 enum XLSX {
     /// The columns, in order. They stay in English so files from any language line up.
     static let headers = [
-        "Title", "Subtitle", "Authors", "Publisher", "Place of Publication", "Year", "Pages", "ISBN", "URL", "Tags"
+        "Title", "Subtitle", "Authors", "Publisher", "Place of Publication", "Year", "Pages", "ISBN", "URL", "Tags", "Note"
     ]
 
     enum Failure: LocalizedError {
@@ -58,7 +58,7 @@ enum XLSX {
         return [
             text(book.title), text(book.subtitle), text(authors), text(book.publisher), text(book.place),
             book.publicationYear.map { .number($0) }, text(book.numberOfPages), text(book.isbn), text(book.url),
-            text(book.tags.joined(separator: ", "))
+            text(book.tags.joined(separator: ", ")), text(book.note)
         ]
     }
 
@@ -130,7 +130,7 @@ enum XLSX {
         for (index, book) in books.enumerated() {
             rows.append(row(index + 2, columns: columns, values: cells(for: book)))
         }
-        let widths = [40, 24, 32, 28, 22, 8, 8, 16, 36, 24]
+        let widths = [40, 24, 32, 28, 22, 8, 8, 16, 36, 24, 48]
         let cols = widths.enumerated().map { "<col min=\"\($0 + 1)\" max=\"\($0 + 1)\" width=\"\($1)\" customWidth=\"1\"/>" }.joined()
         let sheet = """
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -440,6 +440,8 @@ enum ZipFile {
             if method == 0 { return stored }
             guard method == 8 else { throw XLSX.Failure.notWorkbook }
             guard uncompressedSize > 0 else { return Data() }
+            // A damaged or hostile file can claim any size; no real sheet is this big.
+            guard uncompressedSize < 300_000_000 else { throw XLSX.Failure.notWorkbook }
             var output = Data(count: Int(uncompressedSize))
             let written = output.withUnsafeMutableBytes { out in
                 stored.withUnsafeBytes { input in

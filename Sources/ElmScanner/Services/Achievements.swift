@@ -15,6 +15,15 @@ enum ISBN {
         let sum = body.compactMap(\.wholeNumberValue).enumerated().reduce(0) { $0 + $1.element * ($1.offset % 2 == 0 ? 1 : 3) }
         return body + String((10 - sum % 10) % 10)
     }
+
+    /// The ISBN-10 of an ISBN-13 that starts 978 (979 books have none), else nil.
+    static func isbn10(fromISBN13 isbn13: String) -> String? {
+        guard isbn13.count == 13, isbn13.hasPrefix("978") else { return nil }
+        let body = isbn13.dropFirst(3).dropLast()
+        let sum = body.compactMap(\.wholeNumberValue).enumerated().reduce(0) { $0 + $1.element * (10 - $1.offset) }
+        let check = (11 - sum % 11) % 11
+        return body + (check == 10 ? "X" : String(check))
+    }
 }
 
 /// A rank earned at a number of scanned books. The list lives in `Ranks.json`.

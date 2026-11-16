@@ -205,7 +205,7 @@ final class ElmScannerTests: XCTestCase {
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
             .appending(path: "Resources/Shared/Ranks.json")
         let ranks = Rank.load(from: file)
-        XCTAssertEqual(ranks.map(\.books), [1, 5, 10, 30, 80, 116, 218, 300, 500, 1000])
+        XCTAssertEqual(ranks.map(\.books), [1, 5, 10, 20, 30, 80, 116, 218, 300, 500, 1000])
         XCTAssertTrue(ranks.allSatisfy { !$0.title.isEmpty && !$0.message.isEmpty })
     }
 
@@ -261,13 +261,17 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertNil(ISBNRegion.notice(forISBN: "9784003101018"))   // Japanese
         XCTAssertNil(ISBNRegion.notice(forISBN: "9798000000007"))   // USA (979-8)
         XCTAssertNil(ISBNRegion.notice(forISBN: "12345"))           // not an ISBN
-        let german = ISBNRegion.notice(forISBN: "9783161484100")
-        XCTAssertTrue(german?.contains("German-language area") == true, german ?? "nil")
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9783161484100"))   // German: the Deutsche Nationalbibliothek
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9782070360024"))   // French: the Bibliothèque nationale de France
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9791032300008"))   // French (979-10)
+        XCTAssertNil(ISBNRegion.notice(forISBN: "9788437604947"))   // Spanish: the Biblioteca Nacional de España
+        let italian = ISBNRegion.notice(forISBN: "9788804668282")
+        XCTAssertTrue(italian?.contains("Italian-language area") == true, italian ?? "nil")
         // An ISBN-10 is placed by its ISBN-13 form.
-        XCTAssertTrue(ISBNRegion.notice(forISBN: "3-16-148410-X")?.contains("German") == true)
+        XCTAssertTrue(ISBNRegion.notice(forISBN: "88-04-66828-8")?.contains("Italian") == true)
         // A group the table doesn't name still gets a notice, worded generally.
         let unnamed = ISBNRegion.notice(forISBN: "9786000000004")
-        XCTAssertTrue(unnamed?.contains("outside the English- and Japanese-language areas") == true, unnamed ?? "nil")
+        XCTAssertTrue(unnamed?.contains("outside the English-, Japanese-, German-, French- and Spanish-language areas") == true, unnamed ?? "nil")
     }
 
     @MainActor
@@ -276,14 +280,14 @@ final class ElmScannerTests: XCTestCase {
             func lookup(isbn: String) async throws -> BookMetadata? { nil }
         }
         let session = ScanSession(lookup: NotFound())
-        session.add("9783161484100")
+        session.add("9788804668282")
         session.add("9780441172719")
         try await Task.sleep(for: .milliseconds(300))
         func reason(_ isbn: String) -> String? {
             if case .failed(let text) = session.books.first(where: { $0.isbn == isbn })?.state { return text }
             return nil
         }
-        XCTAssertTrue(reason("9783161484100")?.contains("German-language area") == true)
+        XCTAssertTrue(reason("9788804668282")?.contains("Italian-language area") == true)
         XCTAssertEqual(reason("9780441172719"), "No match found")
     }
 }

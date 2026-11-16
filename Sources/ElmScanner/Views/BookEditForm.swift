@@ -9,13 +9,15 @@ struct BookEditForm: View {
 
     @State private var title: String
     @State private var subtitle: String
-    @State private var authors: String
+    /// One entry per author, each as "Family, Given".
+    @State private var authors: [String]
     @State private var publisher: String
     @State private var place: String
     @State private var year: String
     @State private var pages: String
     @State private var url: String
     @State private var tags: String
+    @State private var note: String
 
     init(book: ScannedBook, onSave: @escaping (BookMetadata) -> Void) {
         id = book.id
@@ -24,13 +26,15 @@ struct BookEditForm: View {
         let existing = book.metadata
         _title = State(initialValue: existing?.title ?? "")
         _subtitle = State(initialValue: existing?.subtitle ?? "")
-        _authors = State(initialValue: Self.editableAuthors(existing?.authors ?? []))
+        let names = (existing?.authors ?? []).map(Self.editableAuthor)
+        _authors = State(initialValue: names.isEmpty ? [""] : names)
         _publisher = State(initialValue: existing?.publisher ?? "")
         _place = State(initialValue: existing?.place ?? "")
         _year = State(initialValue: existing?.publicationYear.map(String.init) ?? "")
         _pages = State(initialValue: existing?.numberOfPages ?? "")
         _url = State(initialValue: existing?.url ?? "")
         _tags = State(initialValue: existing?.tags.joined(separator: ", ") ?? "")
+        _note = State(initialValue: existing?.note ?? "")
     }
 
     /// "Family, Given" per author, separated by semicolons.
@@ -44,6 +48,11 @@ struct BookEditForm: View {
         authors.map { $0.isOrganization ? "\($0.familyName)," : "\($0.familyName), \($0.givenName)" }.joined(separator: "; ")
     }
 
+    /// One author for its own field: "Family, Given", or an organization with a trailing comma.
+    static func editableAuthor(_ author: AuthorName) -> String {
+        author.isOrganization ? "\(author.familyName)," : "\(author.familyName), \(author.givenName)"
+    }
+
     static func parseAuthors(_ text: String) -> [AuthorName] {
         text.split(separator: ";").map { AuthorName(parsing: String($0)) }.filter { !$0.familyName.isEmpty }
     }
@@ -54,7 +63,12 @@ struct BookEditForm: View {
                 Section {
                     field("Title", $title, missing: title.isEmpty)
                     field("Subtitle", $subtitle)
-                    field("Authors (Family, Given; …)", $authors, missing: authors.isEmpty)
+                    ForEach(authors.indices, id: \.self) { index in
+                        field("Author \(index + 1) (Family, Given)", $authors[index],
+                              missing: index == 0 && authors.allSatisfy { $0.trimmingCharacters(in: .whitespaces).isEmpty })
+                    }
+                    Button("Add Author", systemImage: "plus.circle") { authors.append("") }
+                        .buttonStyle(.borderless)
                     LabeledContent("ISBN", value: isbn)
                 }
                 Section {
@@ -64,6 +78,7 @@ struct BookEditForm: View {
                     field("Pages", $pages)
                     field("URL", $url)
                     field("Tags (comma separated)", $tags)
+                    field("Note", $note)
                 }
             }
             .formStyle(.grouped)
@@ -98,7 +113,7 @@ struct BookEditForm: View {
 
     private func field(_ label: LocalizedStringResource, _ text: Binding<String>, missing: Bool = false) -> some View {
         HStack {
-            TextField(String(localized: label), text: text)
+            ClearableTextField(label, text: text)
             if missing {
                 Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange)
                     .help("Missing: you may want to enter it")
@@ -115,14 +130,15 @@ struct BookEditForm: View {
         onSave(BookMetadata(
             title: title.trimmingCharacters(in: .whitespaces),
             subtitle: trimmed(subtitle),
-            authors: Self.parseAuthors(authors),
+            authors: authors.flatMap(Self.parseAuthors),
             publisher: trimmed(publisher),
             place: trimmed(place),
             publicationYear: Int(year.trimmingCharacters(in: .whitespaces)),
             numberOfPages: trimmed(pages),
             isbn: isbn,
             url: trimmed(url),
-            tags: tags.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+            tags: tags.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty },
+            note: trimmed(note)
         ))
         dismiss()
     }

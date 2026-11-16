@@ -35,6 +35,7 @@ extension ExportService {
             if let pages = book.numberOfPages { fields.append(("pagetotal", pages)) }
             fields.append(("isbn", book.isbn))
             if let url = book.url { fields.append(("url", url)) }
+            if let note = book.note { fields.append(("note", note)) }
             if !book.tags.isEmpty { fields.append(("keywords", book.tags.joined(separator: ", "))) }
             let body = fields.map { key, value in "  \(key) = {\(key == "author" ? value : escape(value))}" }.joined(separator: ",\n")
             return "@book{\(citeKey(for: book, usedKeys: &usedKeys)),\n\(body)\n}"
@@ -53,6 +54,7 @@ extension ExportService {
             lines.append("SN  - \(book.isbn)")
             if let pages = book.numberOfPages { lines.append("SP  - \(pages)") }
             if let url = book.url { lines.append("UR  - \(url)") }
+            if let note = book.note { lines.append("N1  - \(note)") }
             lines += book.tags.map { "KW  - \($0)" }
             lines.append("ER  - ")
             return lines.joined(separator: "\r\n")
@@ -71,6 +73,7 @@ extension ExportService {
             lines.append("%@ \(book.isbn)")
             if let pages = book.numberOfPages { lines.append("%P \(pages)") }
             if let url = book.url { lines.append("%U \(url)") }
+            if let note = book.note { lines.append("%Z \(note)") }
             lines += book.tags.map { "%K \($0)" }
             return lines.joined(separator: "\n")
         }.joined(separator: "\n\n") + "\n"
@@ -88,6 +91,7 @@ extension ExportService {
             lines.append("SN \(book.isbn)")
             if let pages = book.numberOfPages { lines.append("SP \(pages)") }
             if let url = book.url { lines.append("UL \(url)") }
+            if let note = book.note { lines.append("NO \(note)") }
             lines += book.tags.map { "K1 \($0)" }
             return lines.joined(separator: "\n")
         }.joined(separator: "\n\n") + "\n"
@@ -142,6 +146,7 @@ extension ExportService {
             for tag in book.tags { out += "    <subject><topic>\(xml(tag))</topic></subject>\n" }
             out += "    <identifier type=\"isbn\">\(xml(book.isbn))</identifier>\n"
             if let url = book.url { out += "    <location><url>\(xml(url))</url></location>\n" }
+            if let note = book.note { out += "    <note>\(xml(note))</note>\n" }
             return out + "  </mods>\n"
         }
         return xmlHeader + "<modsCollection xmlns=\"http://www.loc.gov/mods/v3\">\n" + items.joined() + "</modsCollection>\n"
@@ -181,6 +186,7 @@ extension ExportService {
             fields.append(.data(tag: "300", ind1: " ", ind2: " ", subfields: [("a", pages.allSatisfy(\.isNumber) ? "\(pages) p." : pages)]))
         }
         for tag in book.tags { fields.append(.data(tag: "650", ind1: " ", ind2: "0", subfields: [("a", tag + ".")])) }
+        if let note = book.note { fields.append(.data(tag: "500", ind1: " ", ind2: " ", subfields: [("a", note)])) }
         if let url = book.url { fields.append(.data(tag: "856", ind1: "4", ind2: "0", subfields: [("u", url)])) }
         return fields
     }
@@ -258,6 +264,7 @@ extension ExportService {
             if let place = book.place { out += "      <pub-location>\(xml(place))</pub-location>\n" }
             if let publisher = book.publisher { out += "      <publisher>\(xml(publisher))</publisher>\n" }
             out += "      <isbn>\(xml(book.isbn))</isbn>\n"
+            if let note = book.note { out += "      <notes>\(xml(note))</notes>\n" }
             if let url = book.url {
                 out += "      <urls>\n        <related-urls>\n          <url>\(xml(url))</url>\n        </related-urls>\n      </urls>\n"
             }
@@ -298,6 +305,7 @@ extension ExportService {
                 out += "    <dc:identifier><dcterms:URI><rdf:value>\(xml(url))</rdf:value></dcterms:URI></dc:identifier>\n"
             }
             out += "    <dc:identifier>ISBN \(xml(book.isbn))</dc:identifier>\n"
+            if let note = book.note { out += "    <dc:description>\(xml(note))</dc:description>\n" }
             return out + "  </bib:Book>\n"
         }
         return xmlHeader + """
@@ -324,6 +332,7 @@ extension ExportService {
             if let pages = book.numberOfPages { out += "    <bibo:numPages>\(xml(pages))</bibo:numPages>\n" }
             if let url = book.url { out += "    <bibo:uri>\(xml(url))</bibo:uri>\n" }
             for tag in book.tags { out += "    <dcterms:subject>\(xml(tag))</dcterms:subject>\n" }
+            if let note = book.note { out += "    <dcterms:description>\(xml(note))</dcterms:description>\n" }
             return out + "  </bibo:Book>\n"
         }
         return xmlHeader + """
@@ -343,6 +352,7 @@ extension ExportService {
             for tag in book.tags { out += "    <dc:subject>\(xml(tag))</dc:subject>\n" }
             out += "    <dc:identifier>ISBN \(xml(book.isbn))</dc:identifier>\n"
             if let url = book.url { out += "    <dc:identifier>\(xml(url))</dc:identifier>\n" }
+            if let note = book.note { out += "    <dc:description>\(xml(note))</dc:description>\n" }
             return out + "  </rdf:Description>\n"
         }
         return xmlHeader + """
