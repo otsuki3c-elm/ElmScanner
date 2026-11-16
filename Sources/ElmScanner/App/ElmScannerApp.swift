@@ -3,11 +3,18 @@ import SwiftUI
 
 @main
 struct ElmScannerApp: App {
-    @State private var session = ScanSession(achievements: .standard(), library: LibrarySender.shared)
+    @State private var session = Self.makeSession()
     @Environment(\.openWindow) private var openWindow
 
     private static let privacyURL = URL(string: "https://github.com/otsuki3c-elm/ElmScanner/blob/main/docs/PRIVACY.md")!
     private static let issuesURL = URL(string: "https://github.com/otsuki3c-elm/ElmScanner/issues")!
+
+    private static func makeSession() -> ScanSession {
+        #if DEBUG
+        if DemoMode.isOn { return DemoMode.makeSession() }
+        #endif
+        return ScanSession(achievements: .standard(), library: LibrarySender.shared)
+    }
 
     init() {
         // One window per scan; no tabs, so View > Show Tab Bar goes away.
@@ -17,6 +24,7 @@ struct ElmScannerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(session: session)
+                .onAppear { if DemoMode.opensAbout { openWindow(id: "about") } }
                 #if !DIRECT_DOWNLOAD
                 .task { TipJar.shared.start() }
                 #endif

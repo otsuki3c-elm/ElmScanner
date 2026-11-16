@@ -6,7 +6,7 @@ struct ContentView: View {
     @State private var camera = BarcodeCamera()
     @State private var selection = Set<UUID>()
     @State private var manualISBN = ""
-    @State private var reviewing = false
+    @State private var reviewing = DemoMode.startsInReview
     @State private var editing: ScannedBook.ID?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var feedback: ScanFeedback?
@@ -31,9 +31,9 @@ struct ContentView: View {
                     camera.totalScanned = { session.achievements?.count ?? 0 }
                     camera.onOtherBarcode = { _ in show(.rejected) }
                     // Not until the email address is in: a scan would look up a book.
-                    if contact.isSet { camera.start() }
+                    if contact.isSet, !DemoMode.isOn { camera.start() }
                 }
-                .onChange(of: contact.isSet) { if contact.isSet { camera.start() } }
+                .onChange(of: contact.isSet) { if contact.isSet, !DemoMode.isOn { camera.start() } }
                 .onDisappear { camera.stop() }
                 .transition(reduceMotion ? .opacity : .move(edge: .leading))
             }
@@ -59,6 +59,9 @@ struct ContentView: View {
         VStack(spacing: 8) {
             ZStack {
                 Color.black
+                if DemoMode.isOn {
+                    DemoMode.cameraPlaceholder
+                } else {
                 switch camera.status {
                 case .running:
                     // Only once startRunning() has returned: attaching a preview layer
@@ -76,6 +79,7 @@ struct ContentView: View {
                     notice("No camera found.", "You can still type or paste ISBNs below.")
                 case .idle:
                     notice("Camera stopped.", "")
+                }
                 }
             }
             .overlay(alignment: .topTrailing) { cameraMenu }

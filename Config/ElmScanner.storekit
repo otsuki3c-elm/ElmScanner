@@ -1,11 +1,11 @@
 {
-  "identifier": "5E2B7C10",
+  "identifier": "7F4D9E32",
   "nonRenewingSubscriptions": [],
   "products": [
     {
       "displayPrice": "3.99",
       "familyShareable": false,
-      "internalID": "6740112233",
+      "internalID": "6740112299",
       "localizations": [
         {
           "description": "A one-time tip to support ElmScanner's development. Nothing in the app depends on it.",
@@ -13,9 +13,9 @@
           "locale": "en_US"
         }
       ],
-      "productID": "com.otsuki.elmscanner.ElmScanner.tip",
+      "productID": "ElmScanner1",
       "referenceName": "Tip",
-      "type": "Consumable"
+      "type": "NonConsumable"
     }
   ],
   "settings": {

@@ -154,17 +154,17 @@ The app uses only standard HTTPS and a hash, so it's exempt. The apps already de
 
 ## Optional tip (in-app purchase)
 
-A single consumable in-app purchase lets users leave a tip. No feature depends on it.
+A single non-consumable in-app purchase lets users leave a tip (one per Apple ID; the app thanks people who already have). No feature depends on it.
 
-1. In App Store Connect, open the app, then Monetization > In-App Purchases, and create a **Consumable**.
-2. **Product ID:** the bundle ID plus `.tip`, for example `com.otsuki.elmscanner.ElmScanner.tip`. It must match exactly.
+1. In App Store Connect, open the app, then Monetization > In-App Purchases, and create a **Non-Consumable**.
+2. **Product ID:** `ElmScanner1` (the value of `TipJar.storeProductID`). It must match exactly.
 3. **Reference name** "Tip"; **display name** "Tip"; **description** "A one-time tip to support ElmScanner's development. Nothing in the app depends on it." Pick a price point (the local test file uses 3.99 USD).
 4. Add the screenshot Apple asks for (the Settings window on the Mac, or the About sheet on the iPhone), then submit the purchase together with the app's first version. Both the Mac and iPhone apps share the product.
 5. The Paid Apps Agreement, tax and bank details are needed before it can be sold, even though the app itself is free.
 
 Apple's rules allow in-app purchases as tips for the developer. The app calls it a "tip" and not a donation on purpose: donations to charities must go through approved non-profits. In the app's text, don't suggest the money goes to a charity or unlocks anything.
 
-App Review note: "The Leave a tip button (Settings on Mac, About on iPhone) is an optional consumable purchase. No feature of the app depends on it."
+App Review note: "The Leave a tip button (Settings on Mac, About on iPhone) is an optional non-consumable purchase. No feature of the app depends on it."
 
 To try it without App Store Connect, run the app from Xcode: the scheme uses `Config/ElmScanner.storekit`.
 

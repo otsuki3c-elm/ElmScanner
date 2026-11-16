@@ -74,6 +74,7 @@ struct ReviewView: View {
             .padding(10)
         }
         .onChange(of: message) { if let message { Announcer.post(message) } }
+        .onAppear { if DemoMode.opensEditor { editing = session.books.first?.id } }
         .confirmationDialog("Remove the \(justExported.count) exported books from the list?", isPresented: $askingToClear, titleVisibility: .visible) {
             Button("Remove", role: .destructive) {
                 session.remove(justExported)

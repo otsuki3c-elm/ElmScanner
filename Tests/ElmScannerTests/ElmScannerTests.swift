@@ -232,9 +232,8 @@ final class ElmScannerTests: XCTestCase {
         XCTAssertTrue(agent.contains("reader@example.com"))
     }
 
-    func testTipProductIsNamedAfterTheBundleID() {
-        XCTAssertEqual(TipJar.productID(bundleID: "com.otsuki.elmscanner.ElmScanner"), "com.otsuki.elmscanner.ElmScanner.tip")
-        XCTAssertEqual(TipJar.productID(bundleID: nil), "ElmScanner.tip")
+    func testTipProductIsTheOneSetUpInAppStoreConnect() {
+        XCTAssertEqual(TipJar.storeProductID, "ElmScanner1")
     }
 
     @MainActor

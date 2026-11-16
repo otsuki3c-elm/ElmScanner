@@ -63,6 +63,7 @@ struct PhoneReviewView: View {
             }
         }
         .onChange(of: message) { if let message { Announcer.post(message) } }
+        .onAppear { if DemoMode.opensEditor { editing = session.books.first?.id } }
         .sheet(item: editingBinding) { book in
             BookEditForm(book: book) { session.update(book.id, with: $0) }
         }

@@ -2,7 +2,14 @@ import SwiftUI
 
 @main
 struct ElmScannerPhoneApp: App {
-    @State private var session = ScanSession(storeURL: ScanSession.defaultStoreURL, achievements: .standard(), library: LibrarySender.shared)
+    @State private var session = Self.makeSession()
+
+    private static func makeSession() -> ScanSession {
+        #if DEBUG
+        if DemoMode.isOn { return DemoMode.makeSession() }
+        #endif
+        return ScanSession(storeURL: ScanSession.defaultStoreURL, achievements: .standard(), library: LibrarySender.shared)
+    }
 
     init() {
         // The system's clear button (ⓧ) in every text field while it is being edited.

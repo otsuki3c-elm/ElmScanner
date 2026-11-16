@@ -118,6 +118,14 @@ final class AchievementTracker {
         }
     }
 
+    #if DEBUG
+    /// For screenshots only (see DemoMode): pretend this many books were scanned, optionally with its rank popup showing.
+    func setDemo(count demoCount: Int, showAward: Bool) {
+        count = demoCount
+        if showAward, let rank = ranks.last(where: { $0.books <= demoCount }) { pending = Award(rank: rank, count: demoCount) }
+    }
+    #endif
+
     /// The highest rank reached so far, or nil before the first.
     var currentRank: Rank? { ranks.last { $0.books <= count } }
 

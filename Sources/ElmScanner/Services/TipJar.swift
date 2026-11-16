@@ -2,9 +2,10 @@ import Foundation
 import Observation
 import StoreKit
 
-/// A one-time tip for the developer, sold as a consumable in-app purchase.
-/// Nothing in the app depends on it: no feature is locked, and there is nothing to
-/// restore, so the app never asks whether a tip was made.
+/// A one-time tip for the developer, sold as an in-app purchase.
+/// Nothing in the app depends on it: no feature is locked. The purchase is non-consumable, so
+/// an Apple ID can leave it once; at launch the app asks Apple whether this one already has,
+/// only to say thank you (this also covers a reinstall or a new device). Nothing is stored.
 @Observable
 @MainActor
 final class TipJar {
@@ -25,11 +26,11 @@ final class TipJar {
     let productID: String
     @ObservationIgnored private var updates: Task<Void, Never>?
 
-    /// The product is named after the app's own bundle ID, so a fork with a bundle ID of
-    /// its own sets up its own product (see the README).
-    nonisolated static func productID(bundleID: String?) -> String { (bundleID ?? "ElmScanner") + ".tip" }
+    /// The product ID set up in App Store Connect for this app. A fork sets up a product of its
+    /// own and changes this (see the README).
+    nonisolated static let storeProductID = "ElmScanner1"
 
-    init(productID: String = TipJar.productID(bundleID: Bundle.main.bundleIdentifier)) {
+    init(productID: String = TipJar.storeProductID) {
         self.productID = productID
     }
 
@@ -49,7 +50,11 @@ final class TipJar {
         state = .loading
         do {
             product = try await Product.products(for: [productID]).first
-            state = product == nil ? .unavailable : .ready
+            if let product, case .verified = await product.currentEntitlement {
+                state = .thanked     // this Apple ID has already left the tip
+            } else {
+                state = product == nil ? .unavailable : .ready
+            }
         } catch {
             state = .unavailable
         }

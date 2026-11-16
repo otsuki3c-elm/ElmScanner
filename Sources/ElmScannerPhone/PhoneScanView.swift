@@ -9,9 +9,9 @@ struct PhoneScanView: View {
     @State private var editing: ScannedBook.ID?
     @State private var feedback: ScanFeedback?
     @State private var lastFeedbackAt = Date.distantPast
-    @State private var reviewing = false
+    @State private var reviewing = DemoMode.startsInReview
     @State private var confirmingClear = false
-    @State private var showingAbout = false
+    @State private var showingAbout = DemoMode.opensAbout
     private let contact = ContactEmail.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -94,9 +94,9 @@ struct PhoneScanView: View {
                 camera.totalScanned = { session.achievements?.count ?? 0 }
                 camera.onOtherBarcode = { _ in show(.rejected) }
                 // Not until the email address is in: a scan would look up a book.
-                if contact.isSet { camera.start() }
+                if contact.isSet, !DemoMode.isOn { camera.start() }
             }
-            .onChange(of: contact.isSet) { if contact.isSet { camera.start() } }
+            .onChange(of: contact.isSet) { if contact.isSet, !DemoMode.isOn { camera.start() } }
             .onDisappear { camera.stop() }
         }
     }
@@ -151,6 +151,9 @@ struct PhoneScanView: View {
     private var cameraPane: some View {
         ZStack {
             Color.black
+            if DemoMode.isOn {
+                DemoMode.cameraPlaceholder
+            } else {
             switch camera.status {
             case .running:
                 // Only once startRunning() has returned: attaching a preview layer
@@ -168,6 +171,7 @@ struct PhoneScanView: View {
                 notice("No camera found.", "You can still type ISBNs below.")
             case .idle:
                 notice("Camera stopped.", "")
+            }
             }
             if let feedback {
                 ScanFeedbackView(kind: feedback.kind).id(feedback.id).transition(.opacity)
