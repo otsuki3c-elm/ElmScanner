@@ -1,7 +1,5 @@
 # ElmScanner Privacy Policy
 
-*Draft. Check the effective date, then publish this page at a public web address and enter that address in App Store Connect.*
-
 **Effective date:** 4 November 2026
 
 ElmScanner scans the ISBN barcode on a book, looks up its details, and lets you export a list of books. It has no accounts, no ads, no analytics and no tracking. This page explains what the app does with your information.

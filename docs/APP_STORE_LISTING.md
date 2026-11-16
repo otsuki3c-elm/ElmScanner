@@ -21,7 +21,7 @@ The Mac app and the iPhone/iPad app share the bundle ID `com.otsuki.elmscanner.E
 | Secondary category | Reference |
 | Price | Free |
 | Support URL | https://github.com/otsuki3c-elm/ElmScanner/issues |
-| Privacy policy URL | https://github.com/otsuki3c-elm/ElmScanner/blob/main/docs/PRIVACY.md (remove its "Draft" line first) |
+| Privacy policy URL | https://github.com/otsuki3c-elm/ElmScanner/blob/main/docs/PRIVACY.md |
 | Copyright | © 2026 Grant Jun Otsuki (use your legal name if it differs) |
 
 ## Promotional text (max 170, can be changed any time)
