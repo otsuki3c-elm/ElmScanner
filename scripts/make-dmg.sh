@@ -11,16 +11,29 @@
 #   NOTARY_PROFILE="elmscanner-notary"                             # from: xcrun notarytool store-credentials
 #
 # Without them the app keeps its development signature and the image only opens cleanly on this Mac.
+#
+# With a Developer ID managed by Xcode (no certificate in the keychain), notarize the app first and
+# then pack it:
+#   xcodebuild -exportArchive -archivePath build/ElmScannerDirect.xcarchive -exportPath build/devid-upload \
+#     -exportOptionsPlist <plist: method developer-id, destination upload, teamID, signingStyle automatic>
+#   (when Apple has finished) xcodebuild -exportArchive … with destination export to get the signed app,
+#   xcrun stapler staple ElmScanner.app, then:  APP_PATH=path/to/ElmScanner.app scripts/make-dmg.sh
 set -euo pipefail
 cd "${0:A:h}/.."
 
-xcodegen generate >/dev/null
-ARCHIVE="build/ElmScannerDirect.xcarchive"
-rm -rf build/dmg "$ARCHIVE"
-xcodebuild archive -scheme ElmScannerDirect -configuration Release -destination 'generic/platform=macOS' \
-  -archivePath "$ARCHIVE" -allowProvisioningUpdates | tail -1
-
-APP="$ARCHIVE/Products/Applications/ElmScanner.app"
+if [[ -n "${APP_PATH:-}" ]]; then
+  # A finished app, for example the notarized one from `xcodebuild -exportArchive` (method developer-id,
+  # destination upload) and `xcrun stapler staple`. Nothing is built or re-signed.
+  APP="$APP_PATH"
+  rm -rf build/dmg
+else
+  xcodegen generate >/dev/null
+  ARCHIVE="build/ElmScannerDirect.xcarchive"
+  rm -rf build/dmg "$ARCHIVE"
+  xcodebuild archive -scheme ElmScannerDirect -configuration Release -destination 'generic/platform=macOS' \
+    -archivePath "$ARCHIVE" -allowProvisioningUpdates | tail -1
+  APP="$ARCHIVE/Products/Applications/ElmScanner.app"
+fi
 VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")
 BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$APP/Contents/Info.plist")
 NAME="ElmScanner-$VERSION"
