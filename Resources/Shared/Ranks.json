@@ -4,6 +4,7 @@
     { "books": 1, "title": "Beginner", "message": "You've scanned your first book. Every library starts with one." },
     { "books": 5, "title": "Novice Collector", "message": "Five books in. You're getting the hang of this." },
     { "books": 10, "title": "Budding Library", "message": "Ten books. You have the start of a real library." },
+    { "books": 20, "title": "Generous user", "message": "Twenty books. If you find this useful, please consider leaving a tip (Settings on Mac, About on iPhone)." },
     { "books": 30, "title": "The Kon-Mari Recommendation", "message": "Thirty books. Does each one spark joy?" },
     { "books": 80, "title": "Good for the kids", "message": "Growing up in a home with 80 or more books is linked to better literacy." },
     { "books": 116, "title": "Da Vinci's Library", "message": "116 books: about what Leonardo da Vinci owned. Good company!" },

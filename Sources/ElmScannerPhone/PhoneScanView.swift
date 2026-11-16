@@ -103,7 +103,7 @@ struct PhoneScanView: View {
 
     private var isbnField: some View {
         HStack {
-            TextField("Or type an ISBN", text: $manualISBN)
+            ClearableTextField("Or type an ISBN", text: $manualISBN)
                 .keyboardType(.numbersAndPunctuation)
                 .textFieldStyle(.roundedBorder)
                 .onSubmit(addManual)

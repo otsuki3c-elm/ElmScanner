@@ -33,6 +33,9 @@ struct AchievementPopup: View {
     /// Where the confetti bursts from, in this view's coordinates; nil for the middle.
     var origin: CGPoint?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// The popup takes the keyboard while it is up, so Return (or Escape) closes it instead of
+    /// going to the ISBN field behind it.
+    @FocusState private var hasKeyboard: Bool
 
     var body: some View {
         ZStack {
@@ -48,6 +51,12 @@ struct AchievementPopup: View {
                 }
                 card(award)
                     .transition(.scale(scale: 0.8).combined(with: .opacity))
+                    .focusable()
+                    .focused($hasKeyboard)
+                    .focusEffectDisabled()
+                    .onKeyPress(.return) { tracker.dismiss(); return .handled }
+                    .onKeyPress(.escape) { tracker.dismiss(); return .handled }
+                    .onKeyPress(.space) { tracker.dismiss(); return .handled }
             }
         }
         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: tracker.pending)
@@ -57,6 +66,7 @@ struct AchievementPopup: View {
         }
         #endif
         .onChange(of: tracker.pending) {
+            hasKeyboard = tracker.pending != nil
             if let award = tracker.pending {
                 Announcer.post(String(localized: "New rank: \(award.rank.title). \(award.rank.message)"), urgent: true)
             }

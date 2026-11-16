@@ -141,7 +141,7 @@ struct PhoneReviewView: View {
             if let addTo, format == .xlsx || format == .csv {
                 Menu(format.title) {
                     Button("New File…") { action(format) }
-                    Button(format == .xlsx ? "Add to Excel File…" : "Add to CSV File…") { addTo(format) }
+                    Button("Add to Existing File…") { addTo(format) }
                 }
             } else {
                 Button(format.title) { action(format) }

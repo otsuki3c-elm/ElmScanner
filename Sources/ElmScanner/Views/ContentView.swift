@@ -41,7 +41,7 @@ struct ContentView: View {
         .clipped()
         .achievementPopup(session.achievements)
         .requiresContactEmail(contact)
-        .frame(minWidth: 760, minHeight: 440)
+        .frame(minWidth: 760, minHeight: 620)
     }
 
     private var editingBinding: Binding<ScannedBook?> {
@@ -90,7 +90,7 @@ struct ContentView: View {
             Text("Hold a book's back-cover barcode up to the camera.")
                 .font(.callout).foregroundStyle(.secondary)
             HStack {
-                TextField("Or type an ISBN", text: $manualISBN)
+                ClearableTextField("Or type an ISBN", text: $manualISBN)
                     .onSubmit(addManual)
                 Button("Add", action: addManual)
                     .disabled(BookLookup.normalizedISBN(manualISBN) == nil)

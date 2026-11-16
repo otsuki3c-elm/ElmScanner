@@ -11,6 +11,9 @@ struct ReviewView: View {
     @State private var message: String?
     /// True once an export has worked: then "Done" appears.
     @State private var exported = false
+    /// After exporting only some books: which ones, and whether the question about clearing them is showing.
+    @State private var justExported = Set<UUID>()
+    @State private var askingToClear = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -40,32 +43,46 @@ struct ReviewView: View {
                 Text(message ?? String(localized: "Double-click a book to edit it."))
                     .font(.callout).foregroundStyle(.secondary)
                 Spacer()
-                Button("Remove") { session.remove(selection) }
+                Button(selection.isEmpty ? LocalizedStringKey("Remove") : LocalizedStringKey("Remove Selected")) { session.remove(selection) }
                     .disabled(selection.isEmpty)
-                Menu("Export") {
+                if exported {
+                    Button("Done") { finish() }
+                        .buttonStyle(.borderedProminent)
+                        .keyboardShortcut(.defaultAction)
+                }
+                Menu(selection.isEmpty ? LocalizedStringKey("Export") : LocalizedStringKey("Export Selected")) {
                     ForEach(ExportService.Format.common) { format in
-                        Button("\(format.title)…") { export(format) }
+                        if format == .xlsx || format == .csv {
+                            // One more choice: a new file, or add to one made earlier.
+                            Menu(format.title) {
+                                Button("New File…") { export(format) }
+                                Button("Add to Existing File…") { addToFile(format) }
+                            }
+                        } else {
+                            Button("\(format.title)…") { export(format) }
+                        }
                     }
                     Menu("More…") {
                         ForEach(ExportService.Format.more) { format in
                             Button("\(format.title)…") { export(format) }
                         }
                     }
-                    Divider()
-                    Button("Add to Excel File…") { addToFile(.xlsx) }
-                    Button("Add to CSV File…") { addToFile(.csv) }
                 }
                 .fixedSize()
-                .disabled(session.foundBooks.isEmpty)
-                if exported {
-                    Button("Done") { finish() }
-                        .buttonStyle(.borderedProminent)
-                        .keyboardShortcut(.defaultAction)
-                }
+                .disabled(exportSet().books.isEmpty)
             }
             .padding(10)
         }
         .onChange(of: message) { if let message { Announcer.post(message) } }
+        .confirmationDialog("Remove the \(justExported.count) exported books from the list?", isPresented: $askingToClear, titleVisibility: .visible) {
+            Button("Remove", role: .destructive) {
+                session.remove(justExported)
+                selection.subtract(justExported)
+            }
+            Button("Keep", role: .cancel) {}
+        } message: {
+            Text("The books you didn't export stay in the list.")
+        }
         .sheet(item: editingBinding) { book in
             BookEditForm(book: book) { session.update(book.id, with: $0) }
         }
@@ -108,9 +125,25 @@ struct ReviewView: View {
         }
     }
 
-    private func record(_ result: (message: String, succeeded: Bool)) {
+    /// The books an export covers: the selected ones that were found, or all found books.
+    private func exportSet() -> (books: [BookMetadata], ids: Set<UUID>, partial: Bool) {
+        let chosen = session.books.filter { selection.contains($0.id) && $0.metadata != nil }
+        // With rows selected, only those are exported (the button says "Export Selected").
+        guard !selection.isEmpty else {
+            return (session.foundBooks, Set(session.books.filter { $0.metadata != nil }.map(\.id)), false)
+        }
+        return (chosen.compactMap(\.metadata), Set(chosen.map(\.id)), chosen.count < session.foundBooks.count)
+    }
+
+    /// After a successful export. If only some books were exported, asks whether to clear them.
+    private func record(_ result: (message: String, succeeded: Bool), exportedIDs: Set<UUID>, partial: Bool) {
         message = result.message
-        if result.succeeded { exported = true }
+        guard result.succeeded else { return }
+        exported = true
+        if partial {
+            justExported = exportedIDs
+            askingToClear = true
+        }
     }
 
     /// Clears the list and goes back to the camera.
@@ -120,14 +153,16 @@ struct ReviewView: View {
     }
 
     private func addToFile(_ format: ExportService.Format) {
-        let chosen = session.books.filter { selection.contains($0.id) }.compactMap(\.metadata)
-        let books = chosen.isEmpty ? session.foundBooks : chosen
-        if let result = ExportService.appendWithOpenPanel(books, format: format) { record(result) }
+        let set = exportSet()
+        if let result = ExportService.appendWithOpenPanel(set.books, format: format) {
+            record(result, exportedIDs: set.ids, partial: set.partial)
+        }
     }
 
     private func export(_ format: ExportService.Format) {
-        let chosen = session.books.filter { selection.contains($0.id) }.compactMap(\.metadata)
-        let books = chosen.isEmpty ? session.foundBooks : chosen
-        if let result = ExportService.exportWithSavePanel(books, format: format) { record(result) }
+        let set = exportSet()
+        if let result = ExportService.exportWithSavePanel(set.books, format: format) {
+            record(result, exportedIDs: set.ids, partial: set.partial)
+        }
     }
 }

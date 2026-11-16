@@ -17,7 +17,7 @@ struct HelpView: View {
                 section("Your email address",
                         "ElmScanner asks for your email address once, because Open Library asks every app to send one. Change it in Settings (⌘,).")
                 section("Books it can't find",
-                        "ElmScanner looks books up at Open Library and the National Diet Library, which cover English and Japanese books best. For other languages, enter the details by hand.")
+                        "ElmScanner looks books up at Open Library and the national libraries of Japan, Germany, France and Spain, which cover English, Japanese, German, French and Spanish books best. For other languages, enter the details by hand.")
             }
             .padding(24)
             .frame(maxWidth: 560, alignment: .leading)

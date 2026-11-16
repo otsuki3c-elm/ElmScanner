@@ -25,6 +25,10 @@ struct ElmScannerApp: App {
         Window("ElmScanner Help", id: "help") {
             HelpView()
         }
+        Window("About ElmScanner", id: "about") {
+            MacAboutView(session: session)
+        }
+        .windowResizability(.contentSize)
         Settings {
             SettingsView()
         }
@@ -37,32 +41,9 @@ struct ElmScannerApp: App {
                 Link("Report an Issue…", destination: Self.issuesURL)
             }
             CommandGroup(replacing: .appInfo) {
-                Button("About ElmScanner") { showAbout() }
+                Button("About ElmScanner") { openWindow(id: "about") }
             }
         }
     }
 
-    /// The standard About panel, with the credits line added under the
-    /// app's name and version.
-    private func showAbout() {
-        // The user's rank, if they have one, goes under the description.
-        let rankText = session.achievements?.currentRank.map {
-            String(localized: "Rank: \($0.title)") + "\n" + $0.message + "\n\n"
-        } ?? ""
-        let credits = NSMutableAttributedString(
-            string: String(localized: "ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.") + "\n\n"
-                + rankText
-                + String(localized: "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)") + "\n\n"
-                + String(localized: "ElmScanner is open source under the MIT license."),
-            attributes: [
-                .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                .foregroundColor: NSColor.labelColor
-            ]
-        )
-        let centered = NSMutableParagraphStyle()
-        centered.alignment = .center
-        credits.addAttribute(.paragraphStyle, value: centered, range: NSRange(location: 0, length: credits.length))
-        NSApp.orderFrontStandardAboutPanel(options: [.credits: credits])
-        NSApp.activate(ignoringOtherApps: true)
-    }
 }

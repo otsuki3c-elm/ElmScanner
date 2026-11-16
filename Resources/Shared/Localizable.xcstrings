@@ -709,16 +709,6 @@
         }
       }
     },
-    "ElmScanner looks books up at Open Library and the National Diet Library, which cover English and Japanese books best. For other languages, enter the details by hand.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ElmScannerはOpen Libraryと国立国会図書館で本を検索します。どちらも英語と日本語の本に最も強く対応しています。それ以外の言語の本は、詳細を手入力してください。"
-          }
-        }
-      }
-    },
     "ElmScanner looks up books on Open Library, a free service run by the Internet Archive. Open Library asks every app to include an email address, so that it can tell who is using its service and reach them if something goes wrong.": {
       "localizations": {
         "ja": {
@@ -1179,16 +1169,6 @@
         }
       }
     },
-    "No match found. This ISBN is from %@, and ElmScanner's catalogues cover English and Japanese books best.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一致する本が見つかりません。このISBNは%@のものです。ElmScannerが利用する書誌データベースは、英語と日本語の本に最も強く対応しています。"
-          }
-        }
-      }
-    },
     "Norwegian": {
       "localizations": {
         "ja": {
@@ -1319,16 +1299,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "プライバシーポリシー"
-          }
-        }
-      }
-    },
-    "Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "企画：オオツキ　グラント　ジュン\nコード：Claude\n書誌データ：Open Library、国立国会図書館（NDLサーチ）"
           }
         }
       }
@@ -1873,17 +1843,6 @@
         }
       }
     },
-    "a region outside the English- and Japanese-language areas": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "英語圏・日本語圏以外の地域"
-          }
-        }
-      },
-      "extractionState": "manual"
-    },
     "the %@-language area": {
       "localizations": {
         "ja": {
@@ -2021,6 +1980,222 @@
           "stringUnit": {
             "state": "translated",
             "value": "新規ファイル…"
+          }
+        }
+      }
+    },
+    "Add to Existing File…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既存のファイルに追加…"
+          }
+        }
+      }
+    },
+    "Remove the %lld exported books from the list?": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Remove the %lld exported book from the list?"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Remove the %lld exported books from the list?"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "書き出した%lld冊をリストから削除しますか？"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Keep": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "残す"
+          }
+        }
+      }
+    },
+    "The books you didn't export stay in the list.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出していない本はリストに残ります。"
+          }
+        }
+      }
+    },
+    "Export Selected": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択項目を書き出す"
+          }
+        }
+      }
+    },
+    "Remove Selected": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択項目を削除"
+          }
+        }
+      }
+    },
+    "Submit": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "決定"
+          }
+        }
+      }
+    },
+    "Author %lld (Family, Given)": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "著者%lld（姓, 名）"
+          }
+        }
+      }
+    },
+    "Add Author": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "著者を追加"
+          }
+        }
+      }
+    },
+    "Open PayPal": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PayPalを開く"
+          }
+        }
+      }
+    },
+    "Open PayPal copies the address first: sign in, choose Send, and paste it as the recipient.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「PayPalを開く」を押すと、先にアドレスがコピーされます。サインインして「送金」を選び、受取人にアドレスを貼り付けてください。"
+          }
+        }
+      }
+    },
+    "ElmScanner looks books up at Open Library and the national libraries of Japan, Germany, France and Spain, which cover English, Japanese, German, French and Spanish books best. For other languages, enter the details by hand.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerはOpen Libraryと、日本・ドイツ・フランス・スペインの国立図書館で本を検索します。英語・日本語・ドイツ語・フランス語・スペイン語の本に最も強く対応しています。それ以外の言語の本は、詳細を手入力してください。"
+          }
+        }
+      }
+    },
+    "No match found. This ISBN is from %@, and ElmScanner's catalogues cover English, Japanese, German, French and Spanish books best.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一致する本が見つかりません。このISBNは%@のものです。ElmScannerが利用する書誌データベースは、英語・日本語・ドイツ語・フランス語・スペイン語の本に最も強く対応しています。"
+          }
+        }
+      }
+    },
+    "a region outside the English-, Japanese-, German-, French- and Spanish-language areas": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "英語・日本語・ドイツ語・フランス語・スペイン語圏以外の地域"
+          }
+        }
+      }
+    },
+    "Note": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモ"
+          }
+        }
+      }
+    },
+    "Prompted by Grant Jun Otsuki\nCode by Claude": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "企画：オオツキ　グラント　ジュン\nコード：Claude"
+          }
+        }
+      }
+    },
+    "Book data from:\nOpen Library (Internet Archive): worldwide\nNational Diet Library (NDL Search): Japan\nDeutsche Nationalbibliothek: Germany\nBibliothèque nationale de France (Licence Ouverte): France\nBiblioteca Nacional de España: Spain": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書誌データの提供元：\nOpen Library（Internet Archive）：全世界\n国立国会図書館（NDLサーチ）：日本\nドイツ国立図書館：ドイツ\nフランス国立図書館（Licence Ouverte）：フランス\nスペイン国立図書館：スペイン"
+          }
+        }
+      }
+    },
+    "Twenty books. If you find this useful, please consider leaving a tip (Settings on Mac, About on iPhone).": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "20冊。お役に立てているなら、チップをご検討ください（Macでは設定、iPhoneでは「情報」画面）。"
+          }
+        }
+      }
+    },
+    "Generous user": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "親切なユーザー"
           }
         }
       }

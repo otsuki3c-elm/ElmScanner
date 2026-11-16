@@ -45,10 +45,14 @@ struct AboutView: View {
                     .padding(.top, 16)
                     .padding(.horizontal)
                 }
-                Text("Prompted by Grant Jun Otsuki\nCode by Claude\nBook data from Open Library and the National Diet Library (NDL Search)")
+                Text("Prompted by Grant Jun Otsuki\nCode by Claude")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
                     .padding(.top, 16)
+                Text(BookSources.credit)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
                 Text("ElmScanner is open source under the MIT license.")
                     .font(.footnote)
                     .multilineTextAlignment(.center)
@@ -77,6 +81,6 @@ struct AboutView: View {
             ContactEmailForm(contact: .shared, mode: .edit) { editingEmail = false }
                 .presentationDetents([.medium, .large])
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.large])
     }
 }

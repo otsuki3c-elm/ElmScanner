@@ -22,9 +22,19 @@ struct PayPalTipSection: View {
             HStack {
                 Text(Self.address).textSelection(.enabled).font(.body.monospaced())
                 Button(copied ? LocalizedStringKey("Copied") : LocalizedStringKey("Copy address"), action: copy)
+                Button("Open PayPal", action: openPayPal)
             }
+            Text("Open PayPal copies the address first: sign in, choose Send, and paste it as the recipient.")
+                .font(.footnote).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .accessibilityElement(children: .contain)
+    }
+
+    /// PayPal has no link that fills in a recipient, so the address is copied for pasting there.
+    private func openPayPal() {
+        copy()
+        if let url = URL(string: "https://www.paypal.com/") { NSWorkspace.shared.open(url) }
     }
 
     private func copy() {

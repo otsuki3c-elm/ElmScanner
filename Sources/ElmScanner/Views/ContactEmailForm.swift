@@ -1,4 +1,7 @@
 import SwiftUI
+#if os(macOS)
+import AppKit
+#endif
 
 /// Asks for the user's email address and explains why. Shown at first use (it can't be
 /// skipped) and again whenever the user wants to change it.
@@ -17,6 +20,9 @@ struct ContactEmailForm: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if mode == .firstUse {
+                logo
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 4)
                 Text("Welcome to ElmScanner").font(.largeTitle.bold())
                 Text("ElmScanner lets you quickly add books to Zotero and other reference management software by scanning bar codes.")
             }
@@ -25,35 +31,56 @@ struct ContactEmailForm: View {
             Text("ElmScanner looks up books on Open Library, a free service run by the Internet Archive. Open Library asks every app to include an email address, so that it can tell who is using its service and reach them if something goes wrong.")
             Text("Your address is sent to Open Library with each book lookup. It is stored only on this device and is not sent anywhere else.")
                 .foregroundStyle(.secondary)
-            TextField("Email address", text: $text)
-                #if os(iOS)
-                .keyboardType(.emailAddress)
-                .textInputAutocapitalization(.never)
-                .textFieldStyle(.roundedBorder)
-                #endif
-                .autocorrectionDisabled()
-                .textContentType(.emailAddress)
-                .onSubmit(save)
-            if showError && !valid {
-                Label("Enter an address like name@example.com.", systemImage: "exclamationmark.circle.fill")
-                    .foregroundStyle(.red).font(.callout)
-            }
             HStack {
-                if mode == .edit {
-                    Button("Cancel") { text = contact.address; onDone() }
-                }
-                Spacer()
-                Button(mode == .firstUse ? LocalizedStringKey("Continue") : LocalizedStringKey("Save"), action: save)
+                ClearableTextField("Email address", text: $text)
+                    #if os(iOS)
+                    .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .textFieldStyle(.roundedBorder)
+                    #endif
+                    .autocorrectionDisabled()
+                    .textContentType(.emailAddress)
+                    .onSubmit(save)
+                Button("Submit", action: save)
                     .keyboardShortcut(.defaultAction)
                     .buttonStyle(.borderedProminent)
                     .disabled(!valid)
             }
             .controlSize(.large)
-            .padding(.top, 4)
+            if showError && !valid {
+                Label("Enter an address like name@example.com.", systemImage: "exclamationmark.circle.fill")
+                    .foregroundStyle(.red).font(.callout)
+            }
+            if mode == .edit {
+                HStack {
+                    Button("Cancel") { text = contact.address; onDone() }
+                    Spacer()
+                }
+                .controlSize(.large)
+            }
         }
         .padding(24)
         .frame(maxWidth: 460)
         .onAppear { text = contact.address }
+    }
+
+    /// The app icon, centered at the top of the first-run screen.
+    @ViewBuilder private var logo: some View {
+        #if os(macOS)
+        Image(nsImage: NSApplication.shared.applicationIconImage)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 96, height: 96)
+            .accessibilityHidden(true)
+        #else
+        Image("AboutIcon")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 96, height: 96)
+            .clipShape(RoundedRectangle(cornerRadius: 96 * 0.2237, style: .continuous))
+            .shadow(radius: 4, y: 2)
+            .accessibilityHidden(true)
+        #endif
     }
 
     private func save() {
