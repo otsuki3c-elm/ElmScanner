@@ -15,56 +15,52 @@ struct PhoneScanView: View {
     private let contact = ContactEmail.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                cameraPane
-                    // Leaves room for the list when the text size is very large.
-                    .frame(height: typeSize.isAccessibilitySize ? 180 : 280)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .cameraDisplay()
-                    .padding([.horizontal, .top])
-                HStack {
-                    TextField("Or type an ISBN", text: $manualISBN)
-                        .keyboardType(.numbersAndPunctuation)
-                        .textFieldStyle(.roundedBorder)
-                        .onSubmit(addManual)
-                    Button("Add", action: addManual)
-                        .disabled(BookLookup.normalizedISBN(manualISBN) == nil)
-                }
-                .padding()
-                ScrollViewReader { proxy in
-                    // Selection only ever shows the book that was just rescanned: the
-                    // system's own row highlight. Taps still open the editor.
-                    List(selection: Binding(get: { session.flashing }, set: { _ in })) {
-                        ForEach(session.books) { book in
-                            HStack(spacing: 12) {
-                                Image(systemName: "book.closed.fill")
-                                    .foregroundStyle(.secondary)
-                                    .symbolEffect(.bounce, options: .nonRepeating, value: session.flashCounts[book.id, default: 0])
-                                    .accessibilityHidden(true)
-                                row(book)
+            Group {
+                if sizeClass == .regular {
+                    // iPad: the camera and the ISBN field on the left, the list on the right.
+                    GeometryReader { geometry in
+                        let portrait = geometry.size.height > geometry.size.width
+                        HStack(spacing: 0) {
+                            VStack(spacing: 0) {
+                                if portrait {
+                                    // Held upright: the camera takes the column's height.
+                                    cameraPane
+                                        .frame(maxHeight: .infinity)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .cameraDisplay()
+                                        .padding([.horizontal, .top])
+                                    isbnField
+                                } else {
+                                    // Held sideways: a 3:4 camera, with the field under it.
+                                    cameraPane
+                                        .aspectRatio(3.0 / 4.0, contentMode: .fit)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .cameraDisplay()
+                                        .padding([.horizontal, .top])
+                                    isbnField
+                                    Spacer(minLength: 0)
+                                }
                             }
-                            .tag(book.id)
-                            .accessibilityElement(children: .combine)
-                            .accessibilityAddTraits(.isButton)
-                            .accessibilityHint("Opens it for editing")
-                            .contentShape(Rectangle())
-                            .onTapGesture { editing = book.id }
+                            .frame(width: portrait ? 420 : min(480, geometry.size.width * 0.4))
+                            Divider()
+                            bookList
                         }
-                        .onDelete { session.remove(Set($0.map { session.books[$0].id })) }
                     }
-                    .onChange(of: session.flashing) {
-                        guard let id = session.flashing else { return }
-                        if reduceMotion { proxy.scrollTo(id, anchor: .center) }
-                        else { withAnimation { proxy.scrollTo(id, anchor: .center) } }
-                        UINotificationFeedbackGenerator().notificationOccurred(.warning)
-                        Announcer.post(String(localized: "Already scanned"), urgent: true)
+                } else {
+                    VStack(spacing: 0) {
+                        cameraPane
+                            // Leaves room for the list when the text size is very large.
+                            .frame(height: typeSize.isAccessibilitySize ? 180 : 280)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .cameraDisplay()
+                            .padding([.horizontal, .top])
+                        isbnField
+                        bookList
                     }
-                }
-                .overlay {
-                    if session.books.isEmpty { Text("No books scanned yet").foregroundStyle(.secondary) }
                 }
             }
             .achievementPopup(session.achievements)
@@ -105,6 +101,53 @@ struct PhoneScanView: View {
         }
     }
 
+    private var isbnField: some View {
+        HStack {
+            TextField("Or type an ISBN", text: $manualISBN)
+                .keyboardType(.numbersAndPunctuation)
+                .textFieldStyle(.roundedBorder)
+                .onSubmit(addManual)
+            Button("Add", action: addManual)
+                .disabled(BookLookup.normalizedISBN(manualISBN) == nil)
+        }
+        .padding()
+    }
+
+    private var bookList: some View {
+        ScrollViewReader { proxy in
+            // Selection only ever shows the book that was just rescanned: the
+            // system's own row highlight. Taps still open the editor.
+            List(selection: Binding(get: { session.flashing }, set: { _ in })) {
+                ForEach(session.books) { book in
+                    HStack(spacing: 12) {
+                        Image(systemName: "book.closed.fill")
+                            .foregroundStyle(.secondary)
+                            .symbolEffect(.bounce, options: .nonRepeating, value: session.flashCounts[book.id, default: 0])
+                            .accessibilityHidden(true)
+                        row(book)
+                    }
+                    .tag(book.id)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityHint("Opens it for editing")
+                    .contentShape(Rectangle())
+                    .onTapGesture { editing = book.id }
+                }
+                .onDelete { session.remove(Set($0.map { session.books[$0].id })) }
+            }
+            .onChange(of: session.flashing) {
+                guard let id = session.flashing else { return }
+                if reduceMotion { proxy.scrollTo(id, anchor: .center) }
+                else { withAnimation { proxy.scrollTo(id, anchor: .center) } }
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
+                Announcer.post(String(localized: "Already scanned"), urgent: true)
+            }
+        }
+        .overlay {
+            if session.books.isEmpty { Text("No books scanned yet").foregroundStyle(.secondary) }
+        }
+    }
+
     private var cameraPane: some View {
         ZStack {
             Color.black
@@ -112,7 +155,7 @@ struct PhoneScanView: View {
             case .running:
                 // Only once startRunning() has returned: attaching a preview layer
                 // while the camera queue is starting the session crashes AVFoundation.
-                CameraPreview(session: camera.session)
+                CameraPreview(session: camera.session, onRotation: { camera.setVideoRotation($0) })
                     .overlay { if camera.smiling { GreetingView(greeting: camera.greeting) } }
                     .animation(.easeOut(duration: 0.2), value: camera.smiling)
                     .accessibilityLabel("Camera view")
@@ -128,6 +171,19 @@ struct PhoneScanView: View {
             }
             if let feedback {
                 ScanFeedbackView(kind: feedback.kind).id(feedback.id).transition(.opacity)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if camera.status == .running, camera.cameras.count > 1 {
+                Button { camera.flip() } label: {
+                    Image(systemName: "camera.rotate")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                        .frame(width: 44, height: 44)
+                        .background(.black.opacity(0.45), in: Circle())
+                }
+                .padding(8)
+                .accessibilityLabel("Switch Camera")
             }
         }
     }
