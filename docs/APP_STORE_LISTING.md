@@ -26,7 +26,7 @@ The Mac app and the iPhone/iPad app share the bundle ID `com.otsuki.elmscanner.E
 
 ## Promotional text (max 170, can be changed any time)
 
-Point your camera at a book's barcode and add it to your reference list in a second. Export to RIS, BibTeX and 13 other formats.
+Point your camera at a book's barcode and add it to your reference list in a second. Export to RIS, BibTeX, Excel, CSV and 13 other formats.
 
 ## Keywords (max 100, comma-separated, no spaces after commas)
 
@@ -48,8 +48,9 @@ REVIEW AND EDIT
 • Book details come from Open Library (a project of the Internet Archive) and, for Japanese books, the National Diet Library's NDL Search.
 
 EXPORT TO MANY FORMATS
-• RIS and BibTeX first, then BibLaTeX, CSL JSON, MODS, MARC, MARCXML, EndNote XML, RefWorks, Web of Science, Refer/BibIX, Zotero RDF, Bibliontology RDF, Dublin Core RDF and XML ContextObject.
+• RIS, BibTeX, Excel (.xlsx) and CSV first, then BibLaTeX, CSL JSON, MODS, MARC, MARCXML, EndNote XML, RefWorks, Web of Science, Refer/BibIX, Zotero RDF, Bibliontology RDF, Dublin Core RDF and XML ContextObject.
 • These are formats that reference managers such as Zotero can import.
+• Keep one running Excel list: choose an Excel or CSV file you exported earlier and the new books are added to the end (books already in it are skipped).
 • On iPhone and iPad, save to the Files app or send the file by email as an attachment.
 
 NEVER LOSE YOUR LIST (iPHONE AND iPAD)
@@ -82,7 +83,7 @@ ElmScanner works with Zotero's import formats but is not made by or endorsed by 
 | Subtitle (max 30) | 書籍バーコードで文献リスト作成 |
 | Keywords (max 100) | ISBN,バーコード,スキャナ,本,書籍,文献,引用,参考文献,蔵書,図書,BibTeX,RIS,Zotero |
 
-**Promotional text:** 本のバーコードにカメラを向けるだけで、文献リストに追加。RIS・BibTeXなど15形式で書き出せます。
+**Promotional text:** 本のバーコードにカメラを向けるだけで、文献リストに追加。RIS・BibTeX・Excel・CSVなど17形式で書き出せます。
 
 **Description:**
 
@@ -101,8 +102,9 @@ ElmScannerは、本の裏表紙のバーコードを、そのまま文献情報�
 • 書籍情報はOpen Library(Internet Archive)と、日本の本については国立国会図書館サーチから取得します。
 
 多彩な形式で書き出し
-• RIS、BibTeXのほか、BibLaTeX、CSL JSON、MODS、MARC、MARCXML、EndNote XML、RefWorks、Web of Science、Refer/BibIX、Zotero RDF、Bibliontology RDF、Dublin Core RDF、XML ContextObjectに対応。
+• RIS、BibTeX、Excel（.xlsx）、CSVのほか、BibLaTeX、CSL JSON、MODS、MARC、MARCXML、EndNote XML、RefWorks、Web of Science、Refer/BibIX、Zotero RDF、Bibliontology RDF、Dublin Core RDF、XML ContextObjectに対応。
 • Zoteroなどの文献管理ソフトで読み込める形式です。
+• 以前書き出したExcelまたはCSVファイルを選ぶと、新しい本が末尾に追加されます（すでに入っている本は追加されません）。
 • iPhone・iPadでは「ファイル」への保存やメール添付で書き出せます。
 
 リストが消えません(iPhone・iPad)

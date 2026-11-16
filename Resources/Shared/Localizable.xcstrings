@@ -1894,6 +1894,136 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Add to Excel File…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excelファイルに追加…"
+          }
+        }
+      }
+    },
+    "Choose the Excel file to add these books to.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これらの本を追加するExcelファイルを選んでください。"
+          }
+        }
+      }
+    },
+    "All of these books are already in %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これらの本はすべて%@にすでに入っています。"
+          }
+        }
+      }
+    },
+    "Added %@ to %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@に%1$@を追加しました。"
+          }
+        }
+      }
+    },
+    "Added %@ to %@. Skipped %@ already in it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@に%1$@を追加しました。登録済みの%3$@はスキップしました。"
+          }
+        }
+      }
+    },
+    "Couldn't add to the file: %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルに追加できませんでした：%@"
+          }
+        }
+      }
+    },
+    "That isn't an Excel workbook (.xlsx) that ElmScanner can read. Older .xls files and password-protected files can't be used.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ElmScannerで読み込めるExcelブック（.xlsx）ではありません。古い形式の.xlsファイルやパスワード付きのファイルは使えません。"
+          }
+        }
+      }
+    },
+    "The first sheet doesn't have ElmScanner's columns (Title, Authors, ISBN…). Choose a file exported from ElmScanner, or an empty workbook.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初のシートにElmScannerの列（Title、Authors、ISBNなど）がありません。ElmScannerで書き出したファイル、または空のブックを選んでください。"
+          }
+        }
+      }
+    },
+    "Add to CSV File…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSVファイルに追加…"
+          }
+        }
+      }
+    },
+    "Choose the CSV file to add these books to.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これらの本を追加するCSVファイルを選んでください。"
+          }
+        }
+      }
+    },
+    "That file can't be read as UTF-8 text, so ElmScanner can't add to it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UTF-8のテキストとして読み込めないため、ElmScannerでは追加できません。"
+          }
+        }
+      }
+    },
+    "The file doesn't have ElmScanner's columns (Title, Authors, ISBN…). Choose a file exported from ElmScanner, or an empty file.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルにElmScannerの列（Title、Authors、ISBNなど）がありません。ElmScannerで書き出したファイル、または空のファイルを選んでください。"
+          }
+        }
+      }
+    },
+    "New File…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新規ファイル…"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

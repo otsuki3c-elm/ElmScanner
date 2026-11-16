@@ -9,6 +9,8 @@ struct ReviewView: View {
     @State private var selection = Set<UUID>()
     @State private var editing: ScannedBook.ID?
     @State private var message: String?
+    /// True once an export has worked: then "Done" appears.
+    @State private var exported = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,9 +51,17 @@ struct ReviewView: View {
                             Button("\(format.title)…") { export(format) }
                         }
                     }
+                    Divider()
+                    Button("Add to Excel File…") { addToFile(.xlsx) }
+                    Button("Add to CSV File…") { addToFile(.csv) }
                 }
                 .fixedSize()
                 .disabled(session.foundBooks.isEmpty)
+                if exported {
+                    Button("Done") { finish() }
+                        .buttonStyle(.borderedProminent)
+                        .keyboardShortcut(.defaultAction)
+                }
             }
             .padding(10)
         }
@@ -98,9 +108,26 @@ struct ReviewView: View {
         }
     }
 
+    private func record(_ result: (message: String, succeeded: Bool)) {
+        message = result.message
+        if result.succeeded { exported = true }
+    }
+
+    /// Clears the list and goes back to the camera.
+    private func finish() {
+        session.removeAll()
+        onBack()
+    }
+
+    private func addToFile(_ format: ExportService.Format) {
+        let chosen = session.books.filter { selection.contains($0.id) }.compactMap(\.metadata)
+        let books = chosen.isEmpty ? session.foundBooks : chosen
+        if let result = ExportService.appendWithOpenPanel(books, format: format) { record(result) }
+    }
+
     private func export(_ format: ExportService.Format) {
         let chosen = session.books.filter { selection.contains($0.id) }.compactMap(\.metadata)
         let books = chosen.isEmpty ? session.foundBooks : chosen
-        if let result = ExportService.exportWithSavePanel(books, format: format) { message = result }
+        if let result = ExportService.exportWithSavePanel(books, format: format) { record(result) }
     }
 }

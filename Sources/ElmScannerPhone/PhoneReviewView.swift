@@ -5,10 +5,15 @@ import SwiftUI
 struct PhoneReviewView: View {
     var session: ScanSession
 
+    @Environment(\.dismiss) private var dismiss
+    /// True once an export has worked: then "Done" appears.
+    @State private var exported = false
     @State private var editing: ScannedBook.ID?
     @State private var format = ExportService.Format.cslJSON
     @State private var exportDocument = ExportDocument(data: Data())
     @State private var exporting = false
+    @State private var addingToFile = false
+    @State private var addFormat = ExportService.Format.xlsx
     @State private var message: String?
     @State private var mailAttachment: MailAttachment?
 
@@ -28,9 +33,17 @@ struct PhoneReviewView: View {
             if session.books.isEmpty { Text("No books to export").foregroundStyle(.secondary) }
         }
         .safeAreaInset(edge: .bottom) {
-            Text(message ?? String(localized: "Tap a book to edit it."))
-                .font(.footnote).foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity).padding(8).background(.bar)
+            VStack(spacing: 8) {
+                if exported {
+                    // Clears the list and goes back to the camera.
+                    Button { session.removeAll(); dismiss() } label: { Text("Done").frame(maxWidth: .infinity) }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                }
+                Text(message ?? String(localized: "Tap a book to edit it."))
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity).padding(8).background(.bar)
         }
         .navigationTitle("\(session.books.count) books")
         .navigationBarTitleDisplayMode(.inline)
@@ -39,7 +52,8 @@ struct PhoneReviewView: View {
                 // Two stages: where to send the file, then which format.
                 Menu("Export") {
                     Menu("Files App", systemImage: "folder") {
-                        formatButtons { export($0) }
+                        // Excel and CSV take one more tap: a new file, or add to one made earlier.
+                        formatButtons({ export($0) }, addTo: { addFormat = $0; addingToFile = true })
                     }
                     Menu("Email", systemImage: "envelope") {
                         formatButtons { email($0) }
@@ -57,9 +71,20 @@ struct PhoneReviewView: View {
                 if result == .sent {
                     message = String(localized: "Email sent.")
                     session.markExported()
+                    exported = true
                 }
             }
             .ignoresSafeArea()
+        }
+        .fileImporter(isPresented: $addingToFile, allowedContentTypes: [addFormat.contentType]) { result in
+            switch result {
+            case .success(let url):
+                let outcome = ExportService.append(session.foundBooks, toFileAt: url)
+                message = outcome.message
+                if outcome.succeeded { session.markExported(); exported = true }
+            case .failure(let error):
+                message = String(localized: "Couldn't add to the file: \(error.localizedDescription)")
+            }
         }
         .fileExporter(
             isPresented: $exporting,
@@ -71,6 +96,7 @@ struct PhoneReviewView: View {
             case .success:
                 message = String(localized: "Exported \(session.foundBooks.count) books.")
                 session.markExported()
+                exported = true
             case .failure(let error):
                 if (error as? CocoaError)?.code != .userCancelled { message = String(localized: "Couldn't export: \(error.localizedDescription)") }
             }
@@ -109,9 +135,17 @@ struct PhoneReviewView: View {
 
     /// RIS and BibTeX, then everything else behind "More…".
     @ViewBuilder
-    private func formatButtons(_ action: @escaping (ExportService.Format) -> Void) -> some View {
+    private func formatButtons(_ action: @escaping (ExportService.Format) -> Void,
+                               addTo: ((ExportService.Format) -> Void)? = nil) -> some View {
         ForEach(ExportService.Format.common) { format in
-            Button(format.title) { action(format) }
+            if let addTo, format == .xlsx || format == .csv {
+                Menu(format.title) {
+                    Button("New File…") { action(format) }
+                    Button(format == .xlsx ? "Add to Excel File…" : "Add to CSV File…") { addTo(format) }
+                }
+            } else {
+                Button(format.title) { action(format) }
+            }
         }
         Menu("More…") {
             ForEach(ExportService.Format.more) { format in
