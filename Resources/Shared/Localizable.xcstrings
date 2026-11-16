@@ -1551,6 +1551,16 @@
       },
       "extractionState": "manual"
     },
+    "Switch Camera": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カメラを切り替え"
+          }
+        }
+      }
+    },
     "Tags": {
       "localizations": {
         "ja": {

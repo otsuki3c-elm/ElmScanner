@@ -17,6 +17,23 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
 
     var status: Status = .idle
 
+    /// A camera the user can pick.
+    struct Choice: Identifiable, Equatable {
+        let id: String        // AVCaptureDevice.uniqueID
+        let name: String
+        let position: AVCaptureDevice.Position
+    }
+
+    /// The cameras available now (refreshed when the scanner starts and when the list is opened).
+    private(set) var cameras: [Choice] = []
+    /// The camera in use.
+    private(set) var currentID: String?
+    @ObservationIgnored private var currentPosition: AVCaptureDevice.Position = .unspecified
+    @ObservationIgnored private var videoOutput: AVCaptureVideoDataOutput?
+    /// How far the frames are turned to be upright (90 is an iPhone held upright).
+    @ObservationIgnored private var videoAngle: CGFloat = 90
+    @ObservationIgnored private static let savedCameraKey = "scannerCameraID"
+
     /// True while someone is smiling at the camera (and for a moment after).
     private(set) var smiling = false
     /// What to say for the current smile: "Hello!" the first time, then any of the greetings.
@@ -91,38 +108,110 @@ final class BarcodeCamera: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
         }
     }
 
-    /// Builds the capture session the first time. Prefers the built-in camera
-    /// so a nearby iPhone isn't picked up unasked.
-    private func configure() -> Bool {
-        if configured { return true }
+    private static var discovery: AVCaptureDevice.DiscoverySession {
         #if os(iOS)
-        let found = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified)
         #else
-        let discovery = AVCaptureDevice.DiscoverySession(
+        AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInWideAngleCamera, .external, .continuityCamera],
             mediaType: .video,
             position: .unspecified
         )
-        let found = discovery.devices.first
         #endif
-        guard let device = found ?? AVCaptureDevice.default(for: .video),
-              let input = try? AVCaptureDeviceInput(device: device) else { return false }
+    }
+
+    /// Looks for connected cameras again (a webcam may have been plugged in).
+    func refreshCameras() {
+        let found = Self.discovery.devices.map { Choice(id: $0.uniqueID, name: $0.localizedName, position: $0.position) }
+        if found != cameras { cameras = found }
+    }
+
+    /// Switches to another camera while the scanner is running (or sets it for the next start).
+    func select(_ id: String) {
+        guard id != currentID, let device = AVCaptureDevice(uniqueID: id) else { return }
+        #if os(macOS)
+        UserDefaults.standard.set(id, forKey: Self.savedCameraKey)   // the iPhone always starts on the back camera
+        #endif
+        guard configured else { return }
+        queue.async { [self] in
+            if install(device) { DispatchQueue.main.async { self.currentID = id } }
+        }
+    }
+
+    /// iPhone: flips between the front and back cameras.
+    func flip() {
+        let wanted: AVCaptureDevice.Position = currentPosition == .front ? .back : .front
+        if let other = cameras.first(where: { $0.position == wanted }) { select(other.id) }
+    }
+
+    /// The camera to start with. The iPhone starts on the back camera. On the Mac, the camera
+    /// used last time if it is still connected, else the built-in one (so a nearby iPhone isn't
+    /// picked up unasked).
+    private func preferredDevice() -> AVCaptureDevice? {
+        let devices = Self.discovery.devices
+        #if os(iOS)
+        return devices.first { $0.position == .back } ?? devices.first
+        #else
+        let saved = UserDefaults.standard.string(forKey: Self.savedCameraKey)
+        return devices.first { $0.uniqueID == saved } ?? devices.first ?? AVCaptureDevice.default(for: .video)
+        #endif
+    }
+
+    /// Puts a device on the session in place of the current one. Call on the camera queue.
+    @discardableResult
+    private func install(_ device: AVCaptureDevice) -> Bool {
+        guard let input = try? AVCaptureDeviceInput(device: device) else { return false }
+        session.beginConfiguration()
+        defer { session.commitConfiguration() }
+        session.inputs.forEach { session.removeInput($0) }
+        guard session.canAddInput(input) else { return false }
+        session.addInput(input)
+        currentPosition = device.position
+        applyRotation()
+        return true
+    }
+
+    /// iOS: the angle that makes frames upright for how the screen is held.
+    func setVideoRotation(_ angle: CGFloat) {
+        queue.async { [self] in
+            guard angle != videoAngle else { return }
+            videoAngle = angle
+            applyRotation()
+        }
+    }
+
+    private func applyRotation() {
+        #if os(iOS)
+        if let connection = videoOutput?.connection(with: .video), connection.isVideoRotationAngleSupported(videoAngle) {
+            connection.videoRotationAngle = videoAngle
+        }
+        #endif
+    }
+
+    /// Builds the capture session the first time.
+    private func configure() -> Bool {
+        if configured { return true }
+        guard let device = preferredDevice() else { return false }
         let output = AVCaptureVideoDataOutput()
         output.alwaysDiscardsLateVideoFrames = true
         output.setSampleBufferDelegate(self, queue: queue)
 
+        guard install(device) else { return false }
         session.beginConfiguration()
         defer { session.commitConfiguration() }
-        guard session.canAddInput(input), session.canAddOutput(output) else { return false }
-        session.addInput(input)
+        guard session.canAddOutput(output) else { return false }
         session.addOutput(output)
+        videoOutput = output
+        applyRotation()
         configured = true
+        let id = device.uniqueID
+        DispatchQueue.main.async { self.currentID = id; self.refreshCameras() }
         return true
     }
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         if Date.now.timeIntervalSince(Self.launchedAt) >= Self.launchQuietTime {
-            smileDetector.look(at: sampleBuffer) { [weak self] smiling in
+            smileDetector.look(at: sampleBuffer, position: currentPosition) { [weak self] smiling in
                 guard smiling else { return }
                 DispatchQueue.main.async { self?.noticeSmile() }
             }

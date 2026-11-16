@@ -1,4 +1,5 @@
 import CoreImage
+import AVFoundation
 import CoreMedia
 
 /// Notices a smiling face in a camera frame, for the "Hello!" greeting over the preview.
@@ -22,7 +23,7 @@ final class SmileDetector: @unchecked Sendable {
 
     /// Offers a frame. If it is time and no look is under way, checks it for a smile in the
     /// background and then calls `completion` (on the detector's queue) with the result.
-    func look(at sampleBuffer: CMSampleBuffer, now: Date = .now, completion: @escaping (Bool) -> Void) {
+    func look(at sampleBuffer: CMSampleBuffer, position: AVCaptureDevice.Position = .unspecified, now: Date = .now, completion: @escaping (Bool) -> Void) {
         lock.lock()
         let due = !looking && now.timeIntervalSince(lastLook) >= interval
         if due { looking = true; lastLook = now }
@@ -35,7 +36,8 @@ final class SmileDetector: @unchecked Sendable {
         queue.async { [self] in
             var options: [String: Any] = [CIDetectorSmile: true]
             #if os(iOS)
-            options[CIDetectorImageOrientation] = 6   // the back camera's frames are turned a quarter
+            // The camera is told to deliver upright frames (see BarcodeCamera.setVideoRotation).
+            options[CIDetectorImageOrientation] = 1
             #endif
             let faces = detector?.features(in: image, options: options) ?? []
             finish()

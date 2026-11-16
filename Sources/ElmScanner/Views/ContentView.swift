@@ -78,6 +78,7 @@ struct ContentView: View {
                     notice("Camera stopped.", "")
                 }
             }
+            .overlay(alignment: .topTrailing) { cameraMenu }
             .overlay {
                 if let feedback {
                     ScanFeedbackView(kind: feedback.kind).id(feedback.id)
@@ -109,6 +110,32 @@ struct ContentView: View {
         Task {
             try? await Task.sleep(for: .seconds(1))
             if feedback == shown { withAnimation(.easeOut(duration: 0.3)) { feedback = nil } }
+        }
+    }
+
+    /// Pick another connected camera (shown only when there is more than one).
+    @ViewBuilder private var cameraMenu: some View {
+        if camera.cameras.count > 1 {
+            Menu {
+                ForEach(camera.cameras) { choice in
+                    Button {
+                        camera.select(choice.id)
+                    } label: {
+                        if choice.id == camera.currentID { Label(choice.name, systemImage: "checkmark") } else { Text(choice.name) }
+                    }
+                }
+            } label: {
+                Image(systemName: "video")
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .fixedSize()
+            .padding(8)
+            .background(.black.opacity(0.45), in: Circle())
+            .padding(8)
+            .help("Switch Camera")
+            .accessibilityLabel("Switch Camera")
+            .onAppear { camera.refreshCameras() }
         }
     }
 
